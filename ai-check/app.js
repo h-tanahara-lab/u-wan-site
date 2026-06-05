@@ -332,32 +332,48 @@ const ScoringEngine = {
    ============================================================= */
 /**
  * submitLead()
- * ミオがUTAGE連携を設定する際にこの関数を差し替えてください。
+ * UTAGEオプトインフォームへ application/x-www-form-urlencoded でPOSTする。
  *
  * @param {{ name: string, email: string, company: string, type: string, score: number, forceD: boolean }} data
  * @returns {Promise<void>}
+ *
+ * 送信フィールド:
+ *   name    ← data.name（お名前）
+ *   mail    ← data.email（メールアドレス）
+ *   free74  ← data.company（会社名）
+ *
+ * 将来対応メモ: 診断タイプをUTAGEに送る場合は以下を body に追加してください。
+ *   params.append('free75', data.type);  // 診断タイプ（A/B/C/D）
  */
 async function submitLead(data) {
-  // ============================================================
-  // PLACEHOLDER: UTAGE連携前の仮実装
-  // 実際の送信先エンドポイントに差し替えてください。
-  //
-  // 想定実装例（UTAGEのWebhook）:
-  //   const res = await fetch('https://utage.example.com/webhook', {
-  //     method: 'POST',
-  //     headers: { 'Content-Type': 'application/json' },
-  //     body: JSON.stringify(data),
-  //   });
-  //   if (!res.ok) throw new Error('送信エラー');
-  //
-  // タグ分岐用フィールド: data.type（A/B/C/D）を活用して
-  // UTAGEのオートメーションでメルマガリスト分岐を実装してください。
-  // ============================================================
+  const UTAGE_ENDPOINT = 'https://uw.u-wan.jp/r/hNGkgY333aq8/store';
+  const TIMEOUT_MS = 3000;
 
-  console.log('[submitLead] リードデータ（UTAGE連携前・仮）:', data);
+  const params = new URLSearchParams();
+  params.append('name',   data.name);
+  params.append('mail',   data.email);
+  params.append('free74', data.company);
+  // 将来: params.append('free75', data.type); // 診断タイプ（A/B/C/D）をここに追加できます
 
-  // 仮実装: 0.8秒待機してから成功とみなす
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  const controller = new AbortController();
+  const timerId = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+  try {
+    await fetch(UTAGE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: params.toString(),
+      mode: 'no-cors',   // UTAGEはCORSヘッダーを返さないためno-cors。レスポンスはopaqueで読めないがPOSTは通る
+      signal: controller.signal,
+    });
+    console.log('[submitLead] UTAGEへのPOST完了（no-cors / レスポンス内容は読めません）');
+  } catch (err) {
+    // AbortError（タイムアウト）含むすべてのエラーをここで吸収する。
+    // throwしないことで sendAndShowResult の「送信失敗でも結果を表示」設計を維持する。
+    console.error('[submitLead] POST失敗（診断結果は引き続き表示します）:', err);
+  } finally {
+    clearTimeout(timerId);
+  }
 }
 
 
@@ -370,6 +386,7 @@ const App = {
   currentQ: 0,       // 現在の設問インデックス
   result: null,      // { type, totalScore, forceD }
   leadData: null,    // { name, email, company }
+  _leadSubmitted: false, // 二重送信防止フラグ
 
   // DOM参照
   el: {},
@@ -624,6 +641,10 @@ const App = {
   },
 
   async sendAndShowResult() {
+    // 二重送信防止
+    if (this._leadSubmitted) return;
+    this._leadSubmitted = true;
+
     // ローディング表示
     this.el.loading.classList.add('active');
     this.el.submitBtn.disabled = true;
