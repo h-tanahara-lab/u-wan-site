@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- ===== SEO / OGP ===== -->
+  <title>工務店AI内製化 現在地チェック | U-WAN</title>
+  <meta name="description" content="見積書・工程表の作成に時間がかかっていませんか？7問・3〜4分でAI内製化の現在地を確認できる無料診断ツールです。">
+  <meta name="robots" content="noindex, nofollow"><!-- 公開前は noindex。公開時に削除 -->
+
+  <!-- OGP -->
+  <meta property="og:title" content="工務店AI内製化 現在地チェック | U-WAN">
+  <meta property="og:description" content="7問・3〜4分。AI内製化の現在地をチェックして、最初の1歩を明確にする無料診断。">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ja_JP">
+  <!-- og:image は公開前に設定 -->
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="工務店AI内製化 現在地チェック | U-WAN">
+  <meta name="twitter:description" content="7問・3〜4分。AI内製化の現在地をチェックして、最初の1歩を明確にする無料診断。">
+
+  <!-- 構造化データ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    "name": "工務店AI内製化 現在地チェック",
+    "description": "工務店向けAI内製化の準備状況を7問で確認する無料診断ツール",
+    "publisher": {
+      "@type": "Organization",
+      "name": "U-WAN"
+    }
+  }
+  </script>
+
+  <!-- フォント（Google Fonts） -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- LCP最適化：ヒーロー画像をプリロード -->
+  <link rel="preload" as="image" href="assets/hero-tanahara-main.jpg">
+
+  <!-- スタイル -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ===== ヘッダー ===== -->
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <span class="site-header__logo">U-WAN</span>
+      <span class="site-header__badge">無料診断</span>
+    </div>
+  </header>
+
+  <!-- ===== メイン ===== -->
+  <main id="main-content" role="main">
+
+    <!-- ローディングオーバーレイ -->
+    <div id="loading-overlay" class="loading-overlay" role="status" aria-live="polite" aria-label="送信中">
+      <div class="spinner" aria-hidden="true"></div>
+      <span>診断結果を確認しています...</span>
+    </div>
+
+    <!-- ============================
+         ページ1：イントロ
+         ============================ -->
+    <section id="page-intro" class="page" aria-labelledby="intro-title">
+
+      <!-- ヒーロー：実写真＋コピー -->
+      <div class="hero">
+        <div class="hero__photo-wrap">
+          <img
+            class="hero__photo"
+            src="assets/hero-tanahara-main.jpg"
+            alt="U-WAN代表 棚原秀樹。AI内製化支援の専門家として工務店経営者の相談に応じる。"
+            width="1200"
+            height="800"
+            loading="eager"
+            fetchpriority="high"
+          >
+          <div class="hero__overlay" aria-hidden="true"></div>
+        </div>
+        <div class="hero__content">
+          <p class="hero__eyebrow">工務店向け 無料診断</p>
+          <h1 class="hero__title" id="intro-title">
+            <span class="hero__title-line1">『AI、うちでもできるのかな』と</span>
+            思った方へ
+          </h1>
+          <p class="hero__lead">
+            わずか7問・3〜4分で、AI導入の最初の一歩が分かります。
+          </p>
+          <button
+            id="btn-start"
+            class="btn btn--cta"
+            type="button"
+            aria-label="診断を開始する"
+          >
+            今すぐ無料で最初の一歩を見つけてみる
+          </button>
+          <p class="hero__cta-caption">診断は0円です</p>
+        </div>
+      </div>
+
+      <!-- コピー＋この診断でわかること -->
+      <div class="intro-body">
+        <div class="intro-copy">
+          <p id="intro-subtitle" class="intro-copy__sub">
+            「AI、うちでもできるのかな」と思ったことがあるなら、まずここから。
+          </p>
+          <div class="intro-copy__text" id="intro-desc">
+            <!-- JS で上書き: CONTENT.meta.description -->
+          </div>
+        </div>
+
+        <div class="intro-whats">
+          <p class="intro-whats__label">この診断でわかること</p>
+          <ul class="intro-points" id="intro-points" aria-label="この診断でわかること">
+            <!-- JS でレンダリング -->
+          </ul>
+        </div>
+
+        <div class="intro-meta" aria-label="診断の概要">
+          <div class="intro-meta__item">
+            <span class="intro-meta__icon" aria-hidden="true">&#128337;</span>
+            <span>所要時間：<strong>3〜4分</strong></span>
+          </div>
+          <div class="intro-meta__item">
+            <span class="intro-meta__icon" aria-hidden="true">&#10067;</span>
+            <span>設問数：<strong>全7問</strong></span>
+          </div>
+          <div class="intro-meta__item">
+            <span class="intro-meta__icon" aria-hidden="true">&#127381;</span>
+            <span>結果：<strong>即時表示</strong></span>
+          </div>
+        </div>
+
+        <div class="intro-cta-wrap">
+          <button
+            id="btn-start-2"
+            class="btn btn--cta"
+            type="button"
+            aria-label="診断を開始する"
+          >
+            今すぐ無料で最初の一歩を見つけてみる
+          </button>
+          <p class="intro-cta-caption">診断は0円です</p>
+        </div>
+      </div>
+
+      <!-- プロフィール：誰が作ったか -->
+      <div class="intro-profile">
+        <img
+          class="intro-profile__photo"
+          src="assets/hero-tanahara-consult.jpg"
+          alt="棚原秀樹 相談シーン。クライアントとPCを前に話し合う様子。"
+          width="900"
+          height="600"
+          loading="lazy"
+        >
+        <div class="intro-profile__body">
+          <p class="intro-profile__role">この診断を設計した人</p>
+          <h2 class="intro-profile__name">棚原 秀樹</h2>
+          <p class="intro-profile__title">U-WAN 代表 / AI導入支援コンサルタント</p>
+          <p class="intro-profile__desc">
+            中小企業向けにAI化を支援。AIを活用して経営の数字を良くすることを前提にしたサポートを行う。支援先は工務店・建設業・製造業などの企業を中心とする。
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================
+         ページ2：設問
+         ============================ -->
+    <section id="page-question" class="page" aria-labelledby="question-text" aria-live="polite">
+
+      <!-- プログレスバー -->
+      <div class="progress-wrap" role="navigation" aria-label="診断の進捗">
+        <div class="progress-meta">
+          <span class="progress-step-label" id="progress-label">Q1 / 書類業務の負担度</span>
+          <span class="progress-count" id="progress-count" aria-live="polite">1 / 7</span>
+        </div>
+        <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="進捗">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- 設問カード -->
+      <div class="question-card">
+        <span class="question-badge" id="question-badge" aria-hidden="true">Q1</span>
+        <h2 class="question-text" id="question-text">
+          <!-- JS でレンダリング -->
+        </h2>
+        <p class="question-note" id="question-note" style="display:none;">
+          <!-- JS でレンダリング -->
+        </p>
+
+        <fieldset>
+          <legend class="sr-only">選択肢から1つ選んでください</legend>
+          <div class="choices" id="choices-wrap" role="radiogroup">
+            <!-- JS でレンダリング -->
+          </div>
+        </fieldset>
+
+        <!-- Q5 丸投げ警告（JS で表示制御） -->
+        <p class="q5-warning" id="q5-warning" role="alert" aria-live="assertive">
+          この選択肢を選ぶと、スコアに関わらず「タイプD：観察型」と判定されます。
+          内製化支援との方向性の整合を確認するための設計です。
+        </p>
+
+        <!-- ナビゲーション -->
+        <div class="q-nav">
+          <button
+            id="btn-prev"
+            class="btn btn--ghost btn--sm"
+            type="button"
+            style="display:none;"
+            aria-label="前の質問に戻る"
+          >
+            &#8592; 戻る
+          </button>
+          <button
+            id="btn-next"
+            class="btn btn--primary"
+            type="button"
+            disabled
+            aria-label="次の質問へ進む"
+            style="flex:1; max-width:300px; margin-left:auto;"
+          >
+            次の質問へ
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ============================
+         ページ3：リードフォーム
+         ============================ -->
+    <section id="page-form" class="page" aria-labelledby="form-title">
+      <div class="form-card">
+        <div class="form-hero">
+          <h2 class="form-hero__title" id="form-title">7問、お疲れさまでした。</h2>
+          <p class="form-hero__sub">
+            診断結果をメールでお届けします。<br>
+            あなたの回答をもとに、今の状態に合った「タイプ診断」と「最初の1アクション」をまとめたものをお送りします。<br>
+            3分ほどで読める内容に整理しています。
+          </p>
+        </div>
+
+        <div class="form-body">
+          <form id="lead-form" novalidate aria-label="リードフォーム">
+
+            <div class="form-group">
+              <label class="form-label" for="field-name">
+                お名前（会社名でもOKです）<span class="required" aria-label="必須">*</span>
+              </label>
+              <input
+                type="text"
+                id="field-name"
+                name="name"
+                class="form-input"
+                placeholder="山田 太郎"
+                autocomplete="name"
+                required
+                aria-required="true"
+                aria-describedby="err-name"
+              >
+              <p class="form-error-msg" id="err-name" role="alert"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="field-email">
+                メールアドレス<span class="required" aria-label="必須">*</span>
+              </label>
+              <input
+                type="email"
+                id="field-email"
+                name="email"
+                class="form-input"
+                placeholder="example@company.co.jp"
+                autocomplete="email"
+                required
+                aria-required="true"
+                aria-describedby="err-email"
+                inputmode="email"
+              >
+              <p class="form-error-msg" id="err-email" role="alert"></p>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="field-company">
+                会社名<span class="required" aria-label="必須">*</span>
+              </label>
+              <input
+                type="text"
+                id="field-company"
+                name="company"
+                class="form-input"
+                placeholder="株式会社〇〇工務店"
+                autocomplete="organization"
+                required
+                aria-required="true"
+                aria-describedby="err-company"
+              >
+              <p class="form-error-msg" id="err-company" role="alert"></p>
+            </div>
+
+            <button
+              id="btn-submit"
+              type="button"
+              class="btn btn--cta"
+              aria-label="診断結果を受け取る"
+            >
+              診断結果を受け取る
+            </button>
+
+            <p class="form-privacy">
+              入力いただいたメールアドレスは、診断結果の送付にのみ使います。<br>
+              スパムメールを送ることはありません。いつでも解除できます。
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================
+         ページ4：結果
+         ============================ -->
+    <section id="page-result" class="page" aria-labelledby="result-heading" aria-live="polite">
+      <div class="result-card" id="result-wrap" aria-label="診断結果">
+        <!-- JS でレンダリング -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===== フッター ===== -->
+  <footer class="site-footer" role="contentinfo">
+    <p>
+      &copy; 2026 U-WAN. All rights reserved.<br>
+      <a href="#">プライバシーポリシー</a>
+    </p>
+  </footer>
+
+  <!-- スクリプト -->
+  <script src="app.js" defer></script>
+
+  <!-- 2つ目のスタートボタンをbtn-startと連動 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn2 = document.getElementById('btn-start-2');
+      if (btn2) {
+        btn2.addEventListener('click', function() {
+          document.getElementById('btn-start').click();
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
