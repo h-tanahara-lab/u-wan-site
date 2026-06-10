@@ -657,6 +657,11 @@ const App = {
         forceD: this.result.forceD,
       });
 
+      // Meta Pixel: 診断登録の完了（リード送信成功）をコンバージョンとして1回だけ計測
+      if (typeof fbq === 'function') {
+        fbq('track', 'CompleteRegistration');
+      }
+
       this.renderResult();
       this.showPage('result');
     } catch (err) {
