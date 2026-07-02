@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ChatGPT登場から3年。『当たり前の使い方』の先へ。AI活用を『効率化』ではなく『一人当たりの利益』に接続する考え方を、まずシェアする場をつくります。U-WAN 棚原秀樹 / AI利益化セミナー 第0期。">
+  <meta property="og:title" content="ChatGPT登場から、3年。『当たり前の使い方』の先へ。——今の形を、シェアさせてください。| U-WAN 棚原秀樹">
+  <meta property="og:description" content="AI活用を『効率化』ではなく『一人当たりの利益』に接続する考え方。まだ完成形ではないけれど、今の段階をシェアしたくて、場を作りました。無料・終了後の実名アンケートご協力が条件です。">
+  <meta property="og:type" content="website">
+  <title>ChatGPT登場から、3年。『当たり前の使い方』の先へ。——今の形を、シェアさせてください。| U-WAN 棚原秀樹 / AI利益化セミナー 第0期</title>
+  <style>
+    /* ====================================================
+       CSS変数
+       ネイビー #1B2A6B / ゴールド #C4962C / 白 #FFFFFF
+    ==================================================== */
+    :root {
+      --navy:    #1B2A6B;
+      --gold:    #C4962C;
+      --gold-lt: #DEB96A;
+      --white:   #FFFFFF;
+      --bg-gray: #F5F7FA;
+      --text:    #1A1A2E;
+      --text-sub: #555566;
+      --border:  #E0E4F0;
+      --red:     #D04040;
+
+      --font-main: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', 'Meiryo', sans-serif;
+      --font-num:  'Georgia', 'Times New Roman', serif;
+
+      --max-w: 780px;
+      --section-gap: 96px;
+    }
+
+    /* ---- Reset & Base ---- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-main);
+      color: var(--text);
+      background: var(--white);
+      font-size: 16px;
+      line-height: 1.8;
+      -webkit-font-smoothing: antialiased;
+    }
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+
+    /* ---- Layout ---- */
+    .container {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+    .section {
+      padding: var(--section-gap) 0;
+    }
+    .section--gray { background: var(--bg-gray); }
+    .section--navy { background: var(--navy); color: var(--white); }
+
+    /* ---- Section Label ---- */
+    .sec-label {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .sec-label__num {
+      font-family: var(--font-num);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .sec-label--white .sec-label__num { color: var(--gold-lt); }
+    .sec-label__text {
+      font-size: 0.8rem;
+      letter-spacing: 0.12em;
+      color: var(--text-sub);
+      border-left: 2px solid var(--border);
+      padding-left: 14px;
+    }
+    .sec-label--white .sec-label__text {
+      color: rgba(255,255,255,0.6);
+      border-left-color: rgba(255,255,255,0.25);
+    }
+
+    /* ---- Heading ---- */
+    .h-main {
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--navy);
+    }
+    .h-main--white { color: var(--white); }
+    .h-sub {
+      margin-top: 16px;
+      font-size: 1.05rem;
+      color: var(--gold);
+      font-weight: 600;
+    }
+    .underline-gold {
+      display: block;
+      width: 40px;
+      height: 3px;
+      background: var(--gold);
+      margin-top: 14px;
+    }
+    .underline-gold--white {
+      background: var(--gold-lt);
+    }
+
+    /* ---- CTA Button ---- */
+    .btn-cta {
+      position: relative;
+      overflow: hidden;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 1.05rem;
+      font-weight: 700;
+      padding: 18px 36px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.25s, box-shadow 0.25s;
+      letter-spacing: 0.04em;
+      text-align: center;
+      justify-content: center;
+    }
+    .btn-cta::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.28) 50%, transparent 100%);
+      transform: skewX(-20deg);
+      transition: none;
+    }
+    .btn-cta:hover {
+      background: #a07820;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(196,150,44,0.45);
+    }
+    .btn-cta:hover::after {
+      animation: btn-shimmer 0.6s ease forwards;
+    }
+    @keyframes btn-shimmer {
+      from { left: -100%; }
+      to   { left: 160%; }
+    }
+    .btn-cta--large {
+      font-size: 1.15rem;
+      padding: 22px 48px;
+      width: 100%;
+      max-width: 480px;
+    }
+    .btn-cta--white {
+      background: var(--white);
+      color: var(--navy);
+    }
+    .btn-cta--white:hover {
+      background: rgba(255,255,255,0.92);
+      color: var(--navy);
+      box-shadow: 0 8px 30px rgba(255,255,255,0.2);
+    }
+
+    /* ---- Top Bar ---- */
+    .topbar {
+      background: var(--navy);
+      color: var(--white);
+      text-align: center;
+      font-size: 0.82rem;
+      padding: 10px 24px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ===================================================
+       HERO / FV — 写真なし・グラデーション背景
+    =================================================== */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      min-height: 580px;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #1B2A6B 0%, #243585 45%, #1E327A 70%, #1B2A6B 100%);
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      bottom: -60px;
+      right: -60px;
+      width: 420px;
+      height: 420px;
+      background: radial-gradient(circle, rgba(196,150,44,0.08) 0%, rgba(27,42,107,0) 70%);
+      pointer-events: none;
+    }
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        to bottom right,
+        rgba(255,255,255,0.03) 0%,
+        rgba(255,255,255,0) 50%,
+        rgba(196,150,44,0.04) 100%
+      );
+      pointer-events: none;
+    }
+    .hero__inner {
+      position: relative;
+      z-index: 2;
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 88px 24px 80px;
+      width: 100%;
+    }
+    .hero__content {
+      max-width: 660px;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .js-ready .hero__content {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    .hero__content.hero-entered {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+    .hero__tag {
+      display: inline-block;
+      border: 1.5px solid rgba(196,150,44,0.9);
+      color: var(--gold-lt);
+      font-size: 0.78rem;
+      letter-spacing: 0.12em;
+      padding: 4px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      background: rgba(27,42,107,0.3);
+    }
+    .hero__head {
+      font-size: clamp(1.35rem, 3.2vw, 1.85rem);
+      font-weight: 700;
+      line-height: 1.65;
+      color: var(--white);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+    }
+    .hero__head em {
+      font-style: normal;
+      color: var(--gold-lt);
+    }
+    .hero__sub {
+      margin-top: 22px;
+      font-size: 0.93rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.9;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+    }
+    .hero__cta {
+      margin-top: 36px;
+    }
+    .hero__note {
+      margin-top: 12px;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.65);
+      text-align: center;
+      max-width: 480px;
+    }
+
+    /* ===================================================
+       数字バー（4列）
+    =================================================== */
+    .numbar {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .numbar__grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .numbar__item {
+      text-align: center;
+      padding: 20px 12px;
+      border-right: 1px solid var(--border);
+    }
+    .numbar__item:last-child { border-right: none; }
+    .numbar__num {
+      font-family: var(--font-num);
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1;
+    }
+    .numbar__main {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-top: 6px;
+      line-height: 1.3;
+    }
+    .numbar__sub {
+      font-size: 0.72rem;
+      color: var(--text-sub);
+      margin-top: 6px;
+      line-height: 1.55;
+    }
+    .numbar__item {
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .js-ready .numbar__item {
+      opacity: 0;
+      transform: scale(0.85);
+    }
+    .numbar__item.numbar-visible {
+      opacity: 1 !important;
+      transform: scale(1) !important;
+    }
+
+    /* ===================================================
+       テキストセクション共通
+    =================================================== */
+    .prose {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text);
+    }
+    .prose p { margin-top: 1em; }
+    .prose p:first-child { margin-top: 0; }
+    .prose strong { font-weight: 700; color: var(--navy); }
+
+    /* ===================================================
+       HONEST SECTION（率直に）
+    =================================================== */
+    .honest-body {
+      font-size: 0.95rem;
+      line-height: 2.0;
+      color: var(--text);
+      margin-top: 28px;
+    }
+    .honest-body p { margin-top: 1.1em; }
+    .honest-body p:first-child { margin-top: 0; }
+
+    /* ===================================================
+       PROBLEM
+    =================================================== */
+    .problem-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--navy);
+      border-radius: 0 8px 8px 0;
+      padding: 28px 32px;
+      margin-top: 24px;
+    }
+    .problem-card__title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    .problem-card__body {
+      font-size: 0.92rem;
+      color: var(--text-sub);
+      line-height: 1.85;
+    }
+    .problem-punch {
+      margin-top: 40px;
+      text-align: center;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      padding: 24px;
+      border: 2px solid var(--navy);
+      border-radius: 8px;
+    }
+
+    /* ===================================================
+       転換
+    =================================================== */
+    .turn {
+      background: var(--navy);
+      color: var(--white);
+      padding: 64px 0;
+      text-align: center;
+    }
+    .turn__body {
+      font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+      font-weight: 700;
+      line-height: 1.55;
+    }
+    .turn__body em { font-style: normal; color: var(--gold); }
+    .turn__sub {
+      margin-top: 20px;
+      font-size: 0.95rem;
+      opacity: 0.85;
+      line-height: 1.85;
+    }
+
+    /* ===================================================
+       SOLUTION
+    =================================================== */
+    .why-box {
+      background: var(--bg-gray);
+      border-radius: 8px;
+      padding: 32px;
+      margin-top: 32px;
+    }
+    .why-box__title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 14px;
+    }
+    .emphasis-box {
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-top: 28px;
+      font-size: 0.95rem;
+      line-height: 1.85;
+    }
+    .emphasis-box strong {
+      color: var(--gold-lt);
+    }
+
+    /* ===================================================
+       FEATURES（セミナーの特徴）
+    =================================================== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 28px;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: 0 0 8px 8px;
+      padding: 24px 22px;
+    }
+    .feature-card__num {
+      font-family: var(--font-num);
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
+    }
+    .feature-card__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.45;
+      margin-bottom: 10px;
+    }
+    .feature-card__body {
+      font-size: 0.84rem;
+      color: var(--text-sub);
+      line-height: 1.8;
+    }
+
+    /* ===================================================
+       SCHEDULE TABLE（当日の内容）
+    =================================================== */
+    .schedule-list {
+      margin-top: 28px;
+    }
+    .schedule-item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 14px;
+      align-items: start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .schedule-item:last-child { border-bottom: none; }
+    .schedule-item__num {
+      font-family: var(--font-num);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.3;
+    }
+    .schedule-item__text {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.75;
+    }
+
+    .info-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 28px;
+      font-size: 0.9rem;
+    }
+    .info-table th,
+    .info-table td {
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      text-align: left;
+      line-height: 1.6;
+    }
+    .info-table th {
+      background: var(--navy);
+      color: var(--white);
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 0.06em;
+      width: 28%;
+    }
+    .info-table td {
+      color: var(--text);
+    }
+
+    /* ===================================================
+       持ち帰れるもの（テイクアウェイ）グリッド
+    =================================================== */
+    .takeaway-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .takeaway-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 32px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .takeaway-item__num {
+      font-family: var(--font-num);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .takeaway-item__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+      line-height: 1.45;
+    }
+    .takeaway-item__body {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      line-height: 1.8;
+    }
+
+    /* ===================================================
+       MYTHS & FACTS
+    =================================================== */
+    .mf-card {
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 28px;
+    }
+    .mf-card__myth {
+      background: #FDF5F5;
+      padding: 20px 28px;
+      border-bottom: 1px solid #EDD8D8;
+    }
+    .mf-card__myth-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--red);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .mf-card__myth-text {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: #888;
+      line-height: 1.5;
+    }
+    .mf-card__fact {
+      padding: 24px 28px;
+      background: var(--white);
+      border-left: 4px solid var(--gold);
+    }
+    .mf-card__fact-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .mf-card__fact-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 14px;
+      line-height: 1.55;
+    }
+    .mf-card__fact-body {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.85;
+    }
+
+    /* ===================================================
+       AFTER IMAGE
+    =================================================== */
+    .after-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 28px;
+    }
+    .after-item {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px 24px;
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+    .after-item__num {
+      font-family: var(--font-num);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .after-item__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .after-item__body {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      line-height: 1.8;
+    }
+
+    /* ===================================================
+       OFFER / 料金
+    =================================================== */
+    .price-box {
+      background: var(--navy);
+      color: var(--white);
+      border-radius: 10px;
+      padding: 40px 36px;
+      margin-top: 28px;
+      text-align: center;
+    }
+    .price-box__label {
+      font-size: 0.78rem;
+      letter-spacing: 0.1em;
+      opacity: 0.75;
+      margin-bottom: 14px;
+    }
+    .price-box__amount {
+      font-family: var(--font-num);
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+    }
+    .price-box__amount-unit {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold-lt);
+      vertical-align: super;
+    }
+    .price-box__note {
+      font-size: 0.82rem;
+      opacity: 0.72;
+      margin-top: 10px;
+    }
+
+    .request-box {
+      margin-top: 28px;
+      padding: 24px 28px;
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      background: rgba(196,150,44,0.04);
+    }
+    .request-box__label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+    }
+    .request-box__body {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.85;
+    }
+    .request-box__body strong { color: var(--navy); }
+
+    .target-note {
+      margin-top: 24px;
+      padding: 20px 24px;
+      background: var(--bg-gray);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.85;
+    }
+    .target-note strong { color: var(--navy); font-weight: 700; }
+
+    /* ===================================================
+       FAQ
+    =================================================== */
+    .faq-list { margin-top: 28px; }
+    .faq-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 12px;
+      overflow: hidden;
+    }
+    .faq-item__q {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px 24px;
+      cursor: pointer;
+      background: var(--white);
+      transition: background 0.15s;
+    }
+    .faq-item__q:hover { background: var(--bg-gray); }
+    .faq-item__q-label {
+      font-family: var(--font-num);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+    .faq-item__q-text {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--navy);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .faq-item__toggle {
+      flex-shrink: 0;
+      color: var(--gold);
+      font-size: 1.2rem;
+      transition: transform 0.3s ease;
+      margin-top: 2px;
+    }
+    .faq-item--open .faq-item__toggle { transform: rotate(180deg); }
+    .faq-item__a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.35s ease;
+      padding: 0 24px 0 56px;
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      line-height: 1.85;
+      border-top: 0 solid var(--border);
+    }
+    .faq-item--open .faq-item__a {
+      max-height: 500px;
+      border-top: 1px solid var(--border);
+      padding-bottom: 20px;
+      padding-top: 16px;
+    }
+
+    /* ===================================================
+       PROFILE（自己紹介）
+    =================================================== */
+    .profile-wrap {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 40px;
+      align-items: start;
+      margin-top: 36px;
+    }
+    .profile-img-wrap {
+      text-align: center;
+    }
+    .profile-img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 12px;
+      border: 3px solid var(--border);
+      box-shadow: 0 4px 16px rgba(27,42,107,0.12);
+      display: block;
+      margin: 0 auto;
+    }
+    .profile-name {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      letter-spacing: 0.06em;
+      line-height: 1.7;
+      text-align: center;
+    }
+    .profile-name strong {
+      display: block;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 4px;
+    }
+    .profile-body {
+      font-size: 0.93rem;
+      color: var(--text);
+      line-height: 2.0;
+    }
+    .profile-body p { margin-top: 1em; }
+    .profile-body p:first-child { margin-top: 0; }
+    .profile-career {
+      margin-top: 20px;
+      padding: 18px 22px;
+      background: var(--bg-gray);
+      border-radius: 8px;
+      font-size: 0.84rem;
+      color: var(--text-sub);
+      line-height: 1.9;
+    }
+    .profile-career__title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--navy);
+      margin-bottom: 10px;
+    }
+    .profile-hobbies {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      color: var(--text-sub);
+    }
+
+    /* ===================================================
+       FINAL MESSAGE（navy背景）
+    =================================================== */
+    .final-msg {
+      background: var(--navy);
+      color: var(--white);
+    }
+    .final-msg__h2 {
+      font-size: clamp(1.3rem, 3.5vw, 1.7rem);
+      font-weight: 700;
+      line-height: 1.5;
+      color: var(--white);
+    }
+    .final-msg__body {
+      margin-top: 28px;
+      font-size: 0.95rem;
+      color: rgba(255,255,255,0.85);
+      line-height: 1.95;
+    }
+    .final-msg__body p { margin-top: 1.1em; }
+    .final-msg__body p:first-child { margin-top: 0; }
+    .final-msg__sign {
+      margin-top: 36px;
+      font-size: 0.9rem;
+      color: rgba(255,255,255,0.65);
+    }
+    .final-msg__sign strong {
+      display: block;
+      font-size: 1.1rem;
+      color: var(--white);
+      margin-top: 4px;
+    }
+
+    /* ===================================================
+       追伸
+    =================================================== */
+    .postscript { background: var(--white); }
+    .ps-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 28px 32px;
+      margin-top: 24px;
+    }
+    .ps-card__title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      margin-bottom: 14px;
+    }
+    .ps-card__body {
+      font-size: 0.9rem;
+      color: var(--text-sub);
+      line-height: 1.9;
+    }
+
+    /* ===================================================
+       中間 CTA
+    =================================================== */
+    .mid-cta {
+      background: var(--bg-gray);
+      padding: 48px 0;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .mid-cta__text {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 20px;
+      line-height: 1.6;
+    }
+    .mid-cta__btn {
+      display: flex;
+      justify-content: center;
+    }
+
+    /* ===================================================
+       Footer
+    =================================================== */
+    .footer {
+      background: #0F1A3D;
+      color: rgba(255,255,255,0.55);
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 0.75rem;
+    }
+
+    /* ===================================================
+       スクロールアニメーション
+    =================================================== */
+    .js-ready .fade-up {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .fade-up.visible {
+      opacity: 1 !important;
+      transform: translateY(0) !important;
+    }
+    .js-ready .slide-in-left {
+      opacity: 0;
+      transform: translateX(-32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .js-ready .slide-in-right {
+      opacity: 0;
+      transform: translateX(32px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .slide-in-left.visible,
+    .slide-in-right.visible {
+      opacity: 1 !important;
+      transform: translateX(0) !important;
+    }
+    .mark {
+      background: linear-gradient(transparent 52%, rgba(255,220,0,0.5) 52%);
+      background-size: 0% 100%;
+      background-repeat: no-repeat;
+      transition: background-size 0.75s ease-out;
+      padding-bottom: 1px;
+    }
+    .mark.mark-visible {
+      background-size: 100% 100%;
+    }
+
+    /* ===================================================
+       Print
+    =================================================== */
+    @media print {
+      .js-ready .fade-up,
+      .js-ready .slide-in-left,
+      .js-ready .slide-in-right {
+        opacity: 1 !important; transform: none !important;
+      }
+      .js-ready .hero__content { opacity: 1 !important; transform: none !important; }
+      .js-ready .numbar__item { opacity: 1 !important; transform: none !important; }
+      .mark { background-size: 100% 100% !important; }
+    }
+
+    /* ===================================================
+       Responsive — SP (max 640px)
+    =================================================== */
+    @media (max-width: 640px) {
+      :root { --section-gap: 64px; }
+
+      .hero { min-height: 500px; }
+      .hero__inner { padding: 64px 20px 68px; }
+
+      .numbar__grid { grid-template-columns: repeat(2, 1fr); }
+      .numbar__item {
+        border-right: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .numbar__item:nth-child(2n) { border-right: none; }
+      .numbar__item:nth-child(n+3) { border-bottom: none; }
+
+      .problem-card, .ps-card { padding: 20px; }
+      .mf-card__myth, .mf-card__fact { padding: 18px 20px; }
+      .emphasis-box { padding: 22px 20px; }
+      .price-box { padding: 28px 20px; }
+      .price-box__amount { font-size: 2.8rem; }
+      .request-box { padding: 20px; }
+
+      .faq-item__a { padding-left: 24px; }
+
+      /* プロフィール：SP縦積み */
+      .profile-wrap {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .profile-img { width: 140px; height: 140px; }
+
+      /* 特徴グリッド：SP 1列 */
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===================================================
+     TOP BAR
+=================================================== -->
+<div class="topbar">予約フォームから席を確保 — 複数日程からお選びいただけます</div>
+
+<!-- ===================================================
+     HERO / FV — 写真なし・グラデーション背景
+=================================================== -->
+<section class="hero">
+  <div class="hero__inner">
+    <div class="hero__content" id="hero-content">
+      <div class="hero__tag">U-WAN 棚原秀樹 / AI利益化セミナー 第0期</div>
+      <h1 class="hero__head">
+        ChatGPT登場から、3年。<br>
+        「当たり前の使い方」の先へ。<br>
+        <em>——今の形を、シェアさせてください。</em>
+      </h1>
+      <p class="hero__sub">
+        AI活用を「効率化」ではなく「一人当たりの利益」に接続する考え方。<br>
+        まだ完成形ではないけれど、今の段階をシェアしたくて、場を作りました。
+      </p>
+      <div class="hero__cta">
+        <a href="https://uw.u-wan.jp/r/EtKebnMk0WNX/register" target="_blank" rel="noopener" class="btn-cta btn-cta--large">
+          <span>席を予約する（無料）</span>
+        </a>
+        <p class="hero__note">ご予約いただいた方のみに、複数の日程をご案内します</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     数字バー（4列）
+=================================================== -->
+<div class="numbar" id="numbar">
+  <div class="container">
+    <div class="numbar__grid">
+      <div class="numbar__item">
+        <div class="numbar__num">3年</div>
+        <div class="numbar__sub">ChatGPT登場から経過した年数。「当たり前」になった今、次の話をします。</div>
+      </div>
+      <div class="numbar__item" style="transition-delay:0.1s;">
+        <div class="numbar__num">8年</div>
+        <div class="numbar__sub">組織開発の経験・知識・ノウハウ。人と組織の動かし方を、現場で積み上げてきた。</div>
+      </div>
+      <div class="numbar__item" style="transition-delay:0.2s;">
+        <div class="numbar__num">4年以上</div>
+        <div class="numbar__sub">経営の勉強と実践を繰り返してきた年数。MBA取得後も、学びと実践を続けている。</div>
+      </div>
+      <div class="numbar__item" style="transition-delay:0.3s;">
+        <div class="numbar__num">MBA</div>
+        <div class="numbar__sub">（実は）持っています。タスマニア大学にて取得。経営メソッドの土台になっている。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================
+     率直に（動機開示）
+=================================================== -->
+<section class="section fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">00</span>
+      <span class="sec-label__text">HONEST</span>
+    </div>
+    <h2 class="h-main">最初に、このセミナーを開こうと思った理由を正直に話させてください。</h2>
+    <span class="underline-gold"></span>
+
+    <div class="honest-body">
+      <p>ChatGPTが出てきたとき、真っ先に試したのを覚えています。当時、LINEの下書きを作ってもらったんですが——これが想像以上に自然で、びっくりしました。</p>
+      <p>それから3年が経ちました。今では、AIを使っていること自体が「当たり前」になりつつあります。</p>
+      <p>でも、成果に繋がっているという声は、あまり聞こえてきません。</p>
+      <p>多くの方が、AIを活用しているのに「効率化」で止まっている。時間が少し短くなった、文章が少し早く書けるようになった——それ自体は悪いことじゃないんですが、銀行口座やPLを見ると、「何か変わった？」という感覚が残ることも多い。</p>
+      <p>今年に入ってから自分なりに模索してきた結果、<span class="mark">少しだけ形になってきたものがある</span>という感覚があります。</p>
+      <p>一人で抱えておくより、同じように「次の一手」を探している人にシェアしたい。そう思って、この場をつくることにしました。</p>
+      <p>「セミナー」というほど大げさなものではないかもしれません。まだ完成形ではないので、無料にしています。でも、今の段階で触れておくことには、意味があると思っています。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     01 THE PROBLEM
+=================================================== -->
+<section class="section section--gray fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">01</span>
+      <span class="sec-label__text">PROBLEM</span>
+    </div>
+    <h2 class="h-main">こんな感覚、ありませんか？</h2>
+    <span class="underline-gold"></span>
+
+    <div class="problem-card" style="margin-top:32px;">
+      <div class="problem-card__title">01 — 使っているのに、「変わった感じ」がしない</div>
+      <div class="problem-card__body">
+        ChatGPTを開いて、文章を作って、要約して、アイデア出しをして——AIを使っている状態にはなった。でも、銀行口座やPLを見ると、「何かが変わった」という感覚が正直ない。効率化と成果は、別の話だということに、なんとなく気づいている。
+      </div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-card__title">02 — 「次は何を覚えればいい？」という追いかけに、少し疲れてきた</div>
+      <div class="problem-card__body">
+        新しいツール、新しいプロンプト、新しい活用術——情報を追いかけているうちに、自分が何を目指しているのかが見えなくなってくる。学ぶことが目的になってきた感覚。軸を、どこかで整理したい。
+      </div>
+    </div>
+
+    <div class="problem-card">
+      <div class="problem-card__title">03 — 「差が開いている」のは分かる。でも何をすればいいかが見えない</div>
+      <div class="problem-card__body">
+        周りの人は、どうやらAIをうまく使っているらしい。自分も使っているのに、何かが違う。その「差」が何なのかを、まだ言語化できていない。
+      </div>
+    </div>
+
+    <div class="problem-punch">
+      この3つを、少し整理してみませんか？
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     転換
+=================================================== -->
+<div class="turn fade-up">
+  <div class="container">
+    <p class="turn__body">
+      「<em>操作方法を学ぶ</em>」から<br>
+      「<em>ビジネスで成果の出る使い方を考える</em>」へ。
+    </p>
+    <p class="turn__sub">
+      そろそろ、ここに向かってみたい——それが、このセミナーの出発点です。
+    </p>
+  </div>
+</div>
+
+<!-- ===================================================
+     02 SOLUTION
+=================================================== -->
+<section class="section fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">02</span>
+      <span class="sec-label__text">SOLUTION</span>
+    </div>
+    <h2 class="h-main">AI活用を「効率化」から「一人当たりの利益」へ</h2>
+    <span class="underline-gold"></span>
+
+    <div class="prose" style="margin-top:28px;">
+      <p>市場に出回っているAI情報の出発点は「どう使うか（操作）」です。</p>
+      <p>僕の出発点は「<strong>一人当たりの利益をどう上げるか</strong>」。この違いは、小さいようで、到達点が全然違う。</p>
+    </div>
+
+    <div class="emphasis-box">
+      <strong>8年の組織開発の経験・知識・ノウハウ、さらに（実は）MBAも持っていて、さらに4年以上にわたり経営の勉強と実践を繰り返して得た経営メソッド</strong>——僕が今まで生き延びることができているのは、これのおかげです。その全部を、AIと掛け合わせている。SNS広告で流れてくる"操作方法"とは、まったく別物です。
+    </div>
+
+    <div class="why-box" style="margin-top:40px;">
+      <div class="why-box__title">当日お渡しするもの</div>
+      <div style="font-size:0.9rem;color:var(--text-sub);line-height:1.85;margin-top:8px;">
+        AIを経営に活かすための白書（棚原式AI×経営の考え方をまとめたもの）／セミナー形式での共有・解説／Q&Aの時間。
+        形式はオンライン。参加費は無料（理由は後述）。
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:36px;">
+      <a href="https://uw.u-wan.jp/r/EtKebnMk0WNX/register" target="_blank" rel="noopener" class="btn-cta btn-cta--large">
+        <span>席を予約する（無料）</span>
+      </a>
+      <p style="margin-top:10px;font-size:0.8rem;color:var(--text-sub);">ご予約いただいた方のみに、複数の日程をご案内します</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     特徴（セミナーの話す内容）
+=================================================== -->
+<section class="section section--gray fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">—</span>
+      <span class="sec-label__text">FEATURES</span>
+    </div>
+    <h2 class="h-main">このセミナーの話す内容</h2>
+    <span class="underline-gold"></span>
+
+    <div class="features-grid">
+      <div class="feature-card slide-in-left">
+        <div class="feature-card__num">FEATURE 01</div>
+        <div class="feature-card__title">「操作」ではなく「考え方」</div>
+        <div class="feature-card__body">ChatGPTの使い方は話しません。出発点は「一人当たりの利益にどう接続するか」という経営的な思考です。</div>
+      </div>
+      <div class="feature-card slide-in-right">
+        <div class="feature-card__num">FEATURE 02</div>
+        <div class="feature-card__title">8年 × MBA × 4年以上 × AI</div>
+        <div class="feature-card__body">組織開発の経験・MBAの経営メソッド・4年以上の実践、その全部をAIと掛け合わせた話をします。</div>
+      </div>
+      <div class="feature-card slide-in-left">
+        <div class="feature-card__num">FEATURE 03</div>
+        <div class="feature-card__title">「第0期」＝完成品を渡す場ではない</div>
+        <div class="feature-card__body">今年模索してきた内容を、まずシェアする段階です。皆さんの声でブラッシュアップしていきます。一緒に育てるフェーズ。</div>
+      </div>
+      <div class="feature-card slide-in-right">
+        <div class="feature-card__num">FEATURE 04</div>
+        <div class="feature-card__title">白書を持ち帰れる</div>
+        <div class="feature-card__body">「AIを経営に活かすための白書」を当日お渡しします。聴いて終わりではなく、自分の手元に残るものを。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     03 MYTHS & FACTS
+=================================================== -->
+<section class="section fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">03</span>
+      <span class="sec-label__text">MYTHS &amp; FACTS</span>
+    </div>
+    <h2 class="h-main">よくある思い込みに、正直に答えます</h2>
+    <span class="underline-gold"></span>
+
+    <div class="mf-card" style="margin-top:32px;">
+      <div class="mf-card__myth">
+        <div class="mf-card__myth-badge">思い込み</div>
+        <div class="mf-card__myth-text">「AIはまだ自分のビジネスには早い」</div>
+      </div>
+      <div class="mf-card__fact">
+        <div class="mf-card__fact-badge">実際のところ</div>
+        <div class="mf-card__fact-title">気づけば、AIを使う人と使わない人の差は、もうすでに開いています。</div>
+        <div class="mf-card__fact-body">「まだ早い」と思っている間に、使っている人との差は静かに積み上がっています。「早い」ではなく「今の自分に合った入り方を知らない」だけかもしれません。それを整理する場が、このセミナーです。</div>
+      </div>
+    </div>
+
+    <div class="mf-card">
+      <div class="mf-card__myth">
+        <div class="mf-card__myth-badge">思い込み</div>
+        <div class="mf-card__myth-text">「操作を覚えれば成果は自然についてくる」</div>
+      </div>
+      <div class="mf-card__fact">
+        <div class="mf-card__fact-badge">実際のところ</div>
+        <div class="mf-card__fact-title">効率化と、利益への接続は、別の話です。</div>
+        <div class="mf-card__fact-body">「使いこなせるようになった」と「ビジネスの結果が変わった」はイコールではありません。操作スキルが上がることと、一人当たりの利益が上がることの間には、「考え方」という橋が必要です。</div>
+      </div>
+    </div>
+
+    <div class="mf-card">
+      <div class="mf-card__myth">
+        <div class="mf-card__myth-badge">思い込み</div>
+        <div class="mf-card__myth-text">「第0期＝まだ不完全なものを聞かされる」</div>
+      </div>
+      <div class="mf-card__fact">
+        <div class="mf-card__fact-badge">実際のところ</div>
+        <div class="mf-card__fact-title">「何もない状態」ではなく、一緒に完成させるフェーズです。</div>
+        <div class="mf-card__fact-body">今年模索してきた内容の核の部分は、すでに形になっています。「第0期」は「未完成品を渡す」のではなく、参加者の声を取り込みながら完成度を上げていくフェーズ。その最初のメンバーになるということです。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     中間 CTA
+=================================================== -->
+<div class="mid-cta">
+  <div class="container">
+    <p class="mid-cta__text">AIを「利益」に接続する話、興味が湧いた方は、まず席を確保してください。</p>
+    <div class="mid-cta__btn">
+      <a href="https://uw.u-wan.jp/r/EtKebnMk0WNX/register" target="_blank" rel="noopener" class="btn-cta btn-cta--large">
+        <span>席を予約する（無料）</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================
+     当日の内容
+=================================================== -->
+<section class="section section--gray fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">—</span>
+      <span class="sec-label__text">CONTENT</span>
+    </div>
+    <h2 class="h-main">こんな内容をシェアします（想定）</h2>
+    <span class="underline-gold"></span>
+
+    <div class="schedule-list">
+      <div class="schedule-item">
+        <div class="schedule-item__num">1</div>
+        <div class="schedule-item__text">「効率化止まり」を抜け出すための考え方——なぜ銀行口座が変わらないのか</div>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-item__num">2</div>
+        <div class="schedule-item__text">一人当たり利益に接続するフレームワーク——棚原式AI×経営の土台</div>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-item__num">3</div>
+        <div class="schedule-item__text">今年模索してきた内容のシェア——試行錯誤の中で見えてきたこと</div>
+      </div>
+      <div class="schedule-item">
+        <div class="schedule-item__num">4</div>
+        <div class="schedule-item__text">Q&amp;A——疑問や自分のビジネスへの応用について</div>
+      </div>
+    </div>
+
+    <table class="info-table">
+      <tr>
+        <th>形式</th>
+        <td>オンライン（Zoom または Google Meet）</td>
+      </tr>
+      <tr>
+        <th>参加費</th>
+        <td>無料（理由は後述）</td>
+      </tr>
+      <tr>
+        <th>資料</th>
+        <td>「AIを経営に活かすための白書」をお渡しします</td>
+      </tr>
+      <tr>
+        <th>日程</th>
+        <td>ご予約いただいた方に、複数の日程をご案内します</td>
+      </tr>
+    </table>
+  </div>
+</section>
+
+<!-- ===================================================
+     04 AFTER IMAGE
+=================================================== -->
+<section class="section fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">04</span>
+      <span class="sec-label__text">AFTER IMAGE</span>
+    </div>
+    <h2 class="h-main">こういう状態になることを目指して、一緒に作っていきたい</h2>
+    <span class="underline-gold"></span>
+
+    <div class="after-grid">
+      <div class="after-item">
+        <div class="after-item__num">1</div>
+        <div>
+          <div class="after-item__title">「AI活用の目的地」が言語化できるようになる</div>
+          <div class="after-item__body">「AIを活用しなきゃ」という漠然とした感覚から、「自分のビジネスのどこにAIを接続するか」が具体的に考えられるようになる。</div>
+        </div>
+      </div>
+      <div class="after-item">
+        <div class="after-item__num">2</div>
+        <div>
+          <div class="after-item__title">「効率化」と「利益」の違いが、腑に落ちる</div>
+          <div class="after-item__body">「時間が短縮された」と「手残りが増えた」は全然違う話だと気づく。そしてそこに向かうための思考の型が手元に残る。</div>
+        </div>
+      </div>
+      <div class="after-item">
+        <div class="after-item__num">3</div>
+        <div>
+          <div class="after-item__title">棚原の8年×MBA×経営メソッドを、自分の文脈で使えるようになる</div>
+          <div class="after-item__body">「すごい話を聞いた」で終わらない。自分のビジネスに引き寄せて考えるためのフレームと、白書が手元に残る。</div>
+        </div>
+      </div>
+      <div class="after-item">
+        <div class="after-item__num">4</div>
+        <div>
+          <div class="after-item__title">AIに振り回されない、自分の軸が生まれる</div>
+          <div class="after-item__body">次から次へと出てくるAIツール・情報の波に、いちいち乗らなくてもよくなる。自分のビジネスに必要なものを、自分で判断できるようになる。</div>
+        </div>
+      </div>
+      <div class="after-item">
+        <div class="after-item__num">5</div>
+        <div>
+          <div class="after-item__title">「第0期」というポジションが持つ、固有の意味</div>
+          <div class="after-item__body">完成形ではないからこそ、このコンテンツをつくる側に関われる。完成品の購入者より先に、本質に触れる経験でもある。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     05 OFFER（参加費とお願いごと）
+=================================================== -->
+<section class="section section--gray fade-up" id="offer">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">05</span>
+      <span class="sec-label__text">OFFER</span>
+    </div>
+    <h2 class="h-main">参加費と、一つだけお願いがあります</h2>
+    <span class="underline-gold"></span>
+
+    <div class="price-box">
+      <div class="price-box__label">今回の参加費</div>
+      <div class="price-box__amount"><span class="price-box__amount-unit">&#165;</span>0</div>
+      <div class="price-box__note">無料——まだ完成形ではないので、今の段階では無料にしています</div>
+    </div>
+
+    <div class="request-box">
+      <div class="request-box__label">▼ お願いごと【重要】</div>
+      <div class="request-box__body">
+        オンラインで実施します。終了後に、<strong>実名でのアンケート（ほぼ記述式）</strong>へのご協力をお願いします。<br>
+        皆さんの声で、このセミナーをブラッシュアップしていきます。
+      </div>
+    </div>
+
+    <div class="prose" style="margin-top:24px;font-size:0.92rem;">
+      <p>完成品を受け取る場ではなく、一緒に育てる"第0期メンバー"を募集している感覚で考えていただけると、ちょうどいいかもしれません。</p>
+    </div>
+
+    <div class="target-note">
+      <strong>こんな方に来てもらえたら、と思っています：</strong><br>
+      「当たり前の効率化」に満足せず、売上・利益という成果を本気で出したい方。<br>
+      情報だけ持ち帰りはお互いのためにならないと思っているので、正直にお伝えしておきます。
+    </div>
+
+    <div style="text-align:center;margin-top:40px;">
+      <a href="https://uw.u-wan.jp/r/EtKebnMk0WNX/register" target="_blank" rel="noopener" class="btn-cta btn-cta--large">
+        <span>席を予約する（無料）</span>
+      </a>
+      <p style="margin-top:10px;font-size:0.8rem;color:var(--text-sub);">ご予約いただいた方のみに、複数の日程をご案内します</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     06 FAQ
+=================================================== -->
+<section class="section fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">06</span>
+      <span class="sec-label__text">FAQ</span>
+    </div>
+    <h2 class="h-main">よくある質問</h2>
+    <span class="underline-gold"></span>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">なぜ無料なんですか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          まだ完成形ではないからです。今年模索してきた内容をシェアする「第0期」の段階で、参加者の声を元にブラッシュアップしていきます。完成したら、有料になります。「一緒に育てるフェーズ」だからこそ、今は無料にしています。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">日程はいつですか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          予約フォームから席を確保いただいた方に、複数の日程をご案内します。都合のよい日程をお選びください。全日程が合わない場合は、次回開催をお待ちいただく形になります。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">どんなオンラインツールを使いますか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          Zoom または Google Meet を予定しています。ご予約後にご案内します。どちらも無料でお使いいただけるツールです。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">AI初心者でも参加できますか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          はい、参加いただけます。ChatGPTや生成AIを多少でも触ったことがある方を想定しています。「操作が得意かどうか」は関係なく、「ビジネスの成果に本気で向き合いたいか」の方が大事です。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">「第0期」というのはどういう意味ですか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          まだ完成形ではなく、参加者の声を元にブラッシュアップしながら完成させていくフェーズ、という意味です。「何もない状態を聞かされる」のではなく、今年模索してきた核の部分は形になっています。一緒に完成させる最初のメンバー、というイメージです。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">録画はありますか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          現時点では未定です。録画配信を前提にした設計にはなっていないため、参加できる日程で直接ご参加いただけると嬉しいです。
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <div class="faq-item__q" onclick="toggleFaq(this)">
+          <span class="faq-item__q-label">Q</span>
+          <span class="faq-item__q-text">参加後に有料サービスへの案内はありますか？</span>
+          <span class="faq-item__toggle">&#9662;</span>
+        </div>
+        <div class="faq-item__a">
+          セミナーの中で、棚原の有料サービスも「想定」としてご紹介します。ですが、その内容に対しても、皆様のご意見が欲しいんです。「こういうのがあるといい」「これは嬉しい」「これなら買いたい」——などなど、率直な声をいただけたら嬉しいです。
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     自己紹介セクション
+=================================================== -->
+<section class="section section--gray fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">—</span>
+      <span class="sec-label__text">PROFILE</span>
+    </div>
+    <h2 class="h-main">棚原ってどんな人？</h2>
+    <span class="underline-gold"></span>
+
+    <div class="profile-wrap">
+      <div class="profile-img-wrap">
+        <img src="assets/tanahara.jpg" alt="棚原秀樹 - U-WAN代表" class="profile-img">
+        <div class="profile-name">
+          <strong>棚原 秀樹</strong>
+          U-WAN 代表<br>
+          沖縄県読谷村出身
+        </div>
+      </div>
+      <div>
+        <div class="profile-body">
+          <p>AIによる効率化と、コミュニケーションを重視した組織づくり——一見、正反対に見えるかもしれないですが、ゴールは同じです。「一人当たりの利益を上げながら、人が生き生きと働ける組織をつくる」こと。</p>
+          <p>AI時代というのは、逆説的に「人間の時代」だと思っています。AIが担う部分が増えるほど、人が関わる部分の価値が問われる。そのバランスを、経営者として考え続けています。</p>
+        </div>
+        <div class="profile-career">
+          <div class="profile-career__title">CAREER</div>
+          琉球大学卒業後、証券会社でオペレーター育成を担当。2011年に渡豪し、タスマニア大学にてMBA取得。東京でコンサルティングの経験を積み、2014年に沖縄へUターン。2018年にU-WANを独立設立し、現在に至る。
+        </div>
+        <div class="profile-hobbies">
+          趣味：マラソン　好きな言葉：じりつ・成長・変化
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     FINAL MESSAGE（navy背景）
+=================================================== -->
+<section class="section final-msg fade-up">
+  <div class="container">
+    <div class="sec-label sec-label--white">
+      <span class="sec-label__num">07</span>
+      <span class="sec-label__text">FROM TANAHARA</span>
+    </div>
+    <h2 class="final-msg__h2">棚原から、参加を検討しているあなたへ。</h2>
+    <span class="underline-gold underline-gold--white"></span>
+
+    <div class="final-msg__body">
+      <p>このページを最後まで読んでくれているということは、「何かが引っかかった」のだと思います。</p>
+      <p>「完璧な状態で参加したい」という気持ちは分かります。でも、完璧な状態を待っていると、差がじわじわと広がっていきます。</p>
+      <p>AIが物珍しかった「使い始め」の時期は、とっくに終わっています。問われているのは「どう使うか」ではなく「何のために使うか」という話になってきている。</p>
+      <p>まだ完成形ではないけれど、今の段階でシェアできるものがある。それを一緒に考える場に、来てもらえたらと思っています。</p>
+      <p>「当たり前の効率化」に満足せず、売上・利益という成果を本気で出したい方と、話したいです。</p>
+    </div>
+
+    <div class="final-msg__sign">
+      <strong>棚原 秀樹</strong>
+    </div>
+
+    <div style="text-align:center;margin-top:44px;">
+      <a href="https://uw.u-wan.jp/r/EtKebnMk0WNX/register" target="_blank" rel="noopener" class="btn-cta btn-cta--large btn-cta--white">
+        <span>席を予約する（無料）</span>
+      </a>
+      <p style="margin-top:12px;font-size:0.8rem;color:rgba(255,255,255,0.6);">複数日程からお選びいただけます</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================================================
+     追伸（1本のみ）
+=================================================== -->
+<section class="section postscript fade-up">
+  <div class="container">
+    <div class="sec-label">
+      <span class="sec-label__num">P.S.</span>
+      <span class="sec-label__text">POSTSCRIPT</span>
+    </div>
+    <h2 class="h-main" style="font-size:1.2rem;">追伸</h2>
+    <span class="underline-gold"></span>
+
+    <div class="ps-card">
+      <div class="ps-card__title">追伸</div>
+      <div class="ps-card__body">
+        僕は結構、現状維持が嫌いです（笑）。変化することが楽しみで仕方ないタイプなので、AIで今がどう変わるのかが、純粋に興味深い。<br><br>
+        使う企業と使わない企業の差は、もうすでに広がっています。その伸びている側にいたい——そういう感覚がある方に、ぜひ来てもらえたら^^
+        <div style="margin-top:20px;">
+          <a href="https://uw.u-wan.jp/r/EtKebnMk0WNX/register" target="_blank" rel="noopener" class="btn-cta" style="font-size:0.95rem;padding:14px 28px;">
+            <span>&#8594; 席を予約する</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <p>&copy; 2026 U-WAN 棚原秀樹 / AI利益化セミナー 第0期</p>
+</footer>
+
+<!-- ===================================================
+     JavaScript
+=================================================== -->
+<script>
+  document.documentElement.classList.add('js-ready');
+
+  window.addEventListener('DOMContentLoaded', function() {
+    var heroContent = document.getElementById('hero-content');
+    if (heroContent) {
+      setTimeout(function() {
+        heroContent.classList.add('hero-entered');
+      }, 300);
+    }
+  });
+
+  function toggleFaq(el) {
+    var item = el.closest('.faq-item');
+    item.classList.toggle('faq-item--open');
+  }
+
+  (function() {
+    var supportsIO = 'IntersectionObserver' in window;
+
+    var revealTargets = document.querySelectorAll('.fade-up, .slide-in-left, .slide-in-right');
+    if (!supportsIO) {
+      revealTargets.forEach(function(el) { el.classList.add('visible'); });
+    } else {
+      var revealIO = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.07 });
+      revealTargets.forEach(function(el) { revealIO.observe(el); });
+    }
+
+    var markTargets = document.querySelectorAll('.mark');
+    if (!supportsIO) {
+      markTargets.forEach(function(el) { el.classList.add('mark-visible'); });
+    } else {
+      var markIO = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('mark-visible');
+            markIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      markTargets.forEach(function(el) { markIO.observe(el); });
+    }
+
+    var numbarItems = document.querySelectorAll('.numbar__item');
+    if (!supportsIO) {
+      numbarItems.forEach(function(el) { el.classList.add('numbar-visible'); });
+    } else {
+      var numbarIO = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('numbar-visible');
+            numbarIO.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      numbarItems.forEach(function(el) { numbarIO.observe(el); });
+    }
+
+  })();
+</script>
+
+</body>
+</html>
