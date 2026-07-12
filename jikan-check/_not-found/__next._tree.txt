@@ -1,0 +1,2 @@
+:HL["/jikan-check/_next/static/chunks/3s1zd5qgx8d06.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"LpUv3BY9hDtqp3sMEV2Ob"}
