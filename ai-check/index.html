@@ -4,48 +4,29 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Meta Pixel Code -->
-  <script>
-  !function(f,b,e,v,n,t,s)
-  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-  n.queue=[];t=b.createElement(e);t.async=!0;
-  t.src=v;s=b.getElementsByTagName(e)[0];
-  s.parentNode.insertBefore(t,s)}(window, document,'script',
-  'https://connect.facebook.net/en_US/fbevents.js');
-  fbq('init', '1505768037207415');
-  fbq('track', 'PageView');
-  </script>
-  <noscript><img height="1" width="1" style="display:none"
-  src="https://www.facebook.com/tr?id=1505768037207415&ev=PageView&noscript=1"
-  /></noscript>
-  <!-- End Meta Pixel Code -->
-
   <!-- ===== SEO / OGP ===== -->
-  <title>工務店AI内製化 現在地チェック | U-WAN</title>
-  <meta name="description" content="見積書・工程表の作成に時間がかかっていませんか？7問・3〜4分でAI内製化の現在地を確認できる無料診断ツールです。">
-  <meta name="robots" content="noindex, nofollow"><!-- 公開前は noindex。公開時に削除 -->
+  <title>工務店の書類作成、AIで片付ける無料診断 | U-WAN</title>
+  <meta name="description" content="現場も打ち合わせもお客様対応も終えたあと、待っているのは書類の山。その書類、本当に社長がやる必要がありますか？4つの質問・体感2分で、今の現在地が分かる無料診断です。">
 
   <!-- OGP -->
-  <meta property="og:title" content="工務店AI内製化 現在地チェック | U-WAN">
-  <meta property="og:description" content="7問・3〜4分。AI内製化の現在地をチェックして、最初の1歩を明確にする無料診断。">
+  <meta property="og:title" content="工務店の書類作成、AIで片付ける無料診断 | U-WAN">
+  <meta property="og:description" content="現場を見て、打ち合わせをして、お客様対応を終えたあとに待っている書類。毎日頑張っているのに、気づけば事務作業ばかり。その書類、本当に社長がやる必要がありますか？4つの質問・体感2分の無料診断です。">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="ja_JP">
   <!-- og:image は公開前に設定 -->
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="工務店AI内製化 現在地チェック | U-WAN">
-  <meta name="twitter:description" content="7問・3〜4分。AI内製化の現在地をチェックして、最初の1歩を明確にする無料診断。">
+  <meta name="twitter:title" content="工務店の書類作成、AIで片付ける無料診断 | U-WAN">
+  <meta name="twitter:description" content="現場を見て、打ち合わせをして、お客様対応を終えたあとに待っている書類。毎日頑張っているのに、気づけば事務作業ばかり。その書類、本当に社長がやる必要がありますか？4つの質問・体感2分の無料診断です。">
 
   <!-- 構造化データ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebPage",
-    "name": "工務店AI内製化 現在地チェック",
-    "description": "工務店向けAI内製化の準備状況を7問で確認する無料診断ツール",
+    "name": "工務店の書類作成、AIで片付ける無料診断",
+    "description": "工務店向け、書類作成の負担とAI活用度を4つの質問で確認できる無料診断ツール",
     "publisher": {
       "@type": "Organization",
       "name": "U-WAN"
@@ -59,7 +40,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 
   <!-- LCP最適化：ヒーロー画像をプリロード -->
-  <link rel="preload" as="image" href="assets/hero-tanahara-main.jpg">
+  <link rel="preload" as="image" href="assets/hero-documents-burden-1600.jpg">
 
   <!-- スタイル -->
   <link rel="stylesheet" href="style.css">
@@ -94,10 +75,10 @@
         <div class="hero__photo-wrap">
           <img
             class="hero__photo"
-            src="assets/hero-tanahara-main.jpg"
-            alt="U-WAN代表 棚原秀樹。AI内製化支援の専門家として工務店経営者の相談に応じる。"
-            width="1200"
-            height="800"
+            src="assets/hero-documents-burden-1600.jpg"
+            alt="山積みの書類とノートパソコンに囲まれ、深夜のオフィスで疲れた表情を浮かべる工務店の社長。"
+            width="1600"
+            height="1073"
             loading="eager"
             fetchpriority="high"
           >
@@ -106,11 +87,11 @@
         <div class="hero__content">
           <p class="hero__eyebrow">工務店向け 無料診断</p>
           <h1 class="hero__title" id="intro-title">
-            <span class="hero__title-line1">『AI、うちでもできるのかな』と</span>
-            思った方へ
+            <span class="hero__title-line1">その書類、</span>
+            本当に社長がやる必要がありますか？
           </h1>
           <p class="hero__lead">
-            わずか7問・3〜4分で、AI導入の最初の一歩が分かります。
+            4つの質問・体感2分で、今の現在地が分かります。
           </p>
           <button
             id="btn-start"
@@ -128,7 +109,7 @@
       <div class="intro-body">
         <div class="intro-copy">
           <p id="intro-subtitle" class="intro-copy__sub">
-            「AI、うちでもできるのかな」と思ったことがあるなら、まずここから。
+            本当は、現場や商談にもっと時間を使いたいはずなんですよね。
           </p>
           <div class="intro-copy__text" id="intro-desc">
             <!-- JS で上書き: CONTENT.meta.description -->
@@ -145,11 +126,11 @@
         <div class="intro-meta" aria-label="診断の概要">
           <div class="intro-meta__item">
             <span class="intro-meta__icon" aria-hidden="true">&#128337;</span>
-            <span>所要時間：<strong>3〜4分</strong></span>
+            <span>所要時間：<strong>体感2分</strong></span>
           </div>
           <div class="intro-meta__item">
             <span class="intro-meta__icon" aria-hidden="true">&#10067;</span>
-            <span>設問数：<strong>全7問</strong></span>
+            <span>設問数：<strong>全4問</strong></span>
           </div>
           <div class="intro-meta__item">
             <span class="intro-meta__icon" aria-hidden="true">&#127381;</span>
@@ -200,8 +181,8 @@
       <!-- プログレスバー -->
       <div class="progress-wrap" role="navigation" aria-label="診断の進捗">
         <div class="progress-meta">
-          <span class="progress-step-label" id="progress-label">Q1 / 書類業務の負担度</span>
-          <span class="progress-count" id="progress-count" aria-live="polite">1 / 7</span>
+          <span class="progress-step-label" id="progress-label">Q1 / 書類作成にかける時間</span>
+          <span class="progress-count" id="progress-count" aria-live="polite">1 / 4</span>
         </div>
         <div class="progress-bar-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="進捗">
           <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
@@ -224,12 +205,6 @@
             <!-- JS でレンダリング -->
           </div>
         </fieldset>
-
-        <!-- Q5 丸投げ警告（JS で表示制御） -->
-        <p class="q5-warning" id="q5-warning" role="alert" aria-live="assertive">
-          この選択肢を選ぶと、スコアに関わらず「タイプD：観察型」と判定されます。
-          内製化支援との方向性の整合を確認するための設計です。
-        </p>
 
         <!-- ナビゲーション -->
         <div class="q-nav">
@@ -263,7 +238,7 @@
     <section id="page-form" class="page" aria-labelledby="form-title">
       <div class="form-card">
         <div class="form-hero">
-          <h2 class="form-hero__title" id="form-title">7問、お疲れさまでした。</h2>
+          <h2 class="form-hero__title" id="form-title">4問、お疲れさまでした。</h2>
           <p class="form-hero__sub">
             診断結果をメールでお届けします。<br>
             あなたの回答をもとに、今の状態に合った「タイプ診断」と「最初の1アクション」をまとめたものをお送りします。<br>

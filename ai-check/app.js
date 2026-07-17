@@ -1,16 +1,21 @@
 /**
- * 工務店AI内製化 現在地チェック — メインロジック v4
+ * 工務店AI内製化 現在地チェック — メインロジック v5
  *
  * 文言差し替えポイント: CONTENT オブジェクト（最上部）を編集するだけで
  * 全設問・選択肢・結果テキストを一括差し替えできます。
- * フミ確定原稿（20260602 / CTA改訂 20260603 / トーン全面見直し・全CTA個別相談統一 20260603 / C型D型結果文更新 20260604）を反映済み。
+ * 4問化・結果3パターン化（属人化/様子見/先行タイプ）レン設計・フミ確定原稿を反映済み（20260717）。
+ * ヒーロー・導入文・meta情報を広告（工務店の書類作成、AIで片付ける無料診断）との痛みの連続性を軸にフミが再改訂（20260717）。旧版バックアップ: app_v15.js / index_v10.html
+ * リコ一次チェック差し戻し（H1×サブコピー問い重複／導入部が広告文の逐語反復／書類・仕事の表記ゆれ）を受けフミが再修正（20260717）。旧版バックアップ: app_v16.js / index_v11.html
+ * 棚原さん直接指示（導入文末尾のタイプ名先出し削除／「答えに正解はありません」削除／CTA先出し文削除／ーーー区切り削除、結果画面「ご案内するプログラム」セクションA/B/Cのトーン修正）を受けフミが再修正（20260717）。旧版バックアップ: app_v17.js
+ * リコ一次チェック差し戻し（Cのタイトルと本文の不一致／C1文目の断定口調／体言止め／類義語並列）を受けフミが再修正（20260717）。旧版バックアップ: app_v18.js
  *
  * UTAGE連携ポイント: submitLead() 関数（ファイル末尾）を差し替えてください。
  *
  * ★スコアリングロジック（ScoringEngine）は変更禁止★
- *   7問32点満点、Q5は2倍加重（A=8/B=4/C=2/D=0）
- *   タイプ判定：A≥26 / B 18〜25 / C 10〜17 / D≤9
- *   Q5で「丸投げ」（choiceIndex=3）を選ぶと強制Dタイプ
+ *   Q1・Q2の回答値（1〜4）のみで判定。Q4・Q7は判定に使用しない（UTAGE送信のみ）。
+ *   Q1==4 or Q2==4 or (Q1>=3 and Q2>=3) → A（属人化タイプ）
+ *   Q1<=2 and Q2<=2 → C（先行タイプ）
+ *   それ以外 → B（様子見タイプ）
  */
 
 'use strict';
@@ -21,40 +26,49 @@
 const CONTENT = {
   meta: {
     title: '工務店AI内製化 現在地チェック',
-    subtitle: '「AI、うちでもできるのかな」と思ったことがあるなら、まずここから。',
+    subtitle: '本当は、現場や商談にもっと時間を使いたいはずなんですよね。',
     description: [
-      '「AIを入れたほうがいい」',
+      'でも実際は、見積書や工程表の作成に、時間を取られている。',
       '',
-      'そういう話は聞く。',
+      'しっかり働いているからこそ、そのぶん削られていく時間がある。',
       '',
-      'でも、何から始めていいか分からない。\n自社に合うのか分からない。\nそもそも、今の状態で入れて意味があるのかも分からない。',
-      '',
-      '——そういう社長のための診断です。',
+      '——そう感じているなら、この診断が、今の現在地を確かめる材料になります。',
       '',
       'この診断でやることは、シンプルです。',
       '',
-      '所要時間3〜4分',
+      '所要時間　体感2分',
       '',
-      '自社の「今の状態」を7つの問いで確かめて、\n「今どこにいるか」を整理する。',
+      '自社の「今の状態」を、4つの問いで確かめて、\n「今どこにいるか」を整理する。',
       '',
       'それだけです。',
       '',
       '「AIを導入すべきか」「投資をすべきか」を決めるものではありません。\n現在地を知って、次の1歩が何かを考えるための材料にしてもらうものです。',
+      '',
+      'これらの回答をもとに、',
+      '',
+      '今のあなたの状態を分析します。',
+      '',
+      'そして、次に取るべき「最初の1アクション」も、あわせてお伝えします。',
+      '',
+      '率直に選んでもらえると、より精度の高いフィードバックが届きます。',
+      '',
+      'まずは今の状態を確かめるところから、始めてもらえたらと思います。',
     ].join('\n'),
   },
 
+  /* 「この診断でわかること」カード用（本文中の【この診断でわかること】箇条書きと同一内容をUIリストで表示） */
   introPoints: [
-    '書類業務・属人化の課題が、どのくらいの深刻度か',
-    '今のIT活用度・AIへの慣れ度',
-    'AI内製化に向けた準備状態のタイプ（自走型・準備型・整理型・観察型）',
-    '今の状態に合った「最初の1アクション」',
+    '書類業務（見積書・工程表など）に、どれくらい時間を取られているか',
+    '属人化（社長・ベテラン頼み）が、どれくらい深刻か',
+    'AI（ChatGPTやClaude）に、今どれくらい慣れているか',
+    'AI内製化に、どれくらいの時間・費用を投資できそうか',
   ],
 
-  /* ----- 設問（7問）★変更禁止★ ----- */
+  /* ----- 設問（4問：Q1・Q2・Q4・Q7）★変更禁止★ ----- */
   questions: [
     {
       id: 'q1',
-      theme: 'Q1 / 書類業務にかかる時間',
+      theme: 'Q1 / 書類作成にかける時間',
       text: '見積書・工程表・施工計画書などの書類作成に、週どのくらい時間をかけていますか？',
       note: '最もあてはまるものを1つ選んでください',
       choices: [
@@ -66,7 +80,7 @@ const CONTENT = {
     },
     {
       id: 'q2',
-      theme: 'Q2 / 属人化の状況',
+      theme: 'Q2 / 属人化の深刻度',
       text: '社長またはベテランにしか作れない書類・見積・段取りが、社内にどのくらいありますか？',
       note: '最もあてはまるものを1つ選んでください',
       choices: [
@@ -77,20 +91,8 @@ const CONTENT = {
       ],
     },
     {
-      id: 'q3',
-      theme: 'Q3 / 今使っているツール',
-      text: '業務で主に使っているツールは、どれに近いですか？',
-      note: '最もあてはまるものを1つ選んでください',
-      choices: [
-        { label: '主に紙・手書き', score: 1 },
-        { label: 'Excel・Wordが中心（クラウドツールは使っていない）', score: 2 },
-        { label: 'Googleスプレッドシートやクラウドツールを一部使っている', score: 3 },
-        { label: 'kintoneや施工管理ソフトなどのSaaSを業務で活用している', score: 4 },
-      ],
-    },
-    {
       id: 'q4',
-      theme: 'Q4 / AIツールの経験',
+      theme: 'Q3 / AIリテラシーの現在地',
       text: 'ChatGPTやClaude（AI）を、業務で試したことはありますか？',
       note: '最もあてはまるものを1つ選んでください',
       choices: [
@@ -101,35 +103,8 @@ const CONTENT = {
       ],
     },
     {
-      id: 'q5',
-      theme: 'Q5 / やり方のスタイル（重要）',
-      text: 'AI内製化を進めるとしたら、どのスタイルが自分に合っていると思いますか？',
-      note: '最もあてはまるものを1つ選んでください',
-      isQ5: true, // 丸投げ強制D判定フラグ・2倍加重フラグ
-      choices: [
-        // score は換算前の値。エンジンが ×2 処理する（満点8点）
-        // index=0: 自走=8点 / index=1: 段階的=4点 / index=2: 部分委託=2点 / index=3: 丸投げ=0点・強制D
-        { label: 'やり方を自分で覚えて、自分で使えるようになりたい（自走）', score: 4 },
-        { label: '一緒にやりながら、徐々に自分でできるようになりたい（段階的自走）', score: 2 },
-        { label: '基本はプロに任せて、一部だけ関わりたい（部分委託）', score: 1 },
-        { label: 'とりあえず全部やってもらえれば', score: 0, isForceD: true }, // index=3: 強制D（表示テキストに注記なし・スコアリングロジック維持）
-      ],
-    },
-    {
-      id: 'q6',
-      theme: 'Q6 / 新しいことへの姿勢',
-      text: '「やったことがないことに挑戦する」ことへの姿勢として、自分に近いものを選んでください。',
-      note: '最もあてはまるものを1つ選んでください',
-      choices: [
-        { label: '苦手。失敗が怖いので、確実なものだけやりたい', score: 1 },
-        { label: 'どちらかというと慎重。情報を十分に集めてから動く', score: 2 },
-        { label: 'ある程度の見込みがあれば、動いてみる', score: 3 },
-        { label: 'うまくいかなくても、試してみることに価値があると思う', score: 4 },
-      ],
-    },
-    {
       id: 'q7',
-      theme: 'Q7 / 時間と費用の確保',
+      theme: 'Q4 / 投資意欲',
       text: 'AI内製化のために、月どのくらいの時間と費用を使える想定ですか？',
       note: '最もあてはまるものを1つ選んでください',
       choices: [
@@ -141,34 +116,34 @@ const CONTENT = {
     },
   ],
 
-  /* ----- 結果（4タイプ）— フミ原稿 20260602 / CTA全タイプ個別相談統一・トーン刷新 20260603 ----- */
+  /* ----- 結果（3パターン）— レン判定ロジック確定・フミ原稿確定 20260717 ----- */
   results: {
     A: {
       typeLetter: 'A',
-      typeName: '自走型',
-      heroTitle: '自走型',
-      heroDesc: '「今すぐ始められる状態にいます」',
+      typeName: '属人化タイプ',
+      heroTitle: '属人化タイプ',
+      heroDesc: '',
       sections: [
         {
           title: 'あなたの現在地',
-          text: '書類業務の負担がはっきりあって、\n「自分でやり方を覚えて、社内に展開したい」という意思もある。\n\n課題も意欲もリソースも、揃っています。\n\nあとは「どこから始めるか」だけです。',
+          text: '診断の結果からすると、あなたの会社は、社長の頭の中にある知識が、まだ書類になっていないことが一番のリスクになっているようです。\n見積も、工程表も、施工計画書も、気づけば全部自分の頭の中。\n書類作成に追われて、現場や営業に使いたい時間がどんどん削られている感覚、ありませんか。\n本当は自分が休んでも会社が回る状態を作りたいのに、任せられる形になっていない、、、\nそのプレッシャーを、ずっと一人で抱えてこられたんじゃないかと思います。',
         },
         {
-          title: '自走型の方によくある状態',
-          text: '現場も経営も、ほぼ全部自分でやっている。\n課題があることは分かっている。でも手が届いていない。\n\n「一度方向が見えれば、自分で動ける」\n——そういう方です。',
+          title: 'AIでできること',
+          text: '実はこの状態、僕から見ると、AIで解決できる部分がかなりあります。\n頭の中にあるノウハウを、AIと一緒に言葉にしていく。\nそのプロセス自体が、属人化を解いていく最初の一歩になるんですよね。\n一気に全部変える必要はなくて、まずは一番負担になっている書類から、で大丈夫です。',
         },
         {
-          title: '今日、この1問に答えてみてください',
-          text: '全部を一気に変えようとしなくていいです。\n\nまず1つだけ聞きます。\n\n「今週、いちばん時間がかかった書類は何ですか？」\n\nその書類名を、紙に書いてみてください。\n\nそれが最初の1ステップです。\n\n「書けた」という状態が、AI内製化の第一歩として完結します。\n次に何をするかは、あなたが決めることです。',
+          title: 'まずはここから',
+          text: '施工計画書・日報・お客様報告書、この3つをAIで作れる状態を体験してみませんか？\n3ヶ月あれば、十分その快適さを体感できます。',
         },
         {
           title: '次の一歩',
           isCta: true,
           ctaType: 'consultation',
-          ctaTitle: 'まず「最初の1業務」を一緒に選びましょう',
-          ctaText: '「どこから始めるか」は、一人で考えていても答えが出にくいところです。\n\n無料の個別相談で、最初の1業務と進め方を一緒に整理しませんか。\nあなたの業務の状況を聞きながら、会社に合った内製化の入口を一緒に設計します。\n\n気になったら、のぞいてみてください。',
-          ctaButtonLabel: '無料個別相談に申し込む',
-          ctaButtonNote: '所要時間30分。費用はかかりません。\n相談の場で、AI社員導入支援プログラムの詳細もお伝えします。',
+          ctaTitle: '次の一歩',
+          ctaText: 'ここまで読んで、「自分ごと」として重く感じすぎる必要はなくて。\nまずは無料の個別相談で、今どこが一番苦しいか、AIでどこまで楽になりそうか、一緒に確認できたらと思っています。',
+          ctaButtonLabel: '無料相談で今の状況を話してみる',
+          ctaButtonNote: '所要時間30分。費用はかかりません。',
           ctaButtonUrl: 'https://uw.u-wan.jp/event/NzTJUVLszFr8/register', // UTAGE個別相談予約ページ
         },
       ],
@@ -176,30 +151,30 @@ const CONTENT = {
 
     B: {
       typeLetter: 'B',
-      typeName: '準備型',
-      heroTitle: '準備型',
-      heroDesc: '「あと少し整えれば、動ける状態です」',
+      typeName: '様子見タイプ',
+      heroTitle: '様子見タイプ',
+      heroDesc: '',
       sections: [
         {
           title: 'あなたの現在地',
-          text: '課題意識はあります。意欲もあります。\n\nただ、「何から整えればいいか」の順番がまだ見えていない状態です。\n\n「やりたいとは思っている。でも、どこから手をつけていいか分からない」\n\n——準備型の方の、よくある現在地です。',
+          text: '診断の結果からすると、あなたの会社は、今のところは何とか回っているけれど、繁忙期や特定の案件で急に負荷が跳ね上がる、そういう不安を抱えていらっしゃるように見えます。\nもし今のメンバーの誰かが急に抜けたら、、、と不安になる瞬間もあるんじゃないでしょうか。\n規模が大きくなったら今のやり方のままで本当に回るんだろうか、という漠然とした不安もあるかもしれません。\n「今はまだ大丈夫」と感じているタイミングだからこそ、一度立ち止まって見ておく価値があるのかもしれません。',
         },
         {
-          title: '準備型の方によくある状態',
-          text: '情報はある程度持っている。\n「AIを使えばいいのは分かってる」とも思っている。\n\nでも、業務の優先順位がまだ整理できていない。\n最初の設計をどうするか、一緒に考えてくれる人がいれば動ける。',
+          title: 'AIでできること',
+          text: 'この段階だからこそ、僕としてはAIでできることがあると思っています。\n痛みが本格化する前に、書類まわりの型を作っておく。\nそうすることで、繁忙期や規模拡大が来ても、今の体制のまま踏ん張らずに済むようになっていきます。\n先に整えておく、というだけなので、そこまで気負う必要もないかなと思います。',
         },
         {
-          title: '最初の1アクション',
-          text: '「棚卸しをしてみよう」と思ったとき、多くの社長が最初に詰まるのはここです。\n\n「何から書けばいいか分からない」\n「どの粒度で整理すればいいか分からない」\n\n一人でやろうとすると、そこで止まってしまうことが多い。\n\nそれ自体は、珍しいことではありません。\n「始め方が分からない」は、準備型の方によくある詰まりポイントです。',
+          title: 'ご案内するプログラム',
+          text: 'AIを使うことで、施工計画書・日報・お客様報告書などの書類を効率よく作成できるようにします。\n今困っていないからこそ、低いコストとリスクで試せるタイミングでもあるんですよね。',
         },
         {
           title: '次の一歩',
           isCta: true,
           ctaType: 'consultation',
-          ctaTitle: '棚卸しの始め方を、一緒に整理しましょう',
-          ctaText: '「棚卸しをしよう」と思っても、一人で始めると詰まることがほとんどです。\n\n何から書けばいいか。どの粒度で整理すればいいか。\nそこから一緒に考えるのが、この相談の使い方です。\n\n「準備ができてから来てください」ではありません。\n「どこから手をつけるか分からない」という状態のまま来てください。\n\nAI社員導入支援プログラムの内容も、ここでお伝えできます。',
-          ctaButtonLabel: '無料個別相談に申し込む',
-          ctaButtonNote: '所要時間30分。費用はかかりません。\n棚卸しが終わっていなくても構いません。',
+          ctaTitle: '次の一歩',
+          ctaText: '今すぐ何かを変えなきゃいけない、という話ではなくて。\nまずは無料の個別相談で、今の状態と、先々どんなリスクが見えているかを、一緒に整理できたらと思っています。',
+          ctaButtonLabel: '無料相談で今のうちに整理してみる',
+          ctaButtonNote: '所要時間30分。費用はかかりません。',
           ctaButtonUrl: 'https://uw.u-wan.jp/event/NzTJUVLszFr8/register', // UTAGE個別相談予約ページ
         },
       ],
@@ -207,61 +182,30 @@ const CONTENT = {
 
     C: {
       typeLetter: 'C',
-      typeName: '整理型',
-      heroTitle: '整理型',
-      heroDesc: '「業務の整理をするところから、一緒に取り掛かってみましょう」',
+      typeName: '先行タイプ',
+      heroTitle: '先行タイプ',
+      heroDesc: '',
       sections: [
         {
           title: 'あなたの現在地',
-          text: '課題は感じています。\n\nAI導入の前に、業務を整理するところから始めると、結果として近道になります。\n\nこれは遅れではありません。\n足元が整っている状態でAIを入れると、効果がずっと出やすくなります。\n今の状態を正直に確かめられたことが、大事な1歩です。',
+          text: '診断の結果からすると、あなたの会社は、書類作成の負担も属人化も、今のところそこまで大きくないようです。\nその意味では、無理に変える必要はないタイミングだと思います。\n一方で、この診断に目を通してくださったということは、人手不足や後継者のことなど、この先の会社のあり方について、どこかで気になっている部分があるのかもしれません。',
         },
         {
-          title: '整理型の方によくある状態',
-          text: 'IT活用がまだ紙・Excelレベル、または業務自体が複雑に属人化している。\n「情報を集めてから動く」慎重なタイプ。\n費用か時間のどちらかに制約がある。\n\n「条件が整ったら動く」という意識はあります。\n今は、その条件を整えていくフェーズです。',
+          title: 'AIでできること',
+          text: '今の段階でAIを取り入れるとしたら、それは「困っているから」ではなく、「先に試しておく」という位置づけになると思います。\n急ぐ話ではないので、僕としても無理に勧めるつもりはなくて、、、\nただ、早いうちに触れておいた会社とそうでない会社とでは、数年後に差が出てくる領域だとは感じています。',
         },
         {
-          title: '今できる1アクション',
-          text: 'AI導入の話は少し置いて、こっちから始めてみましょう。\n\n「社長しか知らない業務」を1つ書き出す。\n\n業務の名前だけでいいです。\n紙でも、メモ帳でも、Excelでも構いません。\n\n「1つ」でいいです。完璧な一覧を作ろうとしなくていいです。',
+          title: '参考までに',
+          text: '施工計画書・日報・お客様報告書も、AIを使えば効率化できる余地はあると思います。\nただ、それが今の御社に必要かどうかを判断できるのは御社だけで、僕から一律に「やった方がいい」とは言えないところです。',
         },
         {
           title: '次の一歩',
           isCta: true,
           ctaType: 'consultation',
-          ctaTitle: '「社長しか知らない業務」を1つ書き出せたら、作戦会議の準備ができました！',
-          ctaText: 'まず「社長しか知らない業務」を1つだけ書き出してみてください。\n\n1つ書けたら、その状態で無料の個別相談にお越しいただけたらと思います。\nAI導入に向けてのディスカッションが、ぐっと進めやすくなります。\n\n「これをどうAIに繋げるか」「次に何を整理すればいいか」——\nその続きを一緒に考えます。',
-          ctaButtonLabel: '作戦会議（無料個別相談）に申し込む',
-          ctaButtonNote: '所要時間30分。費用はかかりません。\n書けていなくても来ていただけます。一緒に整理するところから始めます。',
-          ctaButtonUrl: 'https://uw.u-wan.jp/event/NzTJUVLszFr8/register', // UTAGE個別相談予約ページ
-        },
-      ],
-    },
-
-    D: {
-      typeLetter: 'D',
-      typeName: '観察型',
-      heroTitle: '観察型',
-      heroDesc: '「今は、情報を集めながら自分のスタンスを確かめる時期です」',
-      sections: [
-        {
-          title: 'あなたの現在地',
-          text: '「AIが流行っているのは分かる。\nでも、自分がやるイメージがまだ持てない」\n\n——今は、そういう時期なのかもしれません。\n\n情報を集めながら、自分のスタンスを確かめている。\n「まだ早い」「もう少し様子を見たい」という感覚があっても、\nそれはごく自然な現在地です。',
-        },
-        {
-          title: '今の心境はもしかして・・・？',
-          text: '「AIって、結局どういうものなんだろう」\n\nそういう疑問、まだ持ったままじゃないですか。\n\n「自分がやるかどうか」は、今日決めなくていいです。\nただ、「どういうものか」を知っておくことには、\nそれなりの価値があります。\n\n経営判断の材料が増える、というだけでも十分です。',
-        },
-        {
-          title: '今できること',
-          text: '無理に次のステップに進む必要はありません。\n\n他の工務店・中小の建設会社が、実際にどんな書類をAIで自動化しているか。\nどんな順番で始めているか。\n\nそういう事例を、少しずつ見ていくことが今の1アクションです。',
-        },
-        {
-          title: '次の一歩',
-          isCta: true,
-          ctaType: 'consultation',
-          ctaTitle: '「どういうものか、話だけ聞いてみたい」でも大丈夫です',
-          ctaText: '今すぐ始める必要はありません。\n\n「どういうものか、話だけ聞いてみたい」という段階でも構いません。\n決める必要はありません。\n\n気になっていることを話していただけたら、僕から見えていることをお伝えします。',
-          ctaButtonLabel: '無料の個別相談で話を聞いてみる',
-          ctaButtonNote: '所要時間30分。費用はかかりません。\n「情報収集の段階」「まだ始める気はない」という方でも使っていただけます。',
+          ctaTitle: '次の一歩',
+          ctaText: 'もし少しでも気になる部分があれば、無料の個別相談で、今の状況や気になっていることを聞かせていただけたらと思います。\n無理にご提案する場ではなく、一緒に考える場だと思っていただけたら嬉しいです。',
+          ctaButtonLabel: '無料相談で気軽に話してみる',
+          ctaButtonNote: '所要時間30分。費用はかかりません。',
           ctaButtonUrl: 'https://uw.u-wan.jp/event/NzTJUVLszFr8/register', // UTAGE個別相談予約ページ
         },
       ],
@@ -272,57 +216,37 @@ const CONTENT = {
 
 /* =============================================================
    スコアリングエンジン ★変更禁止★
-   - 7問32点満点
-   - Q5は2倍加重（A=8/B=4/C=2/D=0）
-   - Q5でindex=3（丸投げ）→ 合計スコアに関わらず強制Dタイプ
-   - タイプ判定: A≥26 / B 18〜25 / C 10〜17 / D≤9
+   - 判定に使うのはQ1（書類作成にかける時間）・Q2（属人化の深刻度）の回答値（1〜4）のみ
+   - Q1==4 or Q2==4 or (Q1>=3 and Q2>=3) → A（属人化タイプ）
+   - Q1<=2 and Q2<=2 → C（先行タイプ）
+   - それ以外 → B（様子見タイプ）
    ============================================================= */
 const ScoringEngine = {
   /**
-   * 回答配列からタイプとスコアを返す
+   * 回答配列からタイプを返す
    * @param {Array<{questionIndex: number, choiceIndex: number}>} answers
-   * @returns {{ type: 'A'|'B'|'C'|'D', totalScore: number, forceD: boolean }}
+   * @returns {{ type: 'A'|'B'|'C', q1Score: number, q2Score: number }}
    */
   calculate(answers) {
-    let totalScore = 0;
-    let forceD = false;
+    const getScore = (id) => {
+      const qIndex = CONTENT.questions.findIndex((q) => q.id === id);
+      const answer = answers[qIndex];
+      return CONTENT.questions[qIndex].choices[answer.choiceIndex].score;
+    };
 
-    answers.forEach(({ questionIndex, choiceIndex }) => {
-      const q = CONTENT.questions[questionIndex];
-      const choice = q.choices[choiceIndex];
+    const q1Score = getScore('q1');
+    const q2Score = getScore('q2');
 
-      if (q.isQ5) {
-        // Q5: index=3（丸投げ）は isForceD=true で強制D、それ以外は score×2 加重
-        if (choice.isForceD) {
-          forceD = true;
-          // score = 0 なので加算なし
-        } else {
-          totalScore += choice.score * 2;
-        }
-      } else {
-        totalScore += choice.score;
-      }
-    });
-
-    // 強制D判定
-    if (forceD) {
-      return { type: 'D', totalScore, forceD: true };
-    }
-
-    // スコアによるタイプ判定
-    // A: 26〜32 / B: 18〜25 / C: 10〜17 / D: 9以下
     let type;
-    if (totalScore >= 26) {
+    if (q1Score === 4 || q2Score === 4 || (q1Score >= 3 && q2Score >= 3)) {
       type = 'A';
-    } else if (totalScore >= 18) {
-      type = 'B';
-    } else if (totalScore >= 10) {
+    } else if (q1Score <= 2 && q2Score <= 2) {
       type = 'C';
     } else {
-      type = 'D';
+      type = 'B';
     }
 
-    return { type, totalScore, forceD: false };
+    return { type, q1Score, q2Score };
   },
 };
 
@@ -334,16 +258,16 @@ const ScoringEngine = {
  * submitLead()
  * UTAGEオプトインフォームへ application/x-www-form-urlencoded でPOSTする。
  *
- * @param {{ name: string, email: string, company: string, type: string, score: number, forceD: boolean }} data
+ * @param {{ name: string, email: string, company: string, type: string, q4Score: number, q7Score: number }} data
  * @returns {Promise<void>}
  *
  * 送信フィールド:
  *   name    ← data.name（お名前）
  *   mail    ← data.email（メールアドレス）
  *   free74  ← data.company（会社名）
- *
- * 将来対応メモ: 診断タイプをUTAGEに送る場合は以下を body に追加してください。
- *   params.append('free75', data.type);  // 診断タイプ（A/B/C/D）
+ *   free75  ← data.type（診断結果パターン：A=属人化タイプ/B=様子見タイプ/C=先行タイプ）
+ *   free76  ← data.q4Score（AIリテラシーの回答値 1〜4。個別相談担当が事前参照）
+ *   free77  ← data.q7Score（投資意欲の回答値 1〜4。個別相談担当が事前参照）
  */
 async function submitLead(data) {
   const UTAGE_ENDPOINT = 'https://uw.u-wan.jp/r/hNGkgY333aq8/store';
@@ -353,7 +277,9 @@ async function submitLead(data) {
   params.append('name',   data.name);
   params.append('mail',   data.email);
   params.append('free74', data.company);
-  // 将来: params.append('free75', data.type); // 診断タイプ（A/B/C/D）をここに追加できます
+  params.append('free75', data.type);
+  params.append('free76', String(data.q4Score));
+  params.append('free77', String(data.q7Score));
 
   const controller = new AbortController();
   const timerId = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -384,7 +310,7 @@ const App = {
   currentPage: 'intro',
   answers: [],       // { questionIndex, choiceIndex }[]
   currentQ: 0,       // 現在の設問インデックス
-  result: null,      // { type, totalScore, forceD }
+  result: null,      // { type, q1Score, q2Score }
   leadData: null,    // { name, email, company }
   _leadSubmitted: false, // 二重送信防止フラグ
 
@@ -417,7 +343,6 @@ const App = {
     this.el.questionText  = document.getElementById('question-text');
     this.el.questionNote  = document.getElementById('question-note');
     this.el.choicesWrap   = document.getElementById('choices-wrap');
-    this.el.q5Warning     = document.getElementById('q5-warning');
 
     this.el.resultWrap = document.getElementById('result-wrap');
 
@@ -454,8 +379,8 @@ const App = {
       // 段落内の改行は <br> に
       const innerHtml = this.escHtml(block).replace(/\n/g, '<br>');
 
-      // 対象者フレーズ（——そういう社長のための診断です。）に専用クラス付与
-      if (block.indexOf('——そういう社長のための診断です。') !== -1) {
+      // 対象者フレーズ（——そう感じているなら、この診断が、今の現在地を確かめる材料になります。）に専用クラス付与
+      if (block.indexOf('——そう感じているなら、この診断が、今の現在地を確かめる材料になります。') !== -1) {
         p.className = 'intro-copy__target';
       }
       // 節目の見出し段落（この診断でやることは、シンプルです。）
@@ -466,14 +391,19 @@ const App = {
         // divider直後にバッジを挿入
         const badgeWrap = document.createElement('p');
         badgeWrap.className = 'intro-copy__time-badge-wrap';
-        badgeWrap.innerHTML = '<span class="intro-copy__time-badge" aria-label="所要時間">&#9201; 所要時間3〜4分</span>';
+        badgeWrap.innerHTML = '<span class="intro-copy__time-badge" aria-label="所要時間">&#9201; 所要時間　体感2分</span>';
         descEl.appendChild(badgeWrap);
         return; // 手動でappend済み
       }
-      // 所要時間バッジ段落（CONTENTで「所要時間3〜4分」として定義）
-      else if (block.indexOf('所要時間3〜4分') !== -1 && block.length < 20) {
+      // 所要時間バッジ段落（CONTENTで「所要時間　体感2分」として定義）
+      else if (block.indexOf('体感2分') !== -1 && block.length < 20) {
         // divider処理内でバッジを出力済みなので、このブロックはスキップ
         return;
+      }
+      // セクション区切り線（ーーー）は控えめな罫線として表示（読み上げ対象外）
+      else if (block === 'ーーー') {
+        p.className = 'intro-copy__rule';
+        p.setAttribute('aria-hidden', 'true');
       }
 
       p.innerHTML = innerHtml;
@@ -519,9 +449,6 @@ const App = {
       this.el.questionNote.style.display = 'none';
     }
 
-    // Q5警告文
-    this.el.q5Warning.style.display = 'none';
-
     // 選択肢
     this.el.choicesWrap.innerHTML = '';
     const savedAnswer = this.answers[index];
@@ -555,10 +482,6 @@ const App = {
 
   onChoiceSelect(qIndex, choiceIndex, choice) {
     this.answers[qIndex] = { questionIndex: qIndex, choiceIndex };
-
-    // Q5警告表示は無効化（強制D判定ロジック自体は ScoringEngine で維持）
-    this.el.q5Warning.style.display = 'none';
-
     this.updateNextBtn(qIndex);
   },
 
@@ -652,15 +575,10 @@ const App = {
     try {
       await submitLead({
         ...this.leadData,
-        type:   this.result.type,
-        score:  this.result.totalScore,
-        forceD: this.result.forceD,
+        type:    this.result.type,
+        q4Score: this.getScoreByQuestionId('q4'),
+        q7Score: this.getScoreByQuestionId('q7'),
       });
-
-      // Meta Pixel: 診断登録の完了（リード送信成功）をコンバージョンとして1回だけ計測
-      if (typeof fbq === 'function') {
-        fbq('track', 'CompleteRegistration');
-      }
 
       this.renderResult();
       this.showPage('result');
@@ -677,7 +595,7 @@ const App = {
 
   /* ----- 結果表示 ----- */
   renderResult() {
-    const { type, totalScore, forceD } = this.result;
+    const { type } = this.result;
     const r = CONTENT.results[type];
     const wrap = this.el.resultWrap;
     wrap.innerHTML = '';
@@ -686,11 +604,13 @@ const App = {
     const hero = document.createElement('div');
     hero.className = `result-hero result-hero--${type}`;
     hero.setAttribute('data-type', r.typeLetter);
+    const descHtml = r.heroDesc
+      ? `<p class="result-hero__desc">${this.escHtml(r.heroDesc)}</p>`
+      : '';
     hero.innerHTML = `
       <div class="result-type-label" aria-label="診断タイプ">診断タイプ</div>
       <h2 class="result-type-name">${this.escHtml(r.typeName)}</h2>
-      <div class="result-score-badge" aria-label="スコア">スコア：${totalScore}点 / 32点</div>
-      <p class="result-hero__desc">${this.escHtml(r.heroDesc)}</p>
+      ${descHtml}
     `;
     wrap.appendChild(hero);
 
@@ -740,6 +660,12 @@ const App = {
   },
 
   /* ----- ユーティリティ ----- */
+  getScoreByQuestionId(id) {
+    const qIndex = CONTENT.questions.findIndex((q) => q.id === id);
+    const answer = this.answers[qIndex];
+    return CONTENT.questions[qIndex].choices[answer.choiceIndex].score;
+  },
+
   escHtml(str) {
     if (typeof str !== 'string') return '';
     return str
