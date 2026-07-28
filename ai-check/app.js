@@ -580,6 +580,8 @@ const App = {
         q7Score: this.getScoreByQuestionId('q7'),
       });
 
+      if (typeof fbq === 'function') fbq('track', 'CompleteRegistration');
+
       this.renderResult();
       this.showPage('result');
     } catch (err) {
