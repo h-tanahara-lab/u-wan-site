@@ -169,10 +169,10 @@ a { color: inherit; }
   background: #0e173a;
   border: 1px solid rgba(255,255,255,.15);
 }
-.video-frame--vertical {
-  max-width: 240px;
-  aspect-ratio: 9 / 16;
-  border-radius: 18px;
+.video-frame--wide {
+  max-width: 480px;
+  aspect-ratio: 16 / 9;
+  border-radius: 16px;
   border: 1px solid rgba(255,255,255,.28);
   box-shadow: 0 20px 45px rgba(0,0,0,.45);
 }
@@ -623,6 +623,6 @@ a { color: inherit; }
 @media (min-width: 960px) {
   :root { --max: 900px; }
   .hero { padding: 64px 0 56px; }
-  .video-frame--vertical { max-width: 280px; }
+  .video-frame--wide { max-width: 560px; }
   .hero-title { font-size: 2.1rem; }
 }
