@@ -100,11 +100,26 @@
       });
     }
 
-    /* ---------- B（直リンク）／D（既存メルマガ直リンク）クリック計測 ---------- */
+    /* ---------- B（直リンク＝相談予約）／D（直リンク＝メルマガ登録）クリック計測 ----------
+       リョウ一次チェック(v1)提案：B（相談予約＝ホット）とD（メルマガ登録＝ミドル）は
+       温度感が異なるため、GA4コンバージョンを"cta_click"1本にまとめず分離する。
+       実装方針：cta_branchはパラメータとして全イベント共通で送りつつ（カスタムディメンション化用）、
+       B/Dはイベント名自体を分けることで、GA4管理画面側でイベント名単位のコンバージョン登録が
+       そのまま使える（パラメータ値ごとのコンバージョン分岐はGA4標準機能では不可のため）。
+       ------------------------------------------------------------------ */
+    var directEventNameByBranch = {
+      B: "cta_click_consult",   // 相談予約直リンク＝ホット
+      D: "cta_click_newsletter" // メルマガ登録直リンク＝ミドル
+    };
     document.querySelectorAll("[data-track-direct]").forEach(function (a) {
       a.addEventListener("click", function () {
-        trackEvent("cta_click", {
-          cta_branch: a.getAttribute("data-track-direct"),
+        var branch = a.getAttribute("data-track-direct");
+        // "B_sticky"のように末尾に位置サフィックスが付く場合があるため、
+        // 先頭のA/B/C/D部分（"_"より前）だけを見てイベント名を判定する。
+        var branchRoot = branch.split("_")[0];
+        var eventName = directEventNameByBranch[branchRoot] || "cta_click";
+        trackEvent(eventName, {
+          cta_branch: branch,
           cta_location: "lp_4branch",
           outbound_url: a.href
         });

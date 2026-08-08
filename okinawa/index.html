@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 <title>沖縄の経営者へ｜AIを学ぶのは、あなたじゃなくていい｜U-WAN</title>
 <meta name="description" content="沖縄拠点で法人支援実績あり。あなたの代わりに次世代が動ける環境を、一緒に作ります。農業・設計事務所・ホテル宿泊・清掃業・建築など8業種の支援実例を公開中。">
 <meta name="robots" content="noindex, follow">
@@ -12,6 +13,8 @@
 <meta property="og:description" content="沖縄拠点で法人支援実績あり。あなたの代わりに次世代が動ける環境を、一緒に作ります。">
 <meta property="og:url" content="https://u-wan.jp/okinawa/">
 <meta property="og:image" content="https://u-wan.jp/okinawa/assets/hero.jpg">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1067">
 <link rel="stylesheet" href="style.css">
 
 <!-- ==========================================================
@@ -27,12 +30,29 @@
        gtag('config', 'G-XXXXXXX');
      </script>
      ========================================================== -->
+
+<!-- ==========================================================
+     GA4設定メモ（測定ID有効化後、GA4管理画面側で対応。リョウ一次チェック(v1)提案）
+     1. Admin > カスタム定義 > カスタムディメンションを作成し、
+        イベントパラメータ「cta_branch」（範囲：イベント）を紐付ける
+        →レポート上でA/B/C/Dの内訳を横断的に見られるようにする。
+     2. コンバージョンは1本化せず、以下をそれぞれ個別にマークする：
+        - generate_lead（A/C経由のリード獲得＝最も濃い成果）
+        - cta_click_consult（B＝相談予約直リンク＝ホット）
+        - cta_click_newsletter（D＝メルマガ登録直リンク＝ミドル）
+        B/Dはapp.js側で温度感に応じてイベント名を分けて送信済み（パラメータ値単位の
+        コンバージョン分岐はGA4標準機能では不可のため、イベント名を分ける実装とした）。
+     3. 上記2点はGA4プロパティ側の設定作業のため、測定ID確定・プロパティ発行後に対応。
+     ========================================================== -->
 </head>
 <body>
 
 <header class="site-header">
   <div class="container">
-    <div class="brand">U-WAN <span>|</span> 沖縄経営者AI相談</div>
+    <div class="brand">
+      <span class="brand-full">U-WAN <span>|</span> 沖縄経営者AI相談</span>
+      <span class="brand-short">U-WAN<span>|</span>沖縄AI相談</span>
+    </div>
     <a href="#cta" class="header-cta">4つの一歩を見る</a>
   </div>
 </header>
@@ -122,7 +142,7 @@
   <div class="container">
     <div class="solution-intro">
       <div class="solution-photo">
-        <img src="assets/profile.jpg" alt="U-WAN 棚原秀樹" loading="lazy">
+        <img src="assets/profile.jpg" alt="U-WAN 棚原秀樹" width="900" height="600" loading="lazy">
       </div>
       <p>僕、棚原秀樹は沖縄を拠点に、経営者と一緒に「次世代が動ける環境」を作る仕事をしています。</p>
     </div>
