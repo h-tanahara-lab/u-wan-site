@@ -1,0 +1,254 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>マラソン練習ダッシュボード</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  :root {
+    --bg: #0f172a; --card-bg: #1e293b; --text: #e2e8f0; --muted: #94a3b8;
+    --accent: #38bdf8; --good: #4ade80; --warn: #fbbf24; --bad: #f87171;
+    --border: #334155;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 0 12px 40px; background: var(--bg); color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+    line-height: 1.6;
+  }
+  header {
+    padding: 20px 4px 12px; border-bottom: 1px solid var(--border); margin-bottom: 16px;
+  }
+  h1 { font-size: 1.15rem; margin: 0 0 6px; }
+  .sub { color: var(--muted); font-size: 0.85rem; }
+  .headline { font-size: 1rem; margin-top: 10px; }
+  .card {
+    background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 14px; margin-bottom: 16px;
+  }
+  .card h2 { font-size: 0.95rem; margin: 0 0 10px; color: var(--accent); }
+  .chart-wrap { position: relative; width: 100%; height: 260px; }
+  select {
+    background: var(--bg); color: var(--text); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 8px; font-size: 0.85rem; margin-bottom: 8px;
+  }
+  .run-item { border-bottom: 1px solid var(--border); }
+  .run-item:last-child { border-bottom: none; }
+  .run-summary {
+    padding: 10px 4px; cursor: pointer; display: flex; justify-content: space-between;
+    align-items: center; gap: 8px; font-size: 0.9rem;
+  }
+  .run-summary .meta { color: var(--muted); font-size: 0.8rem; }
+  .run-detail { display: none; padding: 4px 4px 14px; font-size: 0.85rem; }
+  .run-detail.open { display: block; }
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 4px 12px; margin-bottom: 10px;
+  }
+  @media (min-width: 480px) { .stat-grid { grid-template-columns: repeat(3, 1fr); } }
+  .stat-grid div span { color: var(--muted); }
+  .analysis-text {
+    background: var(--bg); border-radius: 6px; padding: 10px; white-space: normal;
+    font-size: 0.85rem;
+  }
+  .next-training {
+    margin-top: 8px; padding: 8px 10px; background: rgba(56,189,248,0.12);
+    border-left: 3px solid var(--accent); border-radius: 4px; font-size: 0.85rem;
+  }
+  footer { margin-top: 24px; color: var(--muted); font-size: 0.75rem; text-align: center; }
+  .empty { color: var(--muted); padding: 20px 4px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>🏃 マラソン練習ダッシュボード</h1>
+  <div class="sub" id="updated-at"></div>
+  <div class="headline" id="headline"></div>
+</header>
+
+<div class="card">
+  <h2>週間走行距離（直近12週）</h2>
+  <div class="chart-wrap"><canvas id="chart-weekly"></canvas></div>
+</div>
+
+<div class="card">
+  <h2>距離 × 平均ペース</h2>
+  <div class="chart-wrap"><canvas id="chart-pace-scatter"></canvas></div>
+</div>
+
+<div class="card">
+  <h2>気温別デカップリング率の推移</h2>
+  <div class="chart-wrap"><canvas id="chart-decoupling"></canvas></div>
+</div>
+
+<div class="card">
+  <h2>心拍推移（気温帯フィルタ）</h2>
+  <select id="hr-temp-filter"></select>
+  <div class="chart-wrap"><canvas id="chart-hr"></canvas></div>
+</div>
+
+<div class="card">
+  <h2>RPE（体感）推移</h2>
+  <div class="chart-wrap"><canvas id="chart-rpe"></canvas></div>
+</div>
+
+<div class="card">
+  <h2>直近ラン一覧</h2>
+  <div id="run-list"></div>
+</div>
+
+<footer>
+  <div>バックアップはNAHAマラソンスプレッドシートの各 <code>_backup_auto_*</code> タブを参照。</div>
+  <div id="generated-stamp"></div>
+</footer>
+
+<script id="dashboard-data" type="application/json">{"generated_at": "2026-08-23 18:06", "goal": {"race_name": "NAHAマラソン", "race_date": "2026-12-06", "goal_time": "04:00:00", "days_until_race": 105}, "current_week": {"week_start": "2026-08-17", "count": 2, "distance_km": 22.15, "target_weekly_runs": 4}, "weekly_series": [{"week_start": "2026-06-01", "distance_km": 0.0, "count": 0}, {"week_start": "2026-06-08", "distance_km": 0.0, "count": 0}, {"week_start": "2026-06-15", "distance_km": 0.0, "count": 0}, {"week_start": "2026-06-22", "distance_km": 0.0, "count": 0}, {"week_start": "2026-06-29", "distance_km": 0.0, "count": 0}, {"week_start": "2026-07-06", "distance_km": 0.0, "count": 0}, {"week_start": "2026-07-13", "distance_km": 0.0, "count": 0}, {"week_start": "2026-07-20", "distance_km": 11.88, "count": 2}, {"week_start": "2026-07-27", "distance_km": 20.58, "count": 3}, {"week_start": "2026-08-03", "distance_km": 26.06, "count": 4}, {"week_start": "2026-08-10", "distance_km": 37.12, "count": 5}, {"week_start": "2026-08-17", "distance_km": 22.15, "count": 2}], "temp_class_labels": ["~25℃", "25~28℃", "28~31℃", "31℃~"], "runs": [{"activity_id": "TEST-0000000001", "date": "2026-08-06", "distance_km": 5.02, "duration": "43:15:00", "avg_pace": "8:37/km", "avg_pace_sec": 517, "avg_hr": 148.0, "max_hr": 162.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "段階検証2: ダミー書き込みテスト（手動削除してよい）", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "22750604963", "date": "2026-05-03", "distance_km": 6.02, "duration": "1:10:27", "avg_pace": "11:43/km", "avg_pace_sec": 703, "avg_hr": 130.0, "max_hr": 153.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "22786599553", "date": "2026-05-06", "distance_km": 6.0, "duration": "1:03:33", "avg_pace": "10:35/km", "avg_pace_sec": 635, "avg_hr": 133.0, "max_hr": 143.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "22833569551", "date": "2026-05-10", "distance_km": 6.01, "duration": "1:03:50", "avg_pace": "10:37/km", "avg_pace_sec": 637, "avg_hr": 133.0, "max_hr": 143.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23678534057", "date": "2026-07-21", "distance_km": 6.17, "duration": "1:05:00", "avg_pace": "10:33/km", "avg_pace_sec": 633, "avg_hr": 147.0, "max_hr": 163.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23726075892", "date": "2026-07-25", "distance_km": 5.71, "duration": "1:08:28", "avg_pace": "11:60/km", "avg_pace_sec": 720, "avg_hr": 134.0, "max_hr": 143.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23761078075", "date": "2026-07-28", "distance_km": 6.01, "duration": "1:01:45", "avg_pace": "10:17/km", "avg_pace_sec": 617, "avg_hr": 150.0, "max_hr": 166.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23788213547", "date": "2026-07-30", "distance_km": 7.01, "duration": "1:20:25", "avg_pace": "11:28/km", "avg_pace_sec": 688, "avg_hr": 135.0, "max_hr": 144.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23799051359", "date": "2026-07-31", "distance_km": 7.56, "duration": "1:22:29", "avg_pace": "10:54/km", "avg_pace_sec": 654, "avg_hr": 136.0, "max_hr": 147.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23858934837", "date": "2026-08-03", "distance_km": 7.02, "duration": "1:19:30", "avg_pace": "11:20/km", "avg_pace_sec": 680, "avg_hr": 132.0, "max_hr": 145.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23859612142", "date": "2026-08-05", "distance_km": 7.01, "duration": "57:07:00", "avg_pace": "8:09/km", "avg_pace_sec": 489, "avg_hr": 167.0, "max_hr": 181.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23910984754", "date": "2026-08-09", "distance_km": 7.01, "duration": "1:15:39", "avg_pace": "10:48/km", "avg_pace_sec": 648, "avg_hr": 141.0, "max_hr": 152.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23921886092", "date": "2026-08-10", "distance_km": 9.03, "duration": "1:36:40", "avg_pace": "10:42/km", "avg_pace_sec": 642, "avg_hr": 142.0, "max_hr": 161.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23950495704", "date": "2026-08-12", "distance_km": 3.01, "duration": "30:05:00", "avg_pace": "9:59/km", "avg_pace_sec": 599, "avg_hr": 140.0, "max_hr": 149.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23961163115", "date": "2026-08-13", "distance_km": 10.02, "duration": "1:38:42", "avg_pace": "9:51/km", "avg_pace_sec": 591, "avg_hr": 147.0, "max_hr": 167.0, "avg_temperature": null, "temp_class": null, "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": null, "avg_gct": null, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23974246351", "date": "2026-08-14", "distance_km": 7.05, "duration": "1:07:48", "avg_pace": "9:37/km", "avg_pace_sec": 577, "avg_hr": 141.0, "max_hr": 151.0, "avg_temperature": 30.4, "temp_class": "28~31℃", "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": 169.0, "avg_gct": 283.0, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "23998023394", "date": "2026-08-16", "distance_km": 8.01, "duration": "1:18:57", "avg_pace": "9:51/km", "avg_pace_sec": 591, "avg_hr": 139.0, "max_hr": 149.0, "avg_temperature": 30.2, "temp_class": "28~31℃", "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": 168.0, "avg_gct": 285.0, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "24022344352", "date": "2026-08-18", "distance_km": 10.01, "duration": "1:32:30", "avg_pace": "9:14/km", "avg_pace_sec": 554, "avg_hr": 143.0, "max_hr": 156.0, "avg_temperature": 30.6, "temp_class": "28~31℃", "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": 175.0, "avg_gct": 273.0, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}, {"activity_id": "24071023300", "date": "2026-08-22", "distance_km": 12.14, "duration": "1:55:29", "avg_pace": "9:31/km", "avg_pace_sec": 571, "avg_hr": 145.0, "max_hr": 161.0, "avg_temperature": 31.0, "temp_class": "31℃~", "humidity_pct": null, "heat_index_c": null, "decoupling_pct": null, "avg_cadence": 168.0, "avg_gct": 283.0, "note": "", "rpe": null, "next_training_summary": "", "analysis_full_text": ""}]}</script>
+<script>
+(function () {
+  var DATA = JSON.parse(document.getElementById('dashboard-data').textContent);
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+  function nl2br(s) { return escapeHtml(s).replace(/\n/g, '<br>'); }
+  function fmtNum(v, digits) {
+    if (v === null || v === undefined) return '-';
+    return Number(v).toFixed(digits === undefined ? 1 : digits);
+  }
+
+  // --- ヘッダー ---
+  document.getElementById('updated-at').textContent =
+    '最終更新: ' + DATA.generated_at +
+    (DATA.goal.days_until_race !== null
+      ? ' ／ ' + DATA.goal.race_name + 'まで残り ' + DATA.goal.days_until_race + '日'
+      : '');
+  var cw = DATA.current_week;
+  document.getElementById('headline').textContent =
+    '今週の練習：' + cw.count + '/' + cw.target_weekly_runs + '回・週間距離: ' +
+    fmtNum(cw.distance_km, 1) + 'km';
+  document.getElementById('generated-stamp').textContent = 'Generated at ' + DATA.generated_at;
+
+  var COLORS = ['#38bdf8', '#4ade80', '#fbbf24', '#f87171', '#a78bfa'];
+
+  if (!DATA.runs.length) {
+    ['chart-weekly', 'chart-pace-scatter', 'chart-decoupling', 'chart-hr', 'chart-rpe'].forEach(function (id) {
+      document.getElementById(id).parentNode.innerHTML = '<div class="empty">まだデータがありません</div>';
+    });
+    document.getElementById('run-list').innerHTML = '<div class="empty">まだ記録がありません</div>';
+    return;
+  }
+
+  // --- 週間走行距離（バー） ---
+  new Chart(document.getElementById('chart-weekly'), {
+    type: 'bar',
+    data: {
+      labels: DATA.weekly_series.map(function (w) { return w.week_start; }),
+      datasets: [{ label: '週間距離(km)', data: DATA.weekly_series.map(function (w) { return w.distance_km; }), backgroundColor: COLORS[0] }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+  });
+
+  // --- 距離×平均ペース散布図 ---
+  var scatterPoints = DATA.runs.filter(function (r) { return r.distance_km !== null && r.avg_pace_sec !== null; })
+    .map(function (r) { return { x: r.distance_km, y: r.avg_pace_sec, date: r.date }; });
+  new Chart(document.getElementById('chart-pace-scatter'), {
+    type: 'scatter',
+    data: { datasets: [{ label: '距離(km) × ペース(秒/km)', data: scatterPoints, backgroundColor: COLORS[1] }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { x: { title: { display: true, text: '距離(km)' } }, y: { title: { display: true, text: 'ペース(秒/km、速いほど下)' }, reverse: true } },
+      plugins: { tooltip: { callbacks: { label: function (ctx) { return ctx.raw.date + ': ' + ctx.raw.x + 'km'; } } } }
+    }
+  });
+
+  // --- 気温別デカップリング率 ---
+  var decouplingDatasets = DATA.temp_class_labels.map(function (label, i) {
+    var points = DATA.runs.filter(function (r) { return r.temp_class === label && r.decoupling_pct !== null; })
+      .map(function (r) { return { x: r.date, y: r.decoupling_pct }; });
+    return { label: label, data: points, borderColor: COLORS[i % COLORS.length], backgroundColor: COLORS[i % COLORS.length], showLine: true, tension: 0.2 };
+  });
+  new Chart(document.getElementById('chart-decoupling'), {
+    type: 'line',
+    data: { datasets: decouplingDatasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      scales: { x: { type: 'category' }, y: { title: { display: true, text: 'デカップリング率(%)' } } }
+    }
+  });
+
+  // --- 心拍推移（気温帯フィルタ） ---
+  var hrSelect = document.getElementById('hr-temp-filter');
+  var allOption = document.createElement('option');
+  allOption.value = ''; allOption.textContent = 'すべて';
+  hrSelect.appendChild(allOption);
+  DATA.temp_class_labels.forEach(function (label) {
+    var opt = document.createElement('option');
+    opt.value = label; opt.textContent = label;
+    hrSelect.appendChild(opt);
+  });
+  var hrChart = new Chart(document.getElementById('chart-hr'), {
+    type: 'line',
+    data: { labels: [], datasets: [{ label: '平均心拍', data: [], borderColor: COLORS[3], tension: 0.2 }] },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { title: { display: true, text: 'bpm' } } } }
+  });
+  function renderHrChart(filterClass) {
+    var rows = DATA.runs.filter(function (r) { return r.avg_hr !== null && (!filterClass || r.temp_class === filterClass); });
+    hrChart.data.labels = rows.map(function (r) { return r.date; });
+    hrChart.data.datasets[0].data = rows.map(function (r) { return r.avg_hr; });
+    hrChart.update();
+  }
+  hrSelect.addEventListener('change', function () { renderHrChart(hrSelect.value); });
+  renderHrChart('');
+
+  // --- RPE推移 ---
+  var rpeRows = DATA.runs.filter(function (r) { return r.rpe !== null; });
+  new Chart(document.getElementById('chart-rpe'), {
+    type: 'line',
+    data: {
+      labels: rpeRows.map(function (r) { return r.date; }),
+      datasets: [{ label: 'RPE (0-10)', data: rpeRows.map(function (r) { return r.rpe; }), borderColor: COLORS[2], tension: 0.2 }]
+    },
+    options: { responsive: true, maintainAspectRatio: false, scales: { y: { min: 0, max: 10 } } }
+  });
+
+  // --- 直近ラン一覧（新しい順・アコーディオン） ---
+  var listEl = document.getElementById('run-list');
+  var runsDesc = DATA.runs.slice().reverse();
+  runsDesc.forEach(function (r, idx) {
+    var item = document.createElement('div');
+    item.className = 'run-item';
+
+    var summary = document.createElement('div');
+    summary.className = 'run-summary';
+    summary.innerHTML =
+      '<span>' + escapeHtml(r.date) + '　' + fmtNum(r.distance_km, 2) + 'km　' + escapeHtml(r.avg_pace || '-') + '</span>' +
+      '<span class="meta">' + (r.avg_temperature !== null ? fmtNum(r.avg_temperature, 1) + '℃　' : '') +
+      (r.decoupling_pct !== null ? 'デカップリング' + fmtNum(r.decoupling_pct, 1) + '%' : '') + ' ▾</span>';
+
+    var detail = document.createElement('div');
+    detail.className = 'run-detail';
+    detail.innerHTML =
+      '<div class="stat-grid">' +
+      '<div><span>タイム: </span>' + escapeHtml(r.duration || '-') + '</div>' +
+      '<div><span>平均心拍: </span>' + (r.avg_hr !== null ? fmtNum(r.avg_hr, 0) + 'bpm' : '-') + '</div>' +
+      '<div><span>湿度: </span>' + (r.humidity_pct !== null ? fmtNum(r.humidity_pct, 0) + '%' : '-') + '</div>' +
+      '<div><span>体感温度: </span>' + (r.heat_index_c !== null ? fmtNum(r.heat_index_c, 1) + '℃' : '-') + '</div>' +
+      '<div><span>ピッチ: </span>' + (r.avg_cadence !== null ? fmtNum(r.avg_cadence, 0) + 'spm' : '-') + '</div>' +
+      '<div><span>GCT: </span>' + (r.avg_gct !== null ? fmtNum(r.avg_gct, 0) + 'ms' : '-') + '</div>' +
+      '</div>' +
+      (r.note ? '<div>体感メモ: ' + escapeHtml(r.note) + '</div>' : '') +
+      (r.analysis_full_text ? '<div class="analysis-text">' + nl2br(r.analysis_full_text) + '</div>' : '') +
+      (r.next_training_summary ? '<div class="next-training">' + escapeHtml(r.next_training_summary) + '</div>' : '');
+
+    summary.addEventListener('click', function () { detail.classList.toggle('open'); });
+    item.appendChild(summary);
+    item.appendChild(detail);
+    listEl.appendChild(item);
+  });
+})();
+</script>
+</body>
+</html>
