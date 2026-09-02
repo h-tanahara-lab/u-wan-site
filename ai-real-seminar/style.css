@@ -230,12 +230,17 @@ section { padding: 56px 0; }
 .problem-callout {
   margin-top: 28px;
   text-align: center;
-  font-size: 1.05rem;
-  font-weight: 700;
+  font-size: 1.25rem;
+  font-weight: 800;
   color: var(--navy);
   max-width: 720px;
   margin-inline: auto;
+  padding: 20px 24px;
+  background: var(--navy-soft);
+  border-radius: var(--radius);
+  border: 1px solid rgba(27,42,107,0.12);
 }
+@media (min-width: 768px) { .problem-callout { font-size: 1.5rem; padding: 24px 32px; } }
 
 /* ---------- Turn (転換) ---------- */
 .turn {
