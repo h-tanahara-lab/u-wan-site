@@ -58,6 +58,67 @@
     });
 
     /* ---------------------------------------------------------------
+       数字バーのカウントアップ演出
+       - 「60分」「3,300円」のように【数字＋単位のみ】の要素だけを対象にする
+       - 「1名＋1名」のように数字が複数含まれる文字列は対象外（誤動作防止のため
+         安全側に倒し、そのまま表示する）
+       - prefers-reduced-motionでは即座に最終値を表示（アニメーションしない）
+    --------------------------------------------------------------- */
+    function countUp(el, targetNumber, suffix, duration) {
+      var start = null;
+      function step(ts) {
+        if (start === null) start = ts;
+        var progress = Math.min((ts - start) / duration, 1);
+        var eased = 1 - Math.pow(1 - progress, 3); // ease-out cubic
+        var current = Math.round(targetNumber * eased);
+        el.textContent = current.toLocaleString("ja-JP") + suffix;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        } else {
+          el.textContent = targetNumber.toLocaleString("ja-JP") + suffix;
+        }
+      }
+      window.requestAnimationFrame(step);
+    }
+
+    function initNumberCountUp(prefersReducedMotion) {
+      var numEls = document.querySelectorAll(".numbers .num");
+      if (!numEls.length) return;
+      numEls.forEach(function (el) {
+        var raw = el.textContent.trim();
+        var match = raw.match(/^([\d,]+)(\D*)$/); // 数字（カンマ可）＋残りが非数字のみの場合だけ対象
+        if (!match) return; // 「1名＋1名」等、複数の数字を含む文字列は対象外
+        var targetNumber = parseInt(match[1].replace(/,/g, ""), 10);
+        if (!targetNumber || isNaN(targetNumber)) return;
+        var suffix = match[2] || "";
+        el.dataset.countTarget = String(targetNumber);
+        el.dataset.countSuffix = suffix;
+        if (prefersReducedMotion) return; // reduced-motionでは最終値のまま何もしない
+        el.textContent = "0" + suffix;
+      });
+
+      if (prefersReducedMotion || typeof IntersectionObserver === "undefined") return;
+
+      var countObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var el = entry.target;
+            var target = Number(el.dataset.countTarget);
+            if (target) {
+              countUp(el, target, el.dataset.countSuffix || "", 1100);
+            }
+            countObserver.unobserve(el);
+          });
+        },
+        { root: null, rootMargin: "0px 0px -10% 0px", threshold: 0.4 }
+      );
+      numEls.forEach(function (el) {
+        if (el.dataset.countTarget) countObserver.observe(el);
+      });
+    }
+
+    /* ---------------------------------------------------------------
        スクロール連動フェードイン／スライドイン（.reveal要素）
        - prefers-reduced-motionを尊重（CSS側の@mediaで無効化される前提で、
          JS側でも余分なobserve負荷をかけないよう分岐する）
@@ -66,6 +127,8 @@
     var revealEls = document.querySelectorAll(".reveal");
     var prefersReducedMotion = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    initNumberCountUp(prefersReducedMotion);
 
     if (!revealEls.length) {
       // reveal対象なし（何もしない）

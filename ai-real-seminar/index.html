@@ -105,11 +105,13 @@
 <symbol id="icon-gift" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="1"/><path d="M4 9h16"/><path d="M12 9v11"/><path d="M12 9c-1-3-3.5-4-4.8-2.7C6 7.6 7 9 9 9"/><path d="M12 9c1-3 3.5-4 4.8-2.7C18 7.6 17 9 15 9"/></symbol>
 <symbol id="icon-link-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M10 14L20 4"/><path d="M18 13v6a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h6"/></symbol>
 <symbol id="icon-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a14 14 0 0 1 0 18a14 14 0 0 1 0-18"/></symbol>
-<symbol id="icon-flag" viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 4h11l-3 4 3 4H6"/></symbol>
+<symbol id="icon-flag" viewBox="0 0 24 24"><path d="M6 21V4"/><path d="M6 5l13 3.5-13 3.5z"/></symbol>
 <symbol id="icon-sprout" viewBox="0 0 24 24"><path d="M12 21v-7"/><path d="M12 14c-4 0-6-3-6-6 4 0 6 2 6 5"/><path d="M12 12c0-3 2-5 6-5 0 3-2 6-6 6"/></symbol>
 <symbol id="icon-play-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10.3 8.5l5.5 3.5-5.5 3.5z"/></symbol>
 <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4.3"/><circle cx="12" cy="12" r="0.8" fill="currentColor" stroke="none"/></symbol>
 <symbol id="icon-cap" viewBox="0 0 24 24"><path d="M12 3l10 5-10 5L2 8z"/><path d="M6.5 10.5V16c0 1.5 2.7 3 5.5 3s5.5-1.5 5.5-3v-5.5"/></symbol>
+<symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2.5"/><circle cx="8.5" cy="8.5" r="1.6"/><path d="M21 15.5l-5.2-5.2-9.3 9.2"/></symbol>
+<symbol id="icon-cursor-click" viewBox="0 0 24 24"><path d="M6 3l4.5 15L13 12l6-2.5z"/><path d="M15 15l4 4"/></symbol>
 </defs>
 </svg>
 
@@ -126,13 +128,11 @@
 <!-- ================= 1. ファーストビュー ================= -->
 <section class="hero">
   <div class="hero-orbit" aria-hidden="true">
-    <span class="icon-badge icon-badge--white o1"><svg class="icon"><use href="#icon-chat-check"></use></svg></span>
-    <span class="icon-badge icon-badge--white o2"><svg class="icon"><use href="#icon-spark"></use></svg></span>
-    <span class="icon-badge icon-badge--white o3"><svg class="icon"><use href="#icon-monitor-play"></use></svg></span>
+    <span class="icon-badge icon-badge--white o1"><svg class="icon"><use href="#icon-spark"></use></svg></span>
     <span class="icon-badge icon-badge--white o4"><svg class="icon"><use href="#icon-lightbulb"></use></svg></span>
   </div>
-  <div class="container container-narrow">
-    <div>
+  <div class="container hero-container">
+    <div class="hero-copy">
       <h1>「ChatGPTで書く」から、「AIが動いて、仕事が進む」へ。<br>そのリアルを、60分でそのままお見せします。</h1>
       <p class="hero-sub">ChatGPTを少し触っている、そのままのあなたへ。専門用語なしで、「自律的に動くAI」が実際に働いているところを、画面ごしにそのまま見ていただくセミナーです。</p>
       <div class="hero-meta">
@@ -141,7 +141,43 @@
         <div class="hero-meta-row"><span class="icon-badge icon-badge--white" aria-hidden="true"><svg class="icon"><use href="#icon-globe"></use></svg></span><div><strong>形式：</strong>オンライン開催</div></div>
         <div class="hero-meta-row"><span class="icon-badge icon-badge--white" aria-hidden="true"><svg class="icon"><use href="#icon-people"></use></svg></span><div><strong>ファシリテーター：</strong>棚原秀樹／<strong>ゲスト：</strong>株式会社リライトシステムズ 松本明久</div></div>
       </div>
-      <a href="#UTAGE_URL_TBD" class="btn btn-primary" data-cta-utage="hero">今すぐ申し込む（3,300円）</a>
+      <a href="#UTAGE_URL_TBD" class="btn btn-primary btn-arrow" data-cta-utage="hero"><span>今すぐ申し込む（3,300円）</span><svg class="icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg></a>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+      <svg class="hero-illustration" viewBox="0 0 440 440" role="img" aria-hidden="true">
+        <defs>
+          <radialGradient id="heroGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#E67E22" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#E67E22" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <circle class="hi-glow" cx="222" cy="206" r="150" fill="url(#heroGlow)"/>
+        <path class="hi-line" d="M188 176 C152 150 122 132 102 120"/>
+        <path class="hi-line" d="M260 176 C298 150 328 132 350 117"/>
+        <path class="hi-line" d="M206 258 C186 286 172 305 160 318"/>
+        <g class="hi-node hi-node1">
+          <circle cx="86" cy="104" r="36" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
+          <svg x="66" y="84" width="40" height="40" viewBox="0 0 24 24" class="icon" stroke="#fff"><use href="#icon-chat-check"></use></svg>
+          <circle cx="110" cy="80" r="12" fill="#E67E22"/>
+          <svg x="102" y="72" width="16" height="16" viewBox="0 0 24 24" class="icon"><use href="#icon-check"></use></svg>
+        </g>
+        <g class="hi-node hi-node2">
+          <circle cx="366" cy="100" r="34" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
+          <svg x="347" y="81" width="38" height="38" viewBox="0 0 24 24" class="icon" stroke="#fff"><use href="#icon-image"></use></svg>
+        </g>
+        <g class="hi-node hi-node3">
+          <circle cx="150" cy="336" r="32" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.55)" stroke-width="2"/>
+          <svg x="132" y="318" width="36" height="36" viewBox="0 0 24 24" class="icon" stroke="#fff"><use href="#icon-envelope-q"></use></svg>
+          <circle cx="174" cy="316" r="12" fill="#E67E22"/>
+          <svg x="166" y="308" width="16" height="16" viewBox="0 0 24 24" class="icon"><use href="#icon-check"></use></svg>
+        </g>
+        <g class="hi-monitor">
+          <rect x="150" y="158" width="140" height="98" rx="16" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.6)" stroke-width="2.2"/>
+          <rect x="205" y="260" width="30" height="10" rx="3" fill="rgba(255,255,255,0.35)"/>
+          <rect x="182" y="272" width="76" height="8" rx="4" fill="rgba(255,255,255,0.35)"/>
+          <path d="M204 188 L204 226 L236 207 Z" fill="#E67E22"/>
+        </g>
+      </svg>
     </div>
   </div>
 </section>
@@ -171,10 +207,12 @@
     </div>
   </div>
 </div>
+<div class="divider-wrap" aria-hidden="true"><svg class="divider divider--towhite" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,25 C960,50 1200,90 1440,35 L1440,100 L0,100 Z"/></svg></div>
 
 <!-- ================= 3. こんなお悩みありませんか？ ================= -->
 <section>
   <div class="container container-narrow">
+    <p class="eyebrow reveal">PROBLEM</p>
     <h2 class="section-title reveal">こんなお悩みありませんか？</h2>
 
     <div class="problem-card reveal">
@@ -204,10 +242,12 @@
     <p class="problem-callout reveal"><svg class="icon" aria-hidden="true"><use href="#icon-spark"></use></svg>ここまで読んで、この3つのどれかに、ちょっと心当たりがあった方は、是非ともご参加ください！</p>
   </div>
 </section>
+<div class="divider-wrap" aria-hidden="true"><svg class="divider divider--tonavy" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,25 C960,50 1200,90 1440,35 L1440,100 L0,100 Z"/></svg></div>
 
 <!-- ================= 4. 転換の一行 ================= -->
 <div class="turn">
   <div class="container">
+    <p class="eyebrow eyebrow--onnavy reveal">TURNING POINT</p>
     <div class="turn-graphic reveal" aria-hidden="true">
       <span class="icon-badge icon-badge--white"><svg class="icon"><use href="#icon-headphones"></use></svg></span>
       <svg class="icon icon-arrow"><use href="#icon-arrow-right"></use></svg>
@@ -217,10 +257,12 @@
     <p class="turn-sub reveal">僕が進行役として、ゲストにお迎えするリライトシステムズの松本さんに、自分で動くAIが実際にSNS投稿やメルマガを作っているところを実演していただきます。60分間、その様子をそのまま画面でお見せします。説明より先に、動いているところを見ていただくセミナーです。</p>
   </div>
 </div>
+<div class="divider-wrap" aria-hidden="true"><svg class="divider divider--toalt" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,25 C960,50 1200,90 1440,35 L1440,100 L0,100 Z"/></svg></div>
 
 <!-- ================= 5. SOLUTION ================= -->
 <section class="section-alt">
   <div class="container container-narrow">
+    <p class="eyebrow reveal">SOLUTION</p>
     <figure class="solution-photo reveal">
       <img src="assets/profile.jpg" alt="松本明久氏（株式会社リライトシステムズ 代表取締役）" width="600" height="900" loading="lazy">
       <figcaption>松本明久（株式会社リライトシステムズ 代表取締役）</figcaption>
@@ -250,8 +292,9 @@
 </section>
 
 <!-- ================= 6. 特徴・ベネフィット ================= -->
-<section>
+<section class="blob-field">
   <div class="container">
+    <p class="eyebrow reveal">FEATURES</p>
     <h2 class="section-title reveal">特徴・ベネフィット</h2>
     <div class="feature-grid reveal-group">
       <div class="feature-card reveal">
@@ -279,11 +322,12 @@
 </section>
 
 <!-- ================= 7. 今回お招きするのは、こんな会社です ================= -->
-<section id="company">
+<section id="company" class="blob-field">
   <div class="container container-narrow">
     <div class="company-lead-icon reveal" aria-hidden="true">
       <span class="icon-badge icon-badge--navy"><svg class="icon"><use href="#icon-building"></use></svg></span>
     </div>
+    <p class="eyebrow reveal">GUEST</p>
     <h2 class="section-title reveal">今回お招きするのは、こんな会社です</h2>
     <p class="reveal">今回、実演をお願いする松本さんが代表を務めるのは、広島発のAI・DX推進企業、株式会社リライトシステムズです。バーチャルAI社員導入支援、ソフトウェア開発、DX・経営コンサルティング、データ分析、AI・DX教育、デジタルコンテンツ制作といった事業を通じて、地域の中小企業が抱えるAI格差の解消に取り組んでいます。</p>
     <p class="reveal">代表の松本明久さんは、2006年に有限会社Broad Artsを設立し、約20年にわたってWeb制作・デジタルマーケティングで企業を支援してきました。その中で見えてきた中小企業の人手不足・業務の属人化という経営課題に向き合い、AIを活用した経営変革を使命として、現在の取り組みを進めています。</p>
@@ -331,6 +375,7 @@
 <!-- ================= 8. MYTHS & FACTS ================= -->
 <section class="section-alt">
   <div class="container container-narrow">
+    <p class="eyebrow reveal">MYTHS &amp; FACTS</p>
     <h2 class="section-title reveal">みんなが思うことと、本当のこと</h2>
 
     <div class="mf-item reveal">
@@ -338,7 +383,7 @@
         <div class="mf-card mf-card--myth">
           <div class="mf-row"><span class="mf-mark" aria-hidden="true">❌</span><span class="mf-myth">思い込み①：AIエージェントは、エンジニアじゃないと使えない専門的な技術</span></div>
         </div>
-        <div class="mf-arrow" aria-hidden="true"><svg class="icon"><use href="#icon-arrow-right"></use></svg></div>
+        <div class="mf-arrow" aria-hidden="true"><span class="icon-badge icon-badge--orange"><svg class="icon"><use href="#icon-arrow-right"></use></svg></span></div>
         <div class="mf-card mf-card--fact">
           <div class="mf-row"><span class="mf-mark" aria-hidden="true">⭕</span><span class="mf-fact">事実：今日みなさんがChatGPTで「文章を書いてもらう」「画像を作ってもらう」とやっていること、その延長線上にある動きです。</span></div>
           <p class="mf-body">今回のセミナーでは、その延長がどこまで自然につながっているかを、実演でそのままお見せします。</p>
@@ -351,7 +396,7 @@
         <div class="mf-card mf-card--myth">
           <div class="mf-row"><span class="mf-mark" aria-hidden="true">❌</span><span class="mf-myth">思い込み②：AIに任せたら、何が起きているか分からなくなりそう</span></div>
         </div>
-        <div class="mf-arrow" aria-hidden="true"><svg class="icon"><use href="#icon-arrow-right"></use></svg></div>
+        <div class="mf-arrow" aria-hidden="true"><span class="icon-badge icon-badge--orange"><svg class="icon"><use href="#icon-arrow-right"></use></svg></span></div>
         <div class="mf-card mf-card--fact">
           <div class="mf-row"><span class="mf-mark" aria-hidden="true">⭕</span><span class="mf-fact">事実：自分で動くAIは「全部自動でほったらかし」ではなく、人の確認・承認が組み込まれた形で動きます。</span></div>
           <p class="mf-body">今回は、その確認プロセスを含めて画面をそのまま見ていただくので、「見えない不安」ではなく「見えた上での判断」に変わります。</p>
@@ -364,7 +409,7 @@
         <div class="mf-card mf-card--myth">
           <div class="mf-row"><span class="mf-mark" aria-hidden="true">❌</span><span class="mf-myth">思い込み③：専門用語が分からないと、話についていけないのでは</span></div>
         </div>
-        <div class="mf-arrow" aria-hidden="true"><svg class="icon"><use href="#icon-arrow-right"></use></svg></div>
+        <div class="mf-arrow" aria-hidden="true"><span class="icon-badge icon-badge--orange"><svg class="icon"><use href="#icon-arrow-right"></use></svg></span></div>
         <div class="mf-card mf-card--fact">
           <div class="mf-row"><span class="mf-mark" aria-hidden="true">⭕</span><span class="mf-fact">事実：このセミナーでは「AIエージェント」という言葉自体を最初から使いません。</span></div>
           <p class="mf-body">SNS投稿・メルマガ作成といった、身近な作業の実演から入る構成にしています。ChatGPTを少し触ったことがあれば、十分についてきていただけます。</p>
@@ -377,6 +422,7 @@
 <!-- ================= 9. 当日の流れ ================= -->
 <section>
   <div class="container container-narrow">
+    <p class="eyebrow reveal">SCHEDULE</p>
     <h2 class="section-title reveal">当日の流れ</h2>
     <div class="timeline reveal-group">
       <div class="timeline-item reveal">
@@ -417,6 +463,7 @@
 <!-- ================= 10. AFTER IMAGE ================= -->
 <section class="section-alt">
   <div class="container container-narrow">
+    <p class="eyebrow reveal">AFTER</p>
     <h2 class="section-title reveal">参加後、こんな景色が見えてきます。</h2>
     <div class="after-path reveal-group">
       <div class="after-item reveal"><span class="check" aria-hidden="true">①</span><p>自分で動くAIという新しい働き方を、身構えずにイメージできるようになる</p></div>
@@ -431,6 +478,7 @@
 <!-- ================= 11. 料金・開催概要 ================= -->
 <section id="price">
   <div class="container container-narrow">
+    <p class="eyebrow reveal">PRICING</p>
     <h2 class="section-title reveal">料金・開催概要</h2>
     <div class="table-scroll reveal">
       <table class="feature-table">
@@ -468,6 +516,7 @@
 <!-- ================= 12. FAQ ================= -->
 <section class="section-alt">
   <div class="container container-narrow">
+    <p class="eyebrow reveal">FAQ</p>
     <h2 class="section-title reveal">よくある質問</h2>
 
     <div class="faq-item reveal">
@@ -496,6 +545,7 @@
     </div>
   </div>
 </section>
+<div class="divider-wrap" aria-hidden="true"><svg class="divider divider--tonavy" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,25 C960,50 1200,90 1440,35 L1440,100 L0,100 Z"/></svg></div>
 
 <!-- ================= 13. FINAL MESSAGE ================= -->
 <section class="final-message">
@@ -503,12 +553,14 @@
     <div class="final-message-icon reveal" aria-hidden="true">
       <span class="icon-badge icon-badge--white"><svg class="icon"><use href="#icon-spark"></use></svg></span>
     </div>
+    <p class="eyebrow eyebrow--onnavy reveal">MESSAGE</p>
     <p class="reveal">正直に言うと、僕自身も最初は、AIが自分で動くという話に、少し身構えていました。</p>
     <p class="reveal">でも実際に動かしてみると、それは特別な技術というより、今みなさんがChatGPTでやっていることの、自然な延長線上にあるものでした。</p>
     <p class="reveal">今回は、その延長線がどこにあるのかを、説明ではなく実演でそのままお見せしようと思っています。リライトシステムズの松本さんをゲストにお迎えし、僕が進行役として、SNS投稿やメルマガ作成という身近な作業から、松本さんに実際に画面を動かしていただきます。</p>
     <p class="reveal">「AIに仕事を任せる」がどういうことなのか、ここで一度、実物を見てから考えてみませんか。</p>
   </div>
 </section>
+<div class="divider-wrap" aria-hidden="true"><svg class="divider divider--towhite" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0,40 C240,90 480,0 720,25 C960,50 1200,90 1440,35 L1440,100 L0,100 Z"/></svg></div>
 
 <!-- ================= 14. 追伸 ================= -->
 <section>
