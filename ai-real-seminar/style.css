@@ -127,9 +127,6 @@ section { padding: 56px 0; }
   display: grid;
   gap: 28px;
 }
-@media (min-width: 900px) {
-  .hero .container { grid-template-columns: 1.1fr 0.9fr; align-items: center; gap: 40px; }
-}
 .hero-sub {
   color: #dfe3f6;
   font-size: 1rem;
@@ -155,13 +152,6 @@ section { padding: 56px 0; }
 .hero-meta div { font-size: 0.9rem; color: #eef0f9; }
 .hero-meta strong { color: #fff; font-weight: 700; }
 
-.hero-photo {
-  border-radius: var(--radius);
-  overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-}
-.hero-photo img { width: 100%; }
-
 /* ---------- Buttons ---------- */
 .btn {
   display: inline-flex;
@@ -183,6 +173,12 @@ section { padding: 56px 0; }
   box-shadow: 0 10px 24px rgba(230,126,34,0.35);
 }
 .btn-primary:hover { background: var(--orange-deep); transform: translateY(-1px); }
+.btn-outline-navy {
+  background: transparent;
+  color: var(--navy);
+  border: 2px solid var(--navy);
+}
+.btn-outline-navy:hover { background: var(--navy); color: #fff; }
 .btn-block { width: 100%; }
 
 /* ---------- Number bar ---------- */
@@ -331,6 +327,18 @@ section { padding: 56px 0; }
 }
 .feature-card h3 { font-size: 1.02rem; margin-bottom: 10px; }
 .feature-card p { margin: 0; color: var(--ink-sub); }
+
+/* ---------- Company / member cards ---------- */
+.member-grid { display: grid; gap: 16px; margin-top: 20px; }
+@media (min-width: 700px) { .member-grid { grid-template-columns: repeat(2, 1fr); } }
+.member-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+}
+.member-card .member-name { font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+.member-card p:last-child { margin: 0; color: var(--ink-sub); }
 
 /* ---------- Table (features/flow/price) ---------- */
 .feature-table {
