@@ -207,6 +207,8 @@ section { padding: 56px 0; }
   transition-timing-function: cubic-bezier(.34,1.56,.64,1);
 }
 .js .reveal--pop.is-visible { transform: scale(1); }
+/* お悩みカード／特徴カード：控えめなスケールイン（0.96→1.0） */
+.js .reveal--scale { transform: scale(.96); }
 
 @media (prefers-reduced-motion: reduce) {
   .js .reveal {
