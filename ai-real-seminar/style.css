@@ -197,6 +197,17 @@ section { padding: 56px 0; }
 .reveal-group > *:nth-child(5) { --reveal-delay: .32s; }
 .reveal-group > *:nth-child(6) { --reveal-delay: .4s; }
 
+/* ---------- Reveal variants（セクションの内容に合わせて動きを変える） ---------- */
+/* MYTHS&FACTS：思い込みは左から、事実は右から向き合うように入る */
+.js .reveal--left { transform: translateX(-44px); }
+.js .reveal--right { transform: translateX(44px); }
+/* 参加後の景色／当日の流れ：番号やステップが順番に「点灯」するイメージ */
+.js .reveal--pop {
+  transform: scale(.7);
+  transition-timing-function: cubic-bezier(.34,1.56,.64,1);
+}
+.js .reveal--pop.is-visible { transform: scale(1); }
+
 @media (prefers-reduced-motion: reduce) {
   .js .reveal {
     opacity: 1 !important;
@@ -701,6 +712,16 @@ section { padding: 56px 0; }
   bottom: 6px;
   width: 2px;
   background: var(--line);
+  transform-origin: top;
+}
+/* 当日の流れ：接続線が上から順に伸びていく演出（.timelineがis-visibleになった瞬間に発火） */
+.js .timeline::before {
+  transform: scaleY(0);
+  transition: transform 1.3s cubic-bezier(.22,.61,.36,1) .1s;
+}
+.js .timeline.is-visible::before { transform: scaleY(1); }
+@media (prefers-reduced-motion: reduce) {
+  .js .timeline::before { transform: none !important; transition: none !important; }
 }
 .timeline-item {
   position: relative;
