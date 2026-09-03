@@ -1,6 +1,7 @@
 /* =========================================================
    AIリアル体験セミナー（松本さん共催）LP — app.js
    実装：ケン（U-WAN 04_システム部）／デザイン全面バージョンアップ：ルイ（v5）
+   → 松本さん個人ブランド改訂（部署数の単一定義・GUEST統計カード対応）：ルイ（v6）
    ========================================================= */
 (function () {
   "use strict";
@@ -10,6 +11,15 @@
      2026-09-03 確定・反映（UTAGE決済フォーム・公開済み／決済モードはテストモード）
   --------------------------------------------------------------- */
   var UTAGE_URL = "https://uw.u-wan.jp/p/ojWjkb22XESw";
+
+  /* ---------------------------------------------------------------
+     松本さんの組織「Re-Systems」部署数（単一定義・v6）
+     2026-09-03時点、一次情報が資料により食い違う（akihisa.netトップ年表＝
+     16部署／aishain.akihisa.net＝15部門）。棚原さん確認中のため暫定的に
+     16を採用。確定後はこの数字を書き換えるだけで、ページ内の該当箇所
+     （[data-org-stat="dept-count"]）に自動反映される。
+  --------------------------------------------------------------- */
+  var ORG_DEPT_COUNT = 16;
 
   /* ---------- GA4 計測ヘルパー（暫定） -----------------------------
      本番でGA4計測タグ（gtag.js）を <head> に設置後、
@@ -27,6 +37,12 @@
   }
 
   document.addEventListener("DOMContentLoaded", function () {
+    /* ---------- 部署数の単一定義をDOMへ反映（カウントアップ初期化より前に実行） ---------- */
+    var deptStatEls = document.querySelectorAll('[data-org-stat="dept-count"]');
+    deptStatEls.forEach(function (el) {
+      el.textContent = ORG_DEPT_COUNT + "部署";
+    });
+
     /* ---------- CTAボタンにUTAGE URLを反映 ---------- */
     var ctaLinks = document.querySelectorAll("[data-cta-utage]");
     ctaLinks.forEach(function (el) {
@@ -79,8 +95,8 @@
       window.requestAnimationFrame(step);
     }
 
-    function initNumberCountUp(prefersReducedMotion) {
-      var numEls = document.querySelectorAll(".numbers .num");
+    function initNumberCountUp(prefersReducedMotion, selector) {
+      var numEls = document.querySelectorAll(selector);
       if (!numEls.length) return;
       numEls.forEach(function (el) {
         var raw = el.textContent.trim();
@@ -126,7 +142,8 @@
     var prefersReducedMotion = window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    initNumberCountUp(prefersReducedMotion);
+    initNumberCountUp(prefersReducedMotion, ".numbers .num");
+    initNumberCountUp(prefersReducedMotion, ".guest-stats .stat-num");
 
     if (!revealEls.length) {
       // reveal対象なし（何もしない）

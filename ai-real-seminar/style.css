@@ -2,6 +2,7 @@
    AIリアル体験セミナー（松本さん共催）LP — style.css
    ブランド：ネイビー#1B2A6B + オレンジ#E67E22 + 白
    実装：ケン（v4）→ デザイン全面バージョンアップ：ルイ（v5）
+   → 松本さん個人ブランド改訂（GUESTセクション全面刷新）：ルイ（v6）
    ========================================================= */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -698,6 +699,167 @@ section { padding: 56px 0; }
 .member-card p:last-child { margin: 0; color: var(--ink-sub); }
 
 .company-link-wrap { display: flex; justify-content: center; margin-top: 28px; }
+
+/* ---------- Guest section（松本さんとは、どんな人か） ---------- */
+.hero-guest-thumb {
+  display: inline-block;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+  margin-left: 7px;
+  border: 2px solid rgba(255,255,255,0.55);
+}
+
+.turn-graphic-photo { padding: 0; overflow: hidden; }
+.turn-graphic-photo img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+
+.guest-quote {
+  margin: 24px 0 28px;
+  padding: 24px 26px;
+  background: var(--navy-soft);
+  border-left: 4px solid var(--orange);
+  border-radius: var(--radius);
+}
+.guest-quote p {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--navy);
+  margin: 0 0 6px;
+  line-height: 1.6;
+}
+.guest-quote p:last-of-type { margin-bottom: 10px; }
+.guest-quote cite {
+  display: block;
+  font-style: normal;
+  font-size: 0.78rem;
+  color: var(--ink-mute);
+}
+
+.guest-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin: 28px 0 40px;
+}
+@media (min-width: 640px) { .guest-stats { grid-template-columns: repeat(4, 1fr); } }
+.guest-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 22px 12px;
+  box-shadow: 0 4px 14px rgba(27,42,107,0.05);
+}
+.guest-stat .icon-badge { width: 40px; height: 40px; }
+.guest-stat .icon-badge .icon { width: 20px; height: 20px; }
+.guest-stat .stat-num { font-size: 1.6rem; font-weight: 800; color: var(--navy); }
+.guest-stat .label { font-size: 0.76rem; color: var(--ink-sub); line-height: 1.5; }
+
+.guest-layout {
+  display: grid;
+  gap: 32px;
+  margin-bottom: 8px;
+}
+@media (min-width: 860px) {
+  .guest-layout { grid-template-columns: 240px 1fr; align-items: start; gap: 44px; }
+}
+.guest-photo {
+  margin: 0;
+  max-width: 240px;
+  margin-inline: auto;
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 16px 30px rgba(27,42,107,0.12);
+}
+.guest-photo img { width: 100%; }
+@media (min-width: 860px) {
+  .guest-photo { max-width: none; position: sticky; top: 96px; }
+}
+.guest-history h3 { text-align: center; margin-bottom: 24px; }
+@media (min-width: 860px) {
+  .guest-history h3 { text-align: left; }
+  .guest-history .timeline { margin-inline: 0; max-width: none; }
+}
+
+.guest-highlight {
+  margin: 40px 0;
+  padding: 26px 28px;
+  background: var(--orange-soft);
+  border: 1px solid rgba(230,126,34,0.2);
+  border-radius: var(--radius);
+}
+.guest-highlight-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.guest-highlight-head .icon-badge { width: 44px; height: 44px; flex: none; }
+.guest-highlight-head .icon-badge .icon { width: 22px; height: 22px; }
+.guest-highlight-head h3 { margin: 0; font-size: 1.05rem; }
+.guest-highlight p:last-child { margin-bottom: 0; }
+
+.tool-grid { display: grid; gap: 16px; margin: 20px 0 8px; }
+@media (min-width: 700px) { .tool-grid { grid-template-columns: repeat(3, 1fr); } }
+.tool-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 20px 22px;
+  box-shadow: 0 4px 14px rgba(27,42,107,0.05);
+}
+.tool-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+.tool-card-head .icon-badge { width: 36px; height: 36px; }
+.tool-card-head .icon-badge .icon { width: 18px; height: 18px; }
+.tool-card h4 { font-size: 0.95rem; color: var(--navy); margin: 0; }
+.tool-card ul { display: flex; flex-wrap: wrap; gap: 7px; }
+.tool-card li {
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: var(--navy-soft);
+  color: var(--navy);
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.site-grid { display: grid; gap: 16px; margin: 20px 0 8px; }
+@media (min-width: 700px) { .site-grid { grid-template-columns: repeat(2, 1fr); } }
+.site-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: 0 4px 14px rgba(27,42,107,0.05);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.site-card:hover { transform: translateY(-3px); box-shadow: 0 14px 26px rgba(27,42,107,0.1); }
+.site-card .icon-badge { width: 38px; height: 38px; margin-top: 2px; flex: none; transition: transform .25s ease; }
+.site-card:hover .icon-badge { transform: scale(1.12); }
+.site-card .icon-badge .icon { width: 19px; height: 19px; }
+.site-card-body { flex: 1; min-width: 0; }
+.site-card-body h4 { font-size: 0.98rem; color: var(--navy); margin-bottom: 6px; }
+.site-card-body p { margin: 0; color: var(--ink-sub); font-size: 0.88rem; }
+
+.faq-a-with-photo { display: flex; gap: 14px; align-items: flex-start; }
+.faq-photo {
+  flex: none;
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(27,42,107,0.15);
+}
+.faq-a-with-photo p { margin: 0; }
+@media (max-width: 480px) {
+  .faq-a-with-photo { flex-direction: column; }
+}
 
 /* ---------- Timeline (当日の流れ) ---------- */
 .timeline {
