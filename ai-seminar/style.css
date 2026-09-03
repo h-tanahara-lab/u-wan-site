@@ -179,11 +179,20 @@ section { position: relative; }
 
 /* ============ FV ============ */
 .hero {
-  background: linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 100%);
+  position: relative;
+  background: linear-gradient(165deg, var(--navy) 0%, var(--navy-2) 55%, var(--navy) 100%);
+  background-size: 220% 220%;
   color: var(--white);
   padding: 40px 0 0;
   overflow: hidden;
 }
+.js .hero { animation: gradientShift 18s ease-in-out infinite; }
+@keyframes gradientShift {
+  0% { background-position: 0% 30%; }
+  50% { background-position: 100% 70%; }
+  100% { background-position: 0% 30%; }
+}
+.hero-copy, .hero-photo { position: relative; z-index: 1; }
 .hero .wrap {
   display: flex;
   flex-direction: column;
@@ -505,6 +514,7 @@ section { position: relative; }
   text-align: left;
 }
 .solution-video p { margin: 0 0 18px; color: var(--ink); }
+.solution-video-cta { text-align: center; }
 
 /* ============ 特徴カード ============ */
 .features { background: var(--cream); }
@@ -830,7 +840,7 @@ section { position: relative; }
   margin: 0 0 18px;
   color: var(--ink);
 }
-.final-cta { margin-top: 8px; }
+.final-cta { margin-top: 8px; text-align: center; }
 
 /* ============ 追伸 ============ */
 .postscript { background: var(--cream); }
@@ -888,3 +898,141 @@ section { position: relative; }
 .skip-link:focus {
   left: 0;
 }
+
+/* ============================================================
+   モーション（2026-09-03 追加・ルイ）
+   参考：ai-real-seminar/app.js・style.css の実装パターンを移植。
+   カラー・フォント・レイアウトは変更せず、動きのみ追加。
+   ============================================================ */
+
+/* ---------- Scroll reveal ---------- */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.js .reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-group > *:nth-child(1) { --reveal-delay: 0s; }
+.reveal-group > *:nth-child(2) { --reveal-delay: .08s; }
+.reveal-group > *:nth-child(3) { --reveal-delay: .16s; }
+.reveal-group > *:nth-child(4) { --reveal-delay: .24s; }
+.reveal-group > *:nth-child(5) { --reveal-delay: .32s; }
+.reveal-group > *:nth-child(6) { --reveal-delay: .4s; }
+
+.js .reveal--left { transform: translateX(-40px); }
+.js .reveal--right { transform: translateX(40px); }
+.js .reveal--pop {
+  transform: scale(.7);
+  transition-timing-function: cubic-bezier(.34,1.56,.64,1);
+}
+.js .reveal--pop.is-visible { transform: scale(1); }
+.js .reveal--scale { transform: scale(.96); }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- ヒーローの装飾フロート ---------- */
+.hero-orbit {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.hero-orbit-dot {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(1px);
+}
+.hero-orbit-dot.o1 { width: 130px; height: 130px; top: -40px; right: 6%; background: var(--gold); opacity: .16; }
+.hero-orbit-dot.o2 { width: 90px; height: 90px; bottom: 6%; left: -24px; background: var(--orange); opacity: .14; }
+.hero-orbit-dot.o3 { width: 56px; height: 56px; top: 46%; right: 22%; background: var(--gold); opacity: .12; }
+@media (max-width: 640px) {
+  .hero-orbit-dot.o3 { display: none; }
+}
+.js .hero-orbit-dot.o1 { animation: floatA 8s ease-in-out infinite; }
+.js .hero-orbit-dot.o2 { animation: floatB 9.5s ease-in-out infinite .6s; }
+.js .hero-orbit-dot.o3 { animation: floatA 7s ease-in-out infinite 1.2s; }
+@keyframes floatA {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(6deg); }
+}
+@keyframes floatB {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(12px) rotate(-8deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .js .hero { animation: none; }
+  .js .hero-orbit-dot.o1,
+  .js .hero-orbit-dot.o2,
+  .js .hero-orbit-dot.o3 { animation: none; }
+}
+
+/* ---------- スライダー（MYTHS & FACTS・スマホのみ） ---------- */
+.slider-nav { display: none; }
+@media (max-width: 699px) {
+  .slider-track.myth-list {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 20px;
+    gap: 16px;
+    scrollbar-width: none;
+  }
+  .slider-track.myth-list::-webkit-scrollbar { display: none; }
+  .slider-track.myth-list > .myth-card {
+    flex: 0 0 86%;
+    scroll-snap-align: center;
+  }
+  .js .slider-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 20px;
+  }
+}
+.slider-arrow {
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--white);
+  color: var(--navy);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.slider-arrow:disabled { opacity: .35; cursor: default; }
+.slider-dots { display: flex; align-items: center; gap: 8px; }
+.slider-dot {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: var(--border);
+  cursor: pointer;
+  transition: width .2s ease, background-color .2s ease;
+}
+.slider-dot.is-active { width: 20px; background: var(--orange); }
