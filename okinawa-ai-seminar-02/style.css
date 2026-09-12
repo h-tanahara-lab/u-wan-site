@@ -83,6 +83,32 @@ body {
 img { max-width: 100%; display: block; }
 a { color: inherit; text-decoration: none; }
 
+/* ============ ページ全体の強調（2026-09-13追記） ============
+   OTOページ（ai-seminar-oto/index.html）の<mark>／.turn-highlightの使い分けを踏襲。
+   このページは青系のため、OTOのゴールド系トークンは使わず、既存の青系トークンの
+   範囲内で成立させている（新しい色は追加していない）。
+   ・mark      … 文中の肩書き・固有名詞を一度だけ光らせる（チップ状の背景＋濃紺文字）
+   ・turn-highlight … そのセクションで一番言いたい一文（または中核部分）をボールド＋色で浮かせる
+   コントラストはAA基準（4.5:1）以上を確認済み（mark: 8.52:1／turn-highlight: 6.04〜8.52:1）。 */
+mark {
+  background: var(--blue-accent-text);
+  color: var(--blue-900);
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.turn-highlight {
+  color: var(--blue-500);
+  font-weight: 700;
+}
+/* 濃紺の暗い背景セクション（FV相当のグラデーション）では、明るいアクセント色に切り替えてAAコントラストを確保 */
+.final-cta .turn-highlight,
+.transition .turn-highlight,
+.pricing .turn-highlight {
+  color: var(--blue-accent-text);
+}
+
 .wrap {
   max-width: var(--maxw);
   margin: 0 auto;
@@ -748,30 +774,14 @@ section { position: relative; }
   color: var(--ink);
 }
 
-/* ---- レベル2〜8：番号のみ（2026-09-13追記・差し戻し対応③）----
-   名前・説明のテキストはHTMLに一切含めない。伏せる演出は「塗りつぶさない輪郭のみの
-   番号バッジ」で表現する（低=赤／高=緑のような優劣の色分けはしない、従来方針と同じ）。 */
-.ai-stages-locked {
-  list-style: none;
+/* ---- 「ほとんどの方がこのレベル1」の一言（2026-09-13追記：番号2〜8のブロックを
+   削除し、棚原さんの一言に差し替え。レベル1のカードとteaserの間に配置） ---- */
+.ai-stages-most {
   margin: 0 0 18px;
-  padding: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  justify-content: center;
-}
-.ai-stage-locked-num {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1.5px dashed var(--ink-soft);
-  background: var(--blue-50);
-  color: var(--ink-soft);
-  font-size: 13px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink);
 }
 
 .ai-stages-teaser {
