@@ -485,6 +485,41 @@ section { position: relative; }
 .solution-body p { color: var(--ink); margin: 0 0 12px; }
 .solution-body p:last-child { margin-bottom: 0; }
 
+/* ---- Anthropicとは？（2026-09-13追記・差し戻し対応②）----
+   地の文（solution-body）と読み分けられるよう、小さめのカード・枠囲みにする。
+   新しい色トークンは追加せず、既存トークン（white/border/blue-900/ink/ink-soft）のみ使用。 */
+.solution-anthropic {
+  margin-top: 24px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  text-align: left;
+}
+.solution-anthropic-heading {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue-900);
+  margin: 0 0 10px;
+}
+.solution-anthropic-body p {
+  margin: 0 0 10px;
+  color: var(--ink);
+  line-height: 1.8;
+  font-size: 14.5px;
+}
+.solution-anthropic-body p:last-child { margin-bottom: 0; }
+.solution-anthropic-list {
+  margin: 0 0 12px;
+  padding-left: 1.2em;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.solution-anthropic-list li { margin-bottom: 4px; }
+.solution-anthropic-list li:last-child { margin-bottom: 0; }
+
 /* ============ こんな悩み（PROBLEM） ============ */
 .problem { background: var(--white); }
 .problem-list {
@@ -672,25 +707,20 @@ section { position: relative; }
   color: var(--ink-soft);
 }
 
-.ai-stages-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  gap: 0;
-}
-.ai-stage {
+/* ---- レベル1のみ開示（2026-09-13追記・差し戻し対応③）----
+   レベル1だけ名前・説明を開示。既存の番号バッジ・名前・説明のスタイル（下の
+   .ai-stage-num / .ai-stage-body 系）をそのまま流用し、2〜8との情報量の差を
+   視覚的にはっきりさせる。 */
+.ai-stage-revealed {
   display: flex;
   align-items: flex-start;
   gap: 14px;
-  padding: 14px 0;
-  border-top: 1px dashed var(--border);
+  padding-bottom: 20px;
+  border-bottom: 1px dashed var(--border);
+  margin-bottom: 20px;
 }
-.ai-stage:first-child { border-top: none; padding-top: 0; }
-.ai-stage:last-child { padding-bottom: 0; }
 
-/* 番号バッジ：8行すべて同じ色・同じ形。段の高さと番号の大小だけで進行を見せる
-   （6章 speaker-role と同系統のブルー1色運用。低=赤／高=緑のような塗り分けはしない）。 */
+/* 番号バッジ：レベル1のみ使用（塗りつぶし＝開示済みを示す）。 */
 .ai-stage-num {
   flex: none;
   width: 30px;
@@ -716,6 +746,43 @@ section { position: relative; }
   font-size: 13.5px;
   line-height: 1.75;
   color: var(--ink);
+}
+
+/* ---- レベル2〜8：番号のみ（2026-09-13追記・差し戻し対応③）----
+   名前・説明のテキストはHTMLに一切含めない。伏せる演出は「塗りつぶさない輪郭のみの
+   番号バッジ」で表現する（低=赤／高=緑のような優劣の色分けはしない、従来方針と同じ）。 */
+.ai-stages-locked {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+.ai-stage-locked-num {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1.5px dashed var(--ink-soft);
+  background: var(--blue-50);
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ai-stages-teaser {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  background: var(--blue-50);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-soft);
 }
 
 .ai-stages-caption {
