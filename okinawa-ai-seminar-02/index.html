@@ -172,32 +172,41 @@
     <div class="wrap">
 
       <div class="hero-copy">
-        <span class="hero-series-tag">沖縄AIセミナー 第2回</span>
-        <h1 class="hero-title">Anthropic公式アンバサダーが、沖縄でセミナー登壇します。</h1>
-        <p class="hero-sub">Anthropic公式のClaudeコミュニティアンバサダーであり、有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導してきた安永智也さんが、10月26日、沖縄に来てくださいます。</p>
+        <!-- モバイルではhero-photoを見出し直後に持ち上げるため、
+             hero-copy-top（シリーズタグ＋見出し）とhero-copy-main（以降）に分割。
+             900px以上ではhero-copyがdisplay:contentsにならず従来どおり1つの左カラムとして
+             描画されるため、PCのレイアウト・座標は変化しない（2026-09-12 一次チェック差し戻し対応） -->
+        <div class="hero-copy-top">
+          <span class="hero-series-tag">沖縄AIセミナー 第2回</span>
+          <h1 class="hero-title">Anthropic公式アンバサダーが、沖縄でセミナー登壇します。</h1>
+        </div>
 
-        <dl class="hero-info">
-          <div class="hero-info-row">
-            <dt>日時</dt>
-            <dd><b>2026年10月26日（月）</b><br>開場18:00／セミナー18:30〜20:30</dd>
-          </div>
-          <div class="hero-info-row">
-            <dt>会場</dt>
-            <dd>宜野湾ベイサイド情報センター（沖縄県宜野湾市）</dd>
-          </div>
-          <div class="hero-info-row">
-            <dt>参加費</dt>
-            <dd><b>11,000円</b>（税込）</dd>
-          </div>
-          <div class="hero-info-row">
-            <dt>定員</dt>
-            <dd>30名<span class="tag-real">リアル開催のみ</span></dd>
-          </div>
-        </dl>
+        <div class="hero-copy-main">
+          <p class="hero-sub">Anthropic公式のClaudeコミュニティアンバサダーであり、有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導してきた安永智也さんが、10月26日、沖縄に来てくださいます。</p>
 
-        <a class="btn btn-primary btn-arrow hero-main-cta" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="hero_main">参加を申し込む</a>
+          <dl class="hero-info">
+            <div class="hero-info-row">
+              <dt>日時</dt>
+              <dd><b>2026年10月26日（月）</b><br>開場18:00／セミナー18:30〜20:30</dd>
+            </div>
+            <div class="hero-info-row">
+              <dt>会場</dt>
+              <dd>宜野湾ベイサイド情報センター（沖縄県宜野湾市）</dd>
+            </div>
+            <div class="hero-info-row">
+              <dt>参加費</dt>
+              <dd><b>11,000円</b>（税込）</dd>
+            </div>
+            <div class="hero-info-row">
+              <dt>定員</dt>
+              <dd>30名<span class="tag-real">リアル開催のみ</span></dd>
+            </div>
+          </dl>
 
-        <p class="hero-info-note">お申し込みは事前のオンライン決済制です。定員30名になり次第、受付を終了します。</p>
+          <a class="btn btn-primary btn-arrow hero-main-cta" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="hero_main">参加を申し込む</a>
+
+          <p class="hero-info-note">お申し込みは事前のオンライン決済制です。定員30名になり次第、受付を終了します。</p>
+        </div>
       </div>
 
       <div class="hero-photo">

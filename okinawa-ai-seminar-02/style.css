@@ -191,6 +191,21 @@ section { position: relative; }
   gap: 32px;
 }
 .hero-copy { padding-top: 12px; }
+
+/* ---- モバイルFV：写真を見出し直後に持ち上げる（2026-09-12一次チェック差し戻し対応） ----
+   890px未満では.hero-copyをdisplay:contentsにして中身（hero-copy-top／hero-copy-main）を
+   .wrapの直接のflex itemとして扱い、hero-photoをその間にorderで割り込ませる。
+   900px以上ではこのルールは効かず、.hero-copyは従来どおり単一の左カラムのまま
+   （PCのレイアウト・座標は変更なし）。 */
+@media (max-width: 899px) {
+  .hero .wrap { gap: 18px; }
+  .hero-copy { display: contents; }
+  .hero-copy-top { order: 1; }
+  .hero-photo { order: 2; }
+  .hero-copy-main { order: 3; }
+  .hero-copy-top, .hero-copy-main { position: relative; z-index: 1; }
+}
+
 .hero-series-tag {
   display: inline-flex;
   align-items: center;
@@ -211,6 +226,9 @@ section { position: relative; }
   font-weight: 700;
   margin: 0 0 22px;
 }
+@media (max-width: 899px) {
+  .hero-title { margin-bottom: 0; }
+}
 .hero-title .accent {
   color: var(--blue-accent);
 }
@@ -228,7 +246,8 @@ section { position: relative; }
 .hero-photo > picture img {
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 4;
+  /* モバイルは初期画面に収まるよう縦を抑えたクロップ（顔は上寄せのobject-positionで見切れない） */
+  aspect-ratio: 4 / 3;
   object-fit: cover;
   object-position: 50% 12%;
 }
