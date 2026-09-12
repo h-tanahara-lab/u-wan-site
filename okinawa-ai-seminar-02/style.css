@@ -243,60 +243,53 @@ section { position: relative; }
   position: relative;
   margin: 0 -20px;
 }
-.hero-photo > picture img {
-  width: 100%;
-  height: auto;
-  /* モバイルは初期画面に収まるよう縦を抑えたクロップ（顔は上寄せのobject-positionで見切れない） */
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  object-position: 50% 12%;
-}
-.hero-photo-caption {
-  position: absolute;
-  left: 20px;
-  bottom: 16px;
-  background: rgba(11, 42, 74, 0.82);
-  color: var(--white);
-  font-size: 13px;
-  font-weight: 700;
-  padding: 8px 14px;
-  border-radius: 6px;
-  letter-spacing: 0.02em;
-  z-index: 2;
-}
 
-/* サブ写真（棚原さん・小）：メイン写真の角に重ねるバッジ状の配置。
-   安永さんの写真より明確に小さくし、視線がまず安永さんへ向くようにする。 */
-.hero-photo-sub {
-  position: absolute;
-  right: 16px;
-  bottom: 16px;
-  z-index: 2;
-  width: 76px;
-  background: var(--white);
-  border-radius: 12px;
-  padding: 5px;
-  box-shadow: var(--shadow-md);
+/* ---- 登壇者2名バナー（安永さん＝ゲスト・棚原＝ファシリテーター） ----
+   セミナー告知バナーでよくある「登壇者が並ぶ」構成。安永さんを先に・大きく、
+   棚原はファシリテーターとして役割ラベル付きで小さく配置する
+   （2026-09-13 棚原指示：FVの棚原写真が「遺影っぽい」との差し戻し対応）。
+   両者とも同じ横並びカード構造で、サイズ比だけで主従を出す（扱いを対等にしすぎない）。 */
+.hero-speakers {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 0 20px;
 }
-.hero-photo-sub img {
+.hero-speaker { position: relative; min-width: 0; }
+.hero-speaker picture { display: block; }
+.hero-speaker img {
+  display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  object-position: 50% 15%;
-  border-radius: 8px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
 }
-.hero-photo-sub-caption {
-  font-size: 9px;
-  line-height: 1.35;
-  font-weight: 700;
-  color: var(--blue-900);
+.hero-speaker--guest { flex: 1.25 1 0; }
+.hero-speaker--guest img { object-position: 50% 10%; }
+.hero-speaker--host { flex: 1 1 0; max-width: 42%; }
+.hero-speaker--host img { object-position: 50% 15%; }
+
+.hero-speaker-label {
+  margin-top: 10px;
   text-align: center;
 }
+.hero-speaker-role {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--blue-accent-text);
+  margin-bottom: 2px;
+}
+.hero-speaker-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+}
+.hero-speaker--guest .hero-speaker-name { font-size: 14.5px; }
 
 .hero-info {
   background: rgba(255,255,255,0.07);
@@ -356,13 +349,17 @@ section { position: relative; }
   .hero-photo {
     flex: 1 1 48%;
     margin: 0;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
     align-self: stretch;
+    display: flex;
+    align-items: center;
   }
-  .hero-photo > picture img { aspect-ratio: 4 / 5; object-position: 50% 8%; }
-  .hero-photo-sub { width: 96px; right: 20px; bottom: 20px; }
+  .hero-speakers { padding: 0; align-items: flex-end; gap: 20px; width: 100%; }
+  .hero-speaker img { aspect-ratio: 3 / 4; }
+  .hero-speaker--guest img { object-position: 50% 8%; }
+  .hero-speaker--host { max-width: 38%; }
+  .hero-speaker-role { font-size: 11.5px; }
+  .hero-speaker-name { font-size: 14px; }
+  .hero-speaker--guest .hero-speaker-name { font-size: 16px; }
 }
 
 /* ============ 数字バー（STATS） ============ */
@@ -413,30 +410,13 @@ section { position: relative; }
 }
 
 /* ============ SOLUTION（安永さん登場） ============ */
+/* 2026-09-13：見出し直前の写真を削除（棚原指示）。写真1点を前提にした2カラムgridから
+   テキスト単体の中央寄せブロックに変更。見出し・本文の文言は変更なし。 */
 .solution { background: var(--blue-50); }
 .solution-inner {
-  display: grid;
-  gap: 24px;
-}
-@media (min-width: 640px) {
-  .solution-inner {
-    grid-template-columns: 180px 1fr;
-    align-items: center;
-    gap: 32px;
-  }
-}
-.solution-photo {
-  width: 160px;
+  max-width: 640px;
   margin: 0 auto;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  box-shadow: var(--shadow-md);
-}
-@media (min-width: 640px) { .solution-photo { width: 100%; } }
-.solution-photo img {
-  width: 100%;
-  aspect-ratio: 3 / 4;
-  object-fit: cover;
+  text-align: center;
 }
 .solution-headline {
   font-family: var(--font-serif);

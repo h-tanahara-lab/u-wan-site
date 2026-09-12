@@ -28,6 +28,9 @@
      個別リクエスト対応のFAQ1問は棚原さん判断により非掲載（03_FAQ追加分.md参照）。
      質疑応答（終盤10分）を開催概要の日時行・参加費に含まれるものへ反映済み。
      ヒーロー写真：安永さん（メイン）＋棚原さん（サブ・小）に差し替え（2026-09-12）。
+     2026-09-13追記：FVを「登壇者2名が並ぶ」バナー構成に変更（安永さん＝ゲスト・棚原＝ファシリテーター、
+     役割ラベルの文言はユイ確定待ちプレースホルダ）。安永さんの写真をSOLUTION・プロフィールにも統一
+     （assets/yasunaga-portrait.jpg＝hero.jpgと同一写真の3:4トリミング）。SOLUTIONの写真は削除。
      ============================================================ -->
 
 <title>沖縄AIセミナー 第2回｜Anthropic公式アンバサダーが登壇｜2026年10月26日(月) 宜野湾｜U-WAN</title>
@@ -209,26 +212,37 @@
         </div>
       </div>
 
-      <div class="hero-photo">
-        <picture>
-          <source type="image/webp" srcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" sizes="(min-width: 900px) 480px, 100vw">
-          <img src="assets/hero.jpg"
-               srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
-               sizes="(min-width: 900px) 480px, 100vw"
-               width="890" height="1334"
-               alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト）"
-               fetchpriority="high">
-        </picture>
-        <span class="hero-photo-caption">安永智也さん（ゲスト）</span>
+      <!-- 登壇者2名バナー：安永さん（ゲスト）を先に・大きく／棚原（ファシリテーター）を役割つきで並べる。
+           2026-09-13 棚原指示：「FVの僕の画像が遺影っぽい」差し戻し対応。
+           役割ラベルの文言はユイ確定コピー待ちのプレースホルダ（［ ］内）。構造・スタイルのみ先行実装。 -->
+      <div class="hero-photo hero-speakers">
+        <div class="hero-speaker hero-speaker--guest">
+          <picture>
+            <source type="image/webp" srcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" sizes="(min-width: 900px) 260px, 56vw">
+            <img src="assets/hero.jpg"
+                 srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
+                 sizes="(min-width: 900px) 260px, 56vw"
+                 width="890" height="1334"
+                 alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト）"
+                 fetchpriority="high">
+          </picture>
+          <div class="hero-speaker-label">
+            <span class="hero-speaker-role">［プレースホルダ：ゲスト登壇］</span>
+            <span class="hero-speaker-name">安永智也さん</span>
+          </div>
+        </div>
 
-        <div class="hero-photo-sub">
+        <div class="hero-speaker hero-speaker--host">
           <picture>
             <source type="image/webp" srcset="assets/tanahara_rewrite.webp">
             <img src="assets/tanahara_rewrite.jpg"
                  width="600" height="800"
-                 alt="白いシャツ姿で笑顔の棚原秀樹（U-WAN）">
+                 alt="白いシャツ姿で笑顔の棚原秀樹（ファシリテーター）">
           </picture>
-          <span class="hero-photo-sub-caption">棚原秀樹（U-WAN）</span>
+          <div class="hero-speaker-label">
+            <span class="hero-speaker-role">［プレースホルダ：ファシリテーター］</span>
+            <span class="hero-speaker-name">棚原秀樹（U-WAN）</span>
+          </div>
         </div>
       </div>
 
@@ -305,18 +319,14 @@
   </section>
 
   <!-- 5. SOLUTION（安永さん登場） -->
+  <!-- 2026-09-13 棚原指示：見出し直前の写真は不要のため削除。見出し・本文は変更なし -->
   <section class="solution section-pad">
     <div class="wrap wrap--narrow">
       <div class="solution-inner">
-        <div class="solution-photo">
-          <img src="assets/yasunaga.jpg" alt="安永智也さん" width="400" height="379" loading="lazy">
-        </div>
-        <div>
-          <h2 class="solution-headline">Anthropic公式アンバサダーが、沖縄でセミナー登壇します。</h2>
-          <div class="solution-body">
-            <p>Anthropic公式のClaudeコミュニティアンバサダーであり、有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導してきた安永智也さん。</p>
-            <p>その安永さんが、10月26日、沖縄に来てくださいます。</p>
-          </div>
+        <h2 class="solution-headline">Anthropic公式アンバサダーが、沖縄でセミナー登壇します。</h2>
+        <div class="solution-body">
+          <p>Anthropic公式のClaudeコミュニティアンバサダーであり、有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導してきた安永智也さん。</p>
+          <p>その安永さんが、10月26日、沖縄に来てくださいます。</p>
         </div>
       </div>
     </div>
@@ -330,7 +340,7 @@
       <div class="speaker-card reveal">
         <div class="speaker-head">
           <div class="speaker-photo">
-            <img src="assets/yasunaga.jpg" alt="安永智也さん" width="400" height="379" loading="lazy">
+            <img src="assets/yasunaga-portrait.jpg" alt="安永智也さん" width="600" height="800" loading="lazy">
           </div>
           <div>
             <span class="speaker-role">ゲスト講師</span>
