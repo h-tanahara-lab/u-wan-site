@@ -204,7 +204,7 @@
             </div>
             <div class="hero-info-row">
               <dt>定員</dt>
-              <dd>30名<span class="tag-real">リアル開催のみ</span></dd>
+              <dd>30名（リアル開催のみ）</dd>
             </div>
           </dl>
 
@@ -214,36 +214,42 @@
         </div>
       </div>
 
-      <!-- 登壇者2名バナー：安永さん（ゲスト講師）を先に・大きく／棚原（ファシリテーター）を役割つきで並べる。
-           2026-09-13 棚原指示：「FVの僕の画像が遺影っぽい」差し戻し対応。
+      <!-- 安永さん（ゲスト講師）の写真を単独で大きく表示。
+           棚原（ファシリテーター）は写真右下に円形バッジで重ねる。
+           2026-09-13 棚原指示②：「FVの僕の画像が遺影っぽい」→ ◯で囲んだ写真を安永さん写真の右下に重ねる形に変更。
            役割ラベルはユイ確定コピー（04_8段階セクション.md②）で実装済み。 -->
       <div class="hero-photo hero-speakers">
         <div class="hero-speaker hero-speaker--guest">
-          <picture>
-            <source type="image/webp" srcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" sizes="(min-width: 900px) 260px, 56vw">
-            <img src="assets/hero.jpg"
-                 srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
-                 sizes="(min-width: 900px) 260px, 56vw"
-                 width="890" height="1334"
-                 alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト講師）"
-                 fetchpriority="high">
-          </picture>
+          <div class="hero-speaker-photo-wrap">
+            <picture>
+              <source type="image/webp" srcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" sizes="(min-width: 900px) 480px, 88vw">
+              <img src="assets/hero.jpg"
+                   srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
+                   sizes="(min-width: 900px) 480px, 88vw"
+                   width="890" height="1334"
+                   alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト講師）"
+                   fetchpriority="high">
+            </picture>
+
+            <div class="hero-host-badge">
+              <span class="hero-host-badge-photo">
+                <picture>
+                  <source type="image/webp" srcset="assets/tanahara_rewrite.webp">
+                  <img src="assets/tanahara_rewrite.jpg"
+                       width="600" height="800"
+                       alt="棚原秀樹（ファシリテーター）">
+                </picture>
+              </span>
+              <span class="hero-host-badge-text">
+                <span class="hero-host-badge-role">ファシリテーター</span>
+                <span class="hero-host-badge-name">棚原秀樹</span>
+              </span>
+            </div>
+          </div>
+
           <div class="hero-speaker-label">
             <span class="hero-speaker-role">ゲスト講師</span>
             <span class="hero-speaker-name">安永智也さん</span>
-          </div>
-        </div>
-
-        <div class="hero-speaker hero-speaker--host">
-          <picture>
-            <source type="image/webp" srcset="assets/tanahara_rewrite.webp">
-            <img src="assets/tanahara_rewrite.jpg"
-                 width="600" height="800"
-                 alt="白いシャツ姿で笑顔の棚原秀樹（ファシリテーター）">
-          </picture>
-          <div class="hero-speaker-label">
-            <span class="hero-speaker-role">ファシリテーター</span>
-            <span class="hero-speaker-name">棚原秀樹（U-WAN）</span>
           </div>
         </div>
       </div>
@@ -603,7 +609,7 @@
         </div>
         <div class="overview-row">
           <dt>形式</dt>
-          <dd>リアル開催<span class="tag-real">REAL</span><br>
+          <dd>リアル開催<br>
           オンライン配信・ハイブリッドはありません。</dd>
         </div>
       </dl>

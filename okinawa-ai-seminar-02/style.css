@@ -244,11 +244,9 @@ section { position: relative; }
   margin: 0 -20px;
 }
 
-/* ---- 登壇者2名バナー（安永さん＝ゲスト・棚原＝ファシリテーター） ----
-   セミナー告知バナーでよくある「登壇者が並ぶ」構成。安永さんを先に・大きく、
-   棚原はファシリテーターとして役割ラベル付きで小さく配置する
-   （2026-09-13 棚原指示：FVの棚原写真が「遺影っぽい」との差し戻し対応）。
-   両者とも同じ横並びカード構造で、サイズ比だけで主従を出す（扱いを対等にしすぎない）。 */
+/* ---- 登壇者バナー（安永さん＝ゲスト講師をメイン写真／棚原＝ファシリテーターを円形バッジで右下に重ねる） ----
+   2026-09-13 棚原指示②：「FVの僕の画像が遺影っぽい」→ 四角い額縁バッジをやめ、
+   ◯で囲んだ棚原の写真を安永さん写真の右下に重ねる形に変更。 */
 .hero-speakers {
   display: flex;
   align-items: flex-end;
@@ -256,20 +254,75 @@ section { position: relative; }
   padding: 0 20px;
 }
 .hero-speaker { position: relative; min-width: 0; }
-.hero-speaker picture { display: block; }
-.hero-speaker img {
+.hero-speaker--guest { flex: 1 1 0; }
+
+.hero-speaker-photo-wrap {
+  position: relative;
+}
+.hero-speaker-photo-wrap picture { display: block; }
+.hero-speaker-photo-wrap > picture > img {
   display: block;
   width: 100%;
   height: auto;
   aspect-ratio: 3 / 4;
   object-fit: cover;
+  object-position: 50% 10%;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
 }
-.hero-speaker--guest { flex: 1.25 1 0; }
-.hero-speaker--guest img { object-position: 50% 10%; }
-.hero-speaker--host { flex: 1 1 0; max-width: 42%; }
-.hero-speaker--host img { object-position: 50% 15%; }
+
+/* 棚原（ファシリテーター）の円形バッジ：写真右下に重ねる */
+.hero-host-badge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: calc(100% - 24px);
+  padding: 4px 12px 4px 4px;
+  background: rgba(10, 20, 42, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+}
+.hero-host-badge-photo {
+  display: block;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--white);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+.hero-host-badge-photo picture { display: block; width: 100%; height: 100%; }
+.hero-host-badge-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.hero-host-badge-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+  white-space: nowrap;
+}
+.hero-host-badge-role {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #AEC2DE;
+}
+.hero-host-badge-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--white);
+}
 
 .hero-speaker-label {
   margin-top: 10px;
@@ -354,9 +407,12 @@ section { position: relative; }
     align-items: center;
   }
   .hero-speakers { padding: 0; align-items: flex-end; gap: 20px; width: 100%; }
-  .hero-speaker img { aspect-ratio: 3 / 4; }
-  .hero-speaker--guest img { object-position: 50% 8%; }
-  .hero-speaker--host { max-width: 38%; }
+  .hero-speaker-photo-wrap > picture > img { aspect-ratio: 3 / 4; object-position: 50% 8%; }
+  .hero-host-badge { right: 20px; bottom: 20px; gap: 10px; padding: 6px 18px 6px 6px; }
+  .hero-host-badge-photo { width: 68px; height: 68px; border-width: 3px; }
+  .hero-host-badge-photo img { object-position: 50% 22%; }
+  .hero-host-badge-role { font-size: 10px; }
+  .hero-host-badge-name { font-size: 14px; }
   .hero-speaker-role { font-size: 11.5px; }
   .hero-speaker-name { font-size: 14px; }
   .hero-speaker--guest .hero-speaker-name { font-size: 16px; }
@@ -730,7 +786,7 @@ section { position: relative; }
   }
 }
 .speaker-photo {
-  width: 140px;
+  width: 180px;
   margin: 0 auto;
   border-radius: var(--radius-md);
   overflow: hidden;
@@ -739,6 +795,7 @@ section { position: relative; }
 @media (min-width: 640px) { .speaker-photo { width: 100%; } }
 .speaker-photo img {
   width: 100%;
+  height: auto;
   aspect-ratio: 3 / 4;
   object-fit: cover;
 }
@@ -812,17 +869,6 @@ section { position: relative; }
   height: fit-content;
 }
 .overview-row dd { margin: 0; color: var(--ink); line-height: 1.8; }
-.tag-real {
-  display: inline-block;
-  background: var(--blue-500);
-  color: var(--white);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  padding: 2px 8px;
-  border-radius: 4px;
-  margin-left: 8px;
-}
 .overview-actions {
   display: flex;
   flex-wrap: wrap;
