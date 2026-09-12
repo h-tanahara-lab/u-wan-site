@@ -177,12 +177,12 @@ p:last-child { margin-bottom: 0; }
   font-size: 13.5px;
   color: var(--ink-soft);
 }
-.countdown-label { font-weight: 600; }
+.countdown-label { font-weight: 600; color: var(--red); }
 .countdown-value {
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.02em;
-  color: var(--navy);
+  color: var(--red);
   font-size: 17px;
 }
 .countdown--cta { margin-top: 22px; }
@@ -428,13 +428,17 @@ p:last-child { margin-bottom: 0; }
   margin-bottom: 6px;
 }
 .price-new-value {
-  font-size: clamp(40px, 12vw, 60px);
+  font-size: clamp(36px, 11vw, 60px);
   font-weight: 800;
   color: var(--white);
   line-height: 1.1;
 }
 .price-new-value span {
   color: var(--gold);
+}
+.price-new-value .price-tax {
+  color: var(--white);
+  white-space: nowrap;
 }
 .pricing-note { max-width: 30em; margin: 0 auto; color: #E6ECF5; }
 .pricing-note p { margin-bottom: 14px; }
@@ -666,7 +670,7 @@ p:last-child { margin-bottom: 0; }
         <div class="price-old-value">11,000円（税込）</div>
         <div class="price-arrow" aria-hidden="true">↓</div>
         <div class="price-new-label">先行申込価格</div>
-        <div class="price-new-value"><span>8,250</span>円（税込）</div>
+        <div class="price-new-value"><span>8,250</span>円<span class="price-tax">（税込）</span></div>
       </div>
 
       <div class="pricing-note">
