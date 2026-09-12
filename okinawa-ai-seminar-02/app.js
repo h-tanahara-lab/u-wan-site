@@ -1,22 +1,36 @@
 /* =========================================================
    沖縄AIセミナー 第2回 通常LP — app.js
-   実装：ルイ（U-WAN 04_システム部）2026-09-12
+   実装：ルイ（U-WAN 04_システム部）2026-09-12（計測はリョウ設計に統一）
 
    実装範囲：
    ・スクロール連動フェードイン（.reveal）
    ・モバイル追従CTAの表示/非表示（最終CTAセクションと重複させない）
-   ・計測イベント発火（dataLayer.push のみ。GA4タグ本体の埋め込みは
-     リョウの指示待ち。gtag()は呼ばない・タグは読み込まない）
-     - cta_click   : [data-cta-apply] クリック時
-     - calendar_add: [data-calendar-add] クリック時
-     - scroll_depth: 25 / 50 / 75% 到達時（各1回のみ）
+   ・計測イベント発火（trackEvent() ヘルパー経由。gtag()が定義されて
+     いない現状は console.info にフォールバックし、実際の送信は行わない。
+     GA4タグ本体はhead内にコメントアウトで設置済み。測定ID確定後、
+     コメントを外せばそのまま計測が有効になる）
+     - cta_click       : [data-cta-apply] クリック時
+     - add_to_calendar : [data-calendar-add] クリック時
+     - scroll_depth    : 25 / 50 / 75% 到達時（各1回のみ）
    ・申込フォームはこのページに存在しない（外部UTAGE）ため、
      フォーム開始/送信/エラー等のイベントは実装しない。
    ========================================================= */
 (function () {
   "use strict";
 
-  window.dataLayer = window.dataLayer || [];
+  /* ---------------------------------------------------------------
+     計測ヘルパー（リョウ設計）
+     gtag()が定義されていればGA4に送信、未定義ならconsole.infoに
+     フォールバックする。
+  --------------------------------------------------------------- */
+  function trackEvent(name, params) {
+    params = params || {};
+    if (typeof window.gtag === "function") {
+      window.gtag("event", name, params);
+    } else {
+      console.info("[GA4 (dev)]", name, params);
+    }
+  }
 
   document.addEventListener("DOMContentLoaded", function () {
     var prefersReducedMotion = window.matchMedia &&
@@ -69,9 +83,10 @@
     --------------------------------------------------------------- */
     document.querySelectorAll("[data-cta-apply]").forEach(function (el) {
       el.addEventListener("click", function () {
-        window.dataLayer.push({
-          event: "cta_click",
-          cta_location: el.getAttribute("data-cta-location") || "unknown"
+        trackEvent("cta_click", {
+          cta_location: el.getAttribute("data-cta-location") || "unknown",
+          cta_label: (el.textContent || "").trim(),
+          destination_url: el.getAttribute("href") || ""
         });
       });
     });
@@ -81,9 +96,9 @@
     --------------------------------------------------------------- */
     document.querySelectorAll("[data-calendar-add]").forEach(function (el) {
       el.addEventListener("click", function () {
-        window.dataLayer.push({
-          event: "calendar_add",
-          calendar_type: el.getAttribute("data-calendar-add") || "unknown"
+        trackEvent("add_to_calendar", {
+          calendar_type: el.getAttribute("data-calendar-add") || "unknown",
+          seminar_date: "2026-10-26"
         });
       });
     });
@@ -103,9 +118,8 @@
       scrollMarks.forEach(function (mark) {
         if (!firedMarks[mark] && percent >= mark) {
           firedMarks[mark] = true;
-          window.dataLayer.push({
-            event: "scroll_depth",
-            scroll_depth_percent: mark
+          trackEvent("scroll_depth", {
+            percent_scrolled: mark
           });
         }
       });
