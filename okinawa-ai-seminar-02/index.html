@@ -24,9 +24,10 @@
      沖縄AIセミナー 第2回 通常LP
      実装：ルイ（U-WAN 04_システム部）2026-09-12
      ユイ納品コピー（02_LP_Copy_3patterns.md／推奨案パターンA）を全文流し込み済み。
-     FAQは7問中、回答済みの3問（日程・オンライン有無・価格理由）のみ実装。
-     【要確認】タグの付いた4問（駐車場・支払い方法・キャンセル・領収書）は
-     棚原さんの回答が来るまで非掲載。
+     FAQは6問実装（日程・オンライン有無・価格理由・駐車場・支払い方法・キャンセル）。
+     個別リクエスト対応のFAQ1問は棚原さん判断により非掲載（03_FAQ追加分.md参照）。
+     質疑応答（終盤10分）を開催概要の日時行・参加費に含まれるものへ反映済み。
+     ヒーロー写真：安永さん（メイン）＋棚原さん（サブ・小）に差し替え（2026-09-12）。
      ============================================================ -->
 
 <title>沖縄AIセミナー 第2回｜Anthropic公式アンバサダーが登壇｜2026年10月26日(月) 宜野湾｜U-WAN</title>
@@ -51,7 +52,7 @@
 
 <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
 
-<link rel="preload" as="image" href="assets/hero.jpg" imagesrcset="assets/hero-sm.webp 900w, assets/hero.webp 1400w" fetchpriority="high">
+<link rel="preload" as="image" href="assets/hero.jpg" imagesrcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
@@ -80,7 +81,7 @@
       "addressCountry": "JP"
     }
   },
-  "image": ["https://u-wan.jp/okinawa-ai-seminar-02/assets/hero.jpg"],
+  "image": ["https://u-wan.jp/okinawa-ai-seminar-02/assets/hero.jpg", "https://u-wan.jp/okinawa-ai-seminar-02/assets/tanahara_rewrite.jpg"],
   "offers": {
     "@type": "Offer",
     "price": "11000",
@@ -102,7 +103,7 @@
 }
 </script>
 
-<!-- 構造化データ：FAQPage（本文のFAQセクションと文言を一致させています。回答済み3問のみ掲載） -->
+<!-- 構造化データ：FAQPage（本文のFAQセクションと文言を一致させています。回答済み6問を掲載。棚原判断で非掲載としたFAQ1問あり（詳細は03_FAQ追加分.md参照）） -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -130,6 +131,30 @@
       "acceptedAnswer": {
         "@type": "Answer",
         "text": "安永智也さんに沖縄まで来ていただくゲスト登壇であること、会場を用意したリアル開催であること、定員30名の少人数制であることを踏まえた金額です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "会場に駐車場はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "会場には駐車場がございますが、台数に限りがございます。少し早めのご来場や、公共交通機関のご利用もあわせてご検討いただけますと安心です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "お支払い方法を教えてください",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "お支払いは、クレジットカード決済（Stripe）のみとなっております。恐れ入りますが、銀行振込でのお支払いは承っておりません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "当日、都合が悪くなった場合のキャンセルはできますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "大変恐れ入りますが、お申し込み後のキャンセル・返金は承っておりません。定員30名の少人数開催のため、まずはご予定をよくご確認のうえ、お申し込みをお願いいたします。もし当日どうしても参加が難しくなった場合は、お手数だとは思いますが、必ずご一報いただけますと助かります。定員に漏れてしまった方に、あらためて席をご案内できるようにするためです。ご連絡さえいただければ、次に待っている方の力になれますので、その時はどうぞ遠慮なくお知らせください。"
       }
     }
   ]
@@ -177,15 +202,25 @@
 
       <div class="hero-photo">
         <picture>
-          <source type="image/webp" srcset="assets/hero-sm.webp 900w, assets/hero.webp 1400w" sizes="(min-width: 900px) 480px, 100vw">
+          <source type="image/webp" srcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" sizes="(min-width: 900px) 480px, 100vw">
           <img src="assets/hero.jpg"
-               srcset="assets/hero-sm.jpg 900w, assets/hero.jpg 1400w"
+               srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
                sizes="(min-width: 900px) 480px, 100vw"
-               width="1400" height="933"
-               alt="白いシャツ姿でテーブルに手を組み、笑顔でこちらを見る棚原秀樹（U-WAN）"
+               width="890" height="1334"
+               alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト）"
                fetchpriority="high">
         </picture>
-        <span class="hero-photo-caption">棚原秀樹（U-WAN）</span>
+        <span class="hero-photo-caption">安永智也さん（ゲスト）</span>
+
+        <div class="hero-photo-sub">
+          <picture>
+            <source type="image/webp" srcset="assets/tanahara_rewrite.webp">
+            <img src="assets/tanahara_rewrite.jpg"
+                 width="600" height="800"
+                 alt="白いシャツ姿で笑顔の棚原秀樹（U-WAN）">
+          </picture>
+          <span class="hero-photo-sub-caption">棚原秀樹（U-WAN）</span>
+        </div>
       </div>
 
     </div>
@@ -440,7 +475,8 @@
       <dl class="overview-table reveal">
         <div class="overview-row">
           <dt>日時</dt>
-          <dd>2026年10月26日（月） 開場18:00／セミナー18:30〜20:30</dd>
+          <dd>2026年10月26日（月） 開場18:00／セミナー18:30〜20:30<br>
+          （終盤10分ほどは、安永さんに直接質問できる質疑応答の時間です）</dd>
         </div>
         <div class="overview-row">
           <dt>会場</dt>
@@ -487,6 +523,7 @@
         <li>当日のセミナー参加（120分）</li>
         <li>安永さんの講義</li>
         <li>棚原（企画・運営）のコメント</li>
+        <li>安永さんへの質疑応答の時間（終盤10分程度）</li>
       </ul>
 
       <div class="pricing-cta reveal">
@@ -495,7 +532,7 @@
     </div>
   </section>
 
-  <!-- 13. FAQ（回答済み3問のみ掲載。【要確認】4問は非掲載） -->
+  <!-- 13. FAQ（6問掲載。棚原判断で非掲載としたFAQ1問あり） -->
   <section class="faq section-pad">
     <div class="wrap wrap--narrow">
       <h2 class="section-heading section-heading--center reveal">よくあるご質問</h2>
@@ -514,6 +551,22 @@
         <details class="faq-item reveal">
           <summary>なぜ参加費が11,000円なのですか？</summary>
           <p class="faq-a">安永智也さんに沖縄まで来ていただくゲスト登壇であること、会場を用意したリアル開催であること、定員30名の少人数制であることを踏まえた金額です。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>会場に駐車場はありますか？</summary>
+          <p class="faq-a">会場には駐車場がございますが、台数に限りがございます。少し早めのご来場や、公共交通機関のご利用もあわせてご検討いただけますと安心です。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>お支払い方法を教えてください</summary>
+          <p class="faq-a">お支払いは、クレジットカード決済（Stripe）のみとなっております。恐れ入りますが、銀行振込でのお支払いは承っておりません。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>当日、都合が悪くなった場合のキャンセルはできますか？</summary>
+          <p class="faq-a">大変恐れ入りますが、お申し込み後のキャンセル・返金は承っておりません。定員30名の少人数開催のため、まずはご予定をよくご確認のうえ、お申し込みをお願いいたします。</p>
+          <p class="faq-a">もし当日どうしても参加が難しくなった場合は、お手数だとは思いますが、必ずご一報いただけますと助かります。定員に漏れてしまった方に、あらためて席をご案内できるようにするためです。ご連絡さえいただければ、次に待っている方の力になれますので、その時はどうぞ遠慮なくお知らせください。</p>
         </details>
 
       </div>

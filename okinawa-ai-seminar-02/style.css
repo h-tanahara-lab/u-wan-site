@@ -225,12 +225,12 @@ section { position: relative; }
   position: relative;
   margin: 0 -20px;
 }
-.hero-photo img {
+.hero-photo > picture img {
   width: 100%;
   height: auto;
-  aspect-ratio: 3 / 2;
+  aspect-ratio: 3 / 4;
   object-fit: cover;
-  object-position: 60% 35%;
+  object-position: 50% 12%;
 }
 .hero-photo-caption {
   position: absolute;
@@ -243,6 +243,40 @@ section { position: relative; }
   padding: 8px 14px;
   border-radius: 6px;
   letter-spacing: 0.02em;
+  z-index: 2;
+}
+
+/* サブ写真（棚原さん・小）：メイン写真の角に重ねるバッジ状の配置。
+   安永さんの写真より明確に小さくし、視線がまず安永さんへ向くようにする。 */
+.hero-photo-sub {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  z-index: 2;
+  width: 76px;
+  background: var(--white);
+  border-radius: 12px;
+  padding: 5px;
+  box-shadow: var(--shadow-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.hero-photo-sub img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: 50% 15%;
+  border-radius: 8px;
+}
+.hero-photo-sub-caption {
+  font-size: 9px;
+  line-height: 1.35;
+  font-weight: 700;
+  color: var(--blue-900);
+  text-align: center;
 }
 
 .hero-info {
@@ -308,7 +342,8 @@ section { position: relative; }
     box-shadow: var(--shadow-md);
     align-self: stretch;
   }
-  .hero-photo img { aspect-ratio: 4 / 5; object-position: 55% 30%; }
+  .hero-photo > picture img { aspect-ratio: 4 / 5; object-position: 50% 8%; }
+  .hero-photo-sub { width: 96px; right: 20px; bottom: 20px; }
 }
 
 /* ============ 数字バー（STATS） ============ */
