@@ -579,31 +579,128 @@ section { position: relative; }
 }
 .feature-desc { margin: 0; color: var(--ink); line-height: 1.75; }
 
-/* ============ MYTHS & FACTS ============ */
+/* ============ AI活用の8段階（旧MYTHS&FACTS） ============
+   2026-09-13実装：否定→訂正型の見せ方を廃止し、
+   (1)リード文 (2)8段階リスト (3)Q&A3項目 (4)締め の構成に全面差し替え。
+   色でレベルの優劣を演出しない（番号・段の高さのみで進行を示す）。
+   ------------------------------------------------------------- */
 .myths { background: var(--blue-50); }
-.myths-list {
-  display: grid;
-  gap: 18px;
+
+.myths-lead { margin: 0 0 32px; }
+.myths-lead p {
+  margin: 0 0 14px;
+  color: var(--ink);
+  line-height: 1.85;
 }
-.myth-card {
+.myths-lead p:last-child { margin-bottom: 0; }
+
+/* ---- 8段階リスト ---- */
+.ai-stages {
   background: var(--white);
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: 24px 22px;
+  padding: 24px 20px;
   box-shadow: var(--shadow-sm);
+  margin-bottom: 28px;
 }
-.myth-no {
+.ai-stages-head { text-align: center; margin-bottom: 20px; }
+.ai-stages-title {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 15.5px;
+  color: var(--blue-900);
+}
+.ai-stages-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.ai-stages-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0;
+}
+.ai-stage {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px dashed var(--border);
+}
+.ai-stage:first-child { border-top: none; padding-top: 0; }
+.ai-stage:last-child { padding-bottom: 0; }
+
+/* 番号バッジ：8行すべて同じ色・同じ形。段の高さと番号の大小だけで進行を見せる
+   （6章 speaker-role と同系統のブルー1色運用。低=赤／高=緑のような塗り分けはしない）。 */
+.ai-stage-num {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--blue-500);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ai-stage-body { min-width: 0; }
+.ai-stage-name {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--blue-900);
+}
+.ai-stage-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+.ai-stages-caption {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---- Q&A3項目：開閉なし・常時全文表示（否定→訂正の対比型は使わない） ---- */
+.myths-qa {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.myths-qa-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+}
+.myths-qa-q {
   margin: 0 0 12px;
   font-weight: 700;
   color: var(--blue-900);
   line-height: 1.7;
 }
-.myth-yes {
-  margin: 0;
+.myths-qa-a p {
+  margin: 0 0 10px;
   color: var(--ink);
   line-height: 1.8;
-  padding-top: 12px;
-  border-top: 1px dashed var(--border);
+}
+.myths-qa-a p:last-child { margin-bottom: 0; }
+
+.myths-closing {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.85;
+  text-align: center;
 }
 
 /* ============ 中間CTA（MID CTA） ============ */

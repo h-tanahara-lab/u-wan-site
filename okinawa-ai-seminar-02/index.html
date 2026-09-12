@@ -28,9 +28,11 @@
      個別リクエスト対応のFAQ1問は棚原さん判断により非掲載（03_FAQ追加分.md参照）。
      質疑応答（終盤10分）を開催概要の日時行・参加費に含まれるものへ反映済み。
      ヒーロー写真：安永さん（メイン）＋棚原さん（サブ・小）に差し替え（2026-09-12）。
-     2026-09-13追記：FVを「登壇者2名が並ぶ」バナー構成に変更（安永さん＝ゲスト・棚原＝ファシリテーター、
-     役割ラベルの文言はユイ確定待ちプレースホルダ）。安永さんの写真をSOLUTION・プロフィールにも統一
+     2026-09-13追記：FVを「登壇者2名が並ぶ」バナー構成に変更（安永さん＝ゲスト講師・棚原＝ファシリテーター、
+     役割ラベルはユイ確定コピーで実装済み）。安永さんの写真をSOLUTION・プロフィールにも統一
      （assets/yasunaga-portrait.jpg＝hero.jpgと同一写真の3:4トリミング）。SOLUTIONの写真は削除。
+     2026-09-13追記：MYTHS&FACTSを「AI活用の8段階」セクションへ全面差し替え（04_8段階セクション.md準拠）。
+     棚原さんの役割表記をページ全体で「ファシリテーター」に統一（旧表記だった箇所4件を差し替え）。
      ============================================================ -->
 
 <title>沖縄AIセミナー 第2回｜Anthropic公式アンバサダーが登壇｜2026年10月26日(月) 宜野湾｜U-WAN</title>
@@ -212,9 +214,9 @@
         </div>
       </div>
 
-      <!-- 登壇者2名バナー：安永さん（ゲスト）を先に・大きく／棚原（ファシリテーター）を役割つきで並べる。
+      <!-- 登壇者2名バナー：安永さん（ゲスト講師）を先に・大きく／棚原（ファシリテーター）を役割つきで並べる。
            2026-09-13 棚原指示：「FVの僕の画像が遺影っぽい」差し戻し対応。
-           役割ラベルの文言はユイ確定コピー待ちのプレースホルダ（［ ］内）。構造・スタイルのみ先行実装。 -->
+           役割ラベルはユイ確定コピー（04_8段階セクション.md②）で実装済み。 -->
       <div class="hero-photo hero-speakers">
         <div class="hero-speaker hero-speaker--guest">
           <picture>
@@ -223,11 +225,11 @@
                  srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
                  sizes="(min-width: 900px) 260px, 56vw"
                  width="890" height="1334"
-                 alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト）"
+                 alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト講師）"
                  fetchpriority="high">
           </picture>
           <div class="hero-speaker-label">
-            <span class="hero-speaker-role">［プレースホルダ：ゲスト登壇］</span>
+            <span class="hero-speaker-role">ゲスト講師</span>
             <span class="hero-speaker-name">安永智也さん</span>
           </div>
         </div>
@@ -240,7 +242,7 @@
                  alt="白いシャツ姿で笑顔の棚原秀樹（ファシリテーター）">
           </picture>
           <div class="hero-speaker-label">
-            <span class="hero-speaker-role">［プレースホルダ：ファシリテーター］</span>
+            <span class="hero-speaker-role">ファシリテーター</span>
             <span class="hero-speaker-name">棚原秀樹（U-WAN）</span>
           </div>
         </div>
@@ -385,8 +387,8 @@
 
       <div class="speaker-note reveal">
         <img src="assets/tanahara_rewrite.jpg" alt="棚原秀樹" width="52" height="52" loading="lazy">
-        <p class="speaker-note-text">そして僕も、企画運営として登壇します。
-          <span class="speaker-note-name">棚原秀樹（U-WAN／企画・運営）</span>
+        <p class="speaker-note-text">そして僕も、ファシリテーターとして登壇します。
+          <span class="speaker-note-name">棚原秀樹（U-WAN／ファシリテーター）</span>
         </p>
       </div>
 
@@ -425,28 +427,122 @@
     </div>
   </section>
 
-  <!-- 9. MYTHS & FACTS -->
+  <!-- 9. AI活用の8段階（旧MYTHS&FACTSを全面差し替え。2026-09-13実装／04_8段階セクション.md準拠）
+       否定→訂正型の見せ方・危機を煽る表現は廃止し、加法トーンで再構成。
+       8段階の名称・説明・締め文は安永さん提供の一次情報のまま1文字も変更していない。 -->
   <section class="myths section-pad">
     <div class="wrap wrap--narrow">
-      <h2 class="section-heading section-heading--center reveal">MYTHS &amp; FACTS</h2>
-      <div class="myths-list reveal-group">
+      <h2 class="section-heading section-heading--center reveal">あなたのAI活用は、今どの段階にありますか？</h2>
 
-        <article class="myth-card reveal">
-          <p class="myth-no">❌ 思い込み①：AIの話はもう色々聞いたから、今更かもしれない</p>
-          <p class="myth-yes">⭕ 事実：今回は「AIの使い方」ではなく「AIをどう経営に組み込むか」という切り口です。安永さんは、都市部と地方の間に広がるAI格差を埋めることをライフワークにしてきた方なので、聞く角度そのものが一般的なAIセミナーとは違います。</p>
-        </article>
-
-        <article class="myth-card reveal">
-          <p class="myth-no">❌ 思い込み②：オンラインじゃないと、参加のハードルが高い</p>
-          <p class="myth-yes">⭕ 事実：今回はリアル開催のみでご案内しています。画面越しでは伝わりにくい空気や、その場での質問のやり取りを大事にしたいという理由から、オンライン配信・ハイブリッド配信は行っていません。</p>
-        </article>
-
-        <article class="myth-card reveal">
-          <p class="myth-no">❌ 思い込み③：11,000円は、セミナーとしては高いのでは</p>
-          <p class="myth-yes">⭕ 事実：安永さんに沖縄まで来ていただくゲスト登壇であること、会場を用意したリアル開催であること、定員30名の少人数で行うことを踏まえた金額です。詳しくは「参加費のご案内」でお伝えします。</p>
-        </article>
-
+      <div class="myths-lead reveal">
+        <p>AIの活用には、実は明確な「段階」があります。</p>
+        <p>ChatGPTに質問するところから、複数のAIをチームとして動かすところまで。<br>
+          安永さんが整理した8つの段階です。</p>
+        <p>順位をつけるためのものではなく、「今の自分がどこにいて、次にどこへ進めるか」を確かめるためのものさしとして、見てみてください。</p>
       </div>
+
+      <div class="ai-stages reveal">
+        <div class="ai-stages-head">
+          <p class="ai-stages-title">AI活用の8段階</p>
+          <p class="ai-stages-sub">AIの使い方が"会話"から"自律運用"へ進化する流れ</p>
+        </div>
+
+        <ol class="ai-stages-list reveal-group">
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">1</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">チャットボット</p>
+              <p class="ai-stage-desc">AIに質問・指示をすると、その場で回答してくれる。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">2</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">コパイロット</p>
+              <p class="ai-stage-desc">AIがファイルや作業画面の中で動き、作業を隣で支援してくれる。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">3</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">エージェント</p>
+              <p class="ai-stage-desc">やりたいことを伝えると、AIが手順を考えて実行し、重要な場面では承認を求める。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">4</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">オートパイロット</p>
+              <p class="ai-stage-desc">承認を最小化し、AIがタスクを最後まで自律的に進める。人は結果を確認する。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">5</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">ワークフロー</p>
+              <p class="ai-stage-desc">AIの成果物を安定して高品質にするため、手順や仕組みを整える。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">6</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">アシスタント</p>
+              <p class="ai-stage-desc">AIが指示待ちではなく、バックグラウンドで自発的に動き続ける。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">7</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">マルチエージェント</p>
+              <p class="ai-stage-desc">複数の長時間動作するAIエージェントを同時に管理・運用する。</p>
+            </div>
+          </li>
+          <li class="ai-stage reveal">
+            <span class="ai-stage-num" aria-hidden="true">8</span>
+            <div class="ai-stage-body">
+              <p class="ai-stage-name">オーケストレーター</p>
+              <p class="ai-stage-desc">マネージャーAIが複数のサブエージェントを統括し、チームとして仕事を進める。</p>
+            </div>
+          </li>
+        </ol>
+
+        <p class="ai-stages-caption">下に行くほど、自律性・複雑性・運用レベルが高まる</p>
+      </div>
+
+      <div class="myths-qa reveal-group">
+        <div class="myths-qa-item reveal">
+          <p class="myths-qa-q">「ChatGPTを使っている」と、「AIを使っている」は同じでしょうか？</p>
+          <div class="myths-qa-a">
+            <p>ChatGPTに質問して、答えをもらう——それ自体、十分に価値のある使い方です。<br>
+              ただ、8段階でいうと、それは主に「レベル1：チャットボット」の範囲に当てはまります。</p>
+            <p>今回のセミナーでは、安永さんの話を通じて、「何をもってAIを使っていると言えるのか」を自分の言葉で説明できるようになります。<br>
+              一歩先を知ることで、今の使い方の価値も、より具体的に見えてきます。</p>
+          </div>
+        </div>
+
+        <div class="myths-qa-item reveal">
+          <p class="myths-qa-q">自分のレベルが分かると、足りなさばかり見えてくるのでは？</p>
+          <div class="myths-qa-a">
+            <p>8段階を並べて見ると、つい「自分はまだ下の方だ」と感じるかもしれません。<br>
+              ですが、この8段階は優劣を決めるためのものさしではありません。「今どこにいて、次にどの一段を上がれるか」を確かめるためのものです。どの段階からでも、次の一段は必ずあります。</p>
+            <p>終盤10分の質疑応答では、安永さんに自分の状況を直接聞くこともできます。</p>
+          </div>
+        </div>
+
+        <div class="myths-qa-item reveal">
+          <p class="myths-qa-q">8段階の話は、うちの規模や業種にも当てはまるんでしょうか？</p>
+          <div class="myths-qa-a">
+            <p>安永さんは、飲食店・不動産・印刷・WEB制作・社会福祉法人・IT・工場など、業種を問わず現場でAI活用を指導してきた方です。<br>
+              8段階は、大企業向けの理論ではなく、現場で実際に使われている「ものさし」として整理されたものです。</p>
+            <p>自社の状況に当てはめて聞けるよう、当日は質疑応答の時間も用意しています。</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="myths-closing reveal">僕自身、AI活用にゴールはないと思っています。<br>
+        今どの段階にいても、そこから一段上がる道は必ずあります。<br><br>
+        安永さんと一緒に、あなたの「次の一段」を、当日確かめられたらと思っています。</p>
+
     </div>
   </section>
 
@@ -536,12 +632,12 @@
         <li>定員30名の、少人数制であること</li>
       </ul>
 
-      <p class="pricing-note reveal">当日は、安永さんによるAI時代の経営戦略の講義に加えて、棚原も企画・運営として登壇します。</p>
+      <p class="pricing-note reveal">当日は、安永さんによるAI時代の経営戦略の講義に加えて、棚原もファシリテーターとして登壇します。</p>
 
       <ul class="pricing-includes reveal">
         <li>当日のセミナー参加（120分）</li>
         <li>安永さんの講義</li>
-        <li>棚原（企画・運営）のコメント</li>
+        <li>棚原（ファシリテーター）のコメント</li>
         <li>安永さんへの質疑応答の時間（終盤10分程度）</li>
       </ul>
 
