@@ -784,6 +784,17 @@ section { position: relative; }
   color: var(--ink);
 }
 
+/* ---- 「そこに立てているだけで〜」の一言（2026-09-13追記：08_読後感修正2箇所.md 指摘1）
+   ai-stages-mostは既にturn-highlightで強調済みのため、ここに強い強調は足さない。
+   ai-stages-mostより一段小さく・軽い色にして、teaser（枠囲み）に橋渡しする位置づけ。 ---- */
+.ai-stages-affirm {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+
 .ai-stages-teaser {
   margin: 0 0 18px;
   padding: 14px 16px;
