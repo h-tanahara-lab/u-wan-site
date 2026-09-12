@@ -829,6 +829,14 @@ section { position: relative; }
   color: var(--blue-accent-text);
   font-weight: 900;
 }
+.pricing-includes-note {
+  font-size: 14px;
+  color: var(--blue-accent-text);
+  border-top: 1px dashed rgba(255,255,255,0.3);
+  padding-top: 16px;
+  margin: 20px auto 24px;
+  max-width: 34em;
+}
 .pricing-cta { text-align: center; }
 
 /* ============ FAQ ============ */
