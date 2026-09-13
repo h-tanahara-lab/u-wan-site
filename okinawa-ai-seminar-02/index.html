@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+
+<!-- ==========================================================
+     GA4計測タグ（プレースホルダー）
+     測定ID確定後、GTAG_IDを実IDに差し替えてコメントを外すこと。
+     現状は計測未発火（trackEvent()はgtag未定義時にconsole.infoへフォールバック）。
+
+     <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+     <script>
+       window.dataLayer = window.dataLayer || [];
+       function gtag(){dataLayer.push(arguments);}
+       gtag('js', new Date());
+       gtag('config', 'G-XXXXXXX');
+     </script>
+     ========================================================== -->
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script>document.documentElement.classList.add('js');</script>
+
+<!-- ============================================================
+     沖縄AIセミナー 第2回 通常LP
+     実装：ルイ（U-WAN 04_システム部）2026-09-12
+     ユイ納品コピー（02_LP_Copy_3patterns.md／推奨案パターンA）を全文流し込み済み。
+     FAQは6問実装（日程・オンライン有無・価格理由・駐車場・支払い方法・キャンセル）。
+     個別リクエスト対応のFAQ1問は棚原さん判断により非掲載（03_FAQ追加分.md参照）。
+     質疑応答（終盤10分）を開催概要の日時行・参加費に含まれるものへ反映済み。
+     ヒーロー写真：安永さん（メイン）＋棚原さん（サブ・小）に差し替え（2026-09-12）。
+     2026-09-13追記：FVを「登壇者2名が並ぶ」バナー構成に変更（安永さん＝ゲスト講師・棚原＝ファシリテーター、
+     役割ラベルはユイ確定コピーで実装済み）。安永さんの写真をSOLUTION・プロフィールにも統一
+     （assets/yasunaga-portrait.jpg＝hero.jpgと同一写真の3:4トリミング）。SOLUTIONの写真は削除。
+     2026-09-13追記：MYTHS&FACTSを「AI活用の8段階」セクションへ全面差し替え（04_8段階セクション.md準拠）。
+     棚原さんの役割表記をページ全体で「ファシリテーター」に統一（旧表記だった箇所4件を差し替え）。
+     2026-09-13追記：8段階セクションの番号2〜8ブロックを削除し「ほとんどの方がこのレベル1では
+     ないでしょうか。」に差し替え／締め文を「上のレベルに上がっていくほど」に修正／ページ全体に
+     <mark>・.turn-highlightの強調を6箇所追加（06_8段階修正と強調設計.md準拠、ユイ納品）。
+     ============================================================ -->
+
+<title>沖縄AIセミナー 第2回｜Anthropic公式アンバサダーが登壇｜2026年10月26日(月) 宜野湾｜U-WAN</title>
+<meta name="description" content="2026年10月26日（月）、沖縄県宜野湾市でリアル開催。Anthropic公式のClaudeコミュニティアンバサダー・安永智也さんが登壇するAI経営セミナーです。参加費11,000円（税込）・定員30名。">
+<link rel="canonical" href="https://u-wan.jp/okinawa-ai-seminar-02/">
+<meta name="robots" content="index, follow">
+
+<!-- OGP -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="沖縄AIセミナー 第2回｜Anthropic公式アンバサダーが登壇｜U-WAN">
+<meta property="og:description" content="2026年10月26日（月）、沖縄県宜野湾市でリアル開催。Anthropic公式のClaudeコミュニティアンバサダー・安永智也さんが登壇。参加費11,000円（税込）・定員30名。">
+<meta property="og:image" content="https://u-wan.jp/okinawa-ai-seminar-02/assets/ogp.png">
+<meta property="og:url" content="https://u-wan.jp/okinawa-ai-seminar-02/">
+<meta property="og:site_name" content="U-WAN">
+<meta property="og:locale" content="ja_JP">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="沖縄AIセミナー 第2回｜Anthropic公式アンバサダーが登壇｜U-WAN">
+<meta name="twitter:description" content="2026年10月26日（月）、沖縄県宜野湾市でリアル開催。Anthropic公式のClaudeコミュニティアンバサダー・安永智也さんが登壇。参加費11,000円（税込）・定員30名。">
+<meta name="twitter:image" content="https://u-wan.jp/okinawa-ai-seminar-02/assets/ogp.png">
+
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+<link rel="preload" as="image" href="assets/hero.jpg" imagesrcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" fetchpriority="high">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;800&family=Noto+Serif+JP:wght@700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+
+<!-- 構造化データ：Event（実際の開催情報と一致させています） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "沖縄AIセミナー 第2回",
+  "description": "沖縄県宜野湾市でリアル開催するAI社員活用セミナー第2回。詳細なカリキュラムは調整中のため、決まり次第このページに追記します。",
+  "startDate": "2026-10-26T18:30:00+09:00",
+  "endDate": "2026-10-26T20:30:00+09:00",
+  "doorTime": "2026-10-26T18:00:00+09:00",
+  "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+  "eventStatus": "https://schema.org/EventScheduled",
+  "location": {
+    "@type": "Place",
+    "name": "宜野湾ベイサイド情報センター",
+    "address": {
+      "@type": "PostalAddress",
+      "addressRegion": "沖縄県",
+      "addressLocality": "宜野湾市",
+      "addressCountry": "JP"
+    }
+  },
+  "image": ["https://u-wan.jp/okinawa-ai-seminar-02/assets/hero.jpg", "https://u-wan.jp/okinawa-ai-seminar-02/assets/tanahara_rewrite.jpg"],
+  "offers": {
+    "@type": "Offer",
+    "price": "11000",
+    "priceCurrency": "JPY",
+    "availability": "https://schema.org/InStock",
+    "url": "https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry",
+    "validFrom": "2026-09-12T00:00:00+09:00"
+  },
+  "maximumAttendeeCapacity": 30,
+  "organizer": {
+    "@type": "Organization",
+    "name": "U-WAN",
+    "url": "https://u-wan.jp/"
+  },
+  "performer": [
+    { "@type": "Person", "name": "安永智也" },
+    { "@type": "Person", "name": "棚原秀樹" }
+  ]
+}
+</script>
+
+<!-- 構造化データ：FAQPage（本文のFAQセクションと文言を一致させています。回答済み6問を掲載。棚原判断で非掲載としたFAQ1問あり（詳細は03_FAQ追加分.md参照）） -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "日程が合わないのですが、別の日程はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "今回のリアル開催は、10月26日（月）の1回のみのご案内です。恐れ入りますが、現時点で別日程は予定していません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "沖縄以外からでも参加できますか？オンライン配信はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "今回はリアル開催のみで、オンライン配信・ハイブリッド配信は行っていません。沖縄以外にお住まいの方は、恐れ入りますが会場までお越しいただく形になります。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "会場に駐車場はありますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "会場には駐車場がございますが、台数に限りがございます。少し早めのご来場や、公共交通機関のご利用もあわせてご検討いただけますと安心です。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "お支払い方法を教えてください",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "お支払いは、クレジットカード決済（Stripe）のみとなっております。恐れ入りますが、銀行振込でのお支払いは承っておりません。"
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "当日、都合が悪くなった場合のキャンセルはできますか？",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "大変恐れ入りますが、お申し込み後のキャンセル・返金は承っておりません。定員30名の少人数開催のため、まずはご予定をよくご確認のうえ、お申し込みをお願いいたします。もし当日どうしても参加が難しくなった場合は、お手数だとは思いますが、必ずご一報いただけますと助かります。定員に漏れてしまった方に、あらためて席をご案内できるようにするためです。ご連絡さえいただければ、次に待っている方の力になれますので、その時はどうぞ遠慮なくお知らせください。"
+      }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<a class="skip-link" href="#main">本文へスキップ</a>
+
+<main id="main">
+
+  <!-- 1. ファーストビュー -->
+  <section class="hero">
+    <div class="wrap">
+
+      <div class="hero-copy">
+        <!-- モバイルではhero-photoを見出し直後に持ち上げるため、
+             hero-copy-top（シリーズタグ＋見出し）とhero-copy-main（以降）に分割。
+             900px以上ではhero-copyがdisplay:contentsにならず従来どおり1つの左カラムとして
+             描画されるため、PCのレイアウト・座標は変化しない（2026-09-12 一次チェック差し戻し対応） -->
+        <div class="hero-copy-top">
+          <span class="hero-series-tag">沖縄AIセミナー 第2回</span>
+          <h1 class="hero-title">Anthropic公式アンバサダーが、沖縄でセミナー登壇します。</h1>
+        </div>
+
+        <div class="hero-copy-main">
+          <p class="hero-sub"><mark>Anthropic公式のClaudeコミュニティアンバサダー</mark>であり、有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導してきた安永智也さんが、10月26日、沖縄に来てくださいます。</p>
+
+          <dl class="hero-info">
+            <div class="hero-info-row">
+              <dt>日時</dt>
+              <dd><b>2026年10月26日（月）</b><br>開場18:00／セミナー18:30〜20:30</dd>
+            </div>
+            <div class="hero-info-row">
+              <dt>会場</dt>
+              <dd>宜野湾ベイサイド情報センター（沖縄県宜野湾市）</dd>
+            </div>
+            <div class="hero-info-row">
+              <dt>参加費</dt>
+              <dd><b>11,000円</b>（税込）</dd>
+            </div>
+            <div class="hero-info-row">
+              <dt>定員</dt>
+              <dd>30名（リアル開催のみ）</dd>
+            </div>
+          </dl>
+
+          <a class="btn btn-primary btn-arrow hero-main-cta" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="hero_main">参加を申し込む</a>
+
+          <p class="hero-info-note">お申し込みは事前のオンライン決済制です。定員30名になり次第、受付を終了します。</p>
+        </div>
+      </div>
+
+      <!-- 安永さん（ゲスト講師）の写真を単独で大きく表示。
+           棚原（ファシリテーター）は写真右下に円形バッジで重ねる。
+           2026-09-13 棚原指示②：「FVの僕の画像が遺影っぽい」→ ◯で囲んだ写真を安永さん写真の右下に重ねる形に変更。
+           役割ラベルはユイ確定コピー（04_8段階セクション.md②）で実装済み。 -->
+      <div class="hero-photo hero-speakers">
+        <div class="hero-speaker hero-speaker--guest">
+          <div class="hero-speaker-photo-wrap">
+            <picture>
+              <source type="image/webp" srcset="assets/hero-sm.webp 400w, assets/hero.webp 890w" sizes="(min-width: 900px) 480px, 88vw">
+              <img src="assets/hero.jpg"
+                   srcset="assets/hero-sm.jpg 400w, assets/hero.jpg 890w"
+                   sizes="(min-width: 900px) 480px, 88vw"
+                   width="890" height="1334"
+                   alt="紺のスーツ姿で腕を組み、まっすぐこちらを見る安永智也さん（ゲスト講師）"
+                   fetchpriority="high">
+            </picture>
+
+            <div class="hero-host-badge">
+              <span class="hero-host-badge-photo">
+                <picture>
+                  <source type="image/webp" srcset="assets/tanahara_rewrite.webp">
+                  <img src="assets/tanahara_rewrite.jpg"
+                       width="600" height="800"
+                       alt="棚原秀樹（ファシリテーター）">
+                </picture>
+              </span>
+              <span class="hero-host-badge-text">
+                <span class="hero-host-badge-role">ファシリテーター</span>
+                <span class="hero-host-badge-name">棚原秀樹</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="hero-speaker-label">
+            <span class="hero-speaker-role">ゲスト講師</span>
+            <span class="hero-speaker-name">安永智也さん</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 2. 数字バー -->
+  <section class="stats section-pad">
+    <div class="wrap">
+      <h2 class="sr-only">セミナーに関する数字</h2>
+      <div class="stats-grid reveal-group">
+        <div class="stat-card reveal">
+          <div class="stat-number">5,000人+</div>
+          <div class="stat-desc">これまでにAIを指導してきた人数</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">23,000人+</div>
+          <div class="stat-desc">安永さんが中核メンバーを務める「SHIFT AI」の会員数</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">30名</div>
+          <div class="stat-desc">今回・宜野湾会場の定員</div>
+        </div>
+        <div class="stat-card reveal">
+          <div class="stat-number">120分</div>
+          <div class="stat-desc">セミナーの所要時間（18:30〜20:30）</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. こんな感じ、当てはまりませんか？（PROBLEM） -->
+  <section class="problem section-pad">
+    <div class="wrap">
+      <h2 class="section-heading section-heading--center reveal">こんな感じ、当てはまりませんか？</h2>
+      <div class="problem-list reveal-group">
+
+        <article class="problem-card reveal">
+          <div class="problem-num">PROBLEM 01</div>
+          <div class="problem-body">
+            <p>ChatGPTやClaudeで、文章を作ってもらったり、調べ物を任せたりする場面は、もう当たり前になってきた。</p>
+            <p>便利だし、実際に助かってもいる。</p>
+            <p>ただ、もっとAIをうまく使いたい。でも何ができるのか。何かあるはずだけど分からない。</p>
+          </div>
+        </article>
+
+        <article class="problem-card reveal">
+          <div class="problem-num">PROBLEM 02</div>
+          <div class="problem-body">
+            <p>AIのニュースやセミナーの情報は、探さなくても毎日のように目に入ってくる。</p>
+            <p>勉強にはなるし、知らないよりは知っておきたいと思っている。</p>
+            <p>ただ、その情報のほとんどは全国区・都市部発のもので、沖縄の現場でどう活きるのかまでは、あまり語られていない。</p>
+          </div>
+        </article>
+
+        <article class="problem-card reveal">
+          <div class="problem-num">PROBLEM 03</div>
+          <div class="problem-body">
+            <p>自分なりにAIを仕事に取り入れて、成果につながっている実感もある。</p>
+            <p>ただ、この使い方で合っているのか、他の経営者はどう考えているのかを確かめる機会は、意外と少ない。</p>
+            <p>一人で試しながら進めている状態が、ここまで続いている。</p>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 転換の一行 -->
+  <section class="transition">
+    <div class="wrap">
+      <p>その3つを、沖縄にいながら、直接確かめられる機会があるとしたら？</p>
+    </div>
+  </section>
+
+  <!-- 5. SOLUTION（安永さん登場） -->
+  <!-- 2026-09-13 棚原指示：見出し直前の写真は不要のため削除。見出し・本文は変更なし -->
+  <section class="solution section-pad">
+    <div class="wrap wrap--narrow">
+      <div class="solution-inner">
+        <h2 class="solution-headline">Anthropic公式アンバサダーが、沖縄でセミナー登壇します。</h2>
+        <div class="solution-body">
+          <p>Anthropic公式のClaudeコミュニティアンバサダーであり、有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導してきた安永智也さん。</p>
+          <p><strong class="turn-highlight">その安永さんが、10月26日、沖縄に来てくださいます。</strong></p>
+          <!-- 2026-09-13追記：ユイ確定文（08_読後感修正2箇所.md 指摘2）。文言は一字一句そのまま。
+               solution-body末尾（ハイライト文の直後・カード直前）に配置。強調なし。 -->
+          <p>Anthropicという名前を、ここで初めて見る方もいると思うので、先に少しだけご紹介します。</p>
+        </div>
+
+        <!-- 2026-09-13追記：差し戻し対応②「Anthropicとは？」新設。
+             一次情報（Wikipedia／Anthropic公式サイト「Company」ページ）で確認できた事実のみ記載。
+             変動数字（従業員数・評価額等）は不使用。05_差し戻し対応.md準拠、文言そのまま。 -->
+        <div class="solution-anthropic">
+          <h3 class="solution-anthropic-heading">Anthropicとは？</h3>
+          <div class="solution-anthropic-body">
+            <p>Claudeを開発しているのが、Anthropic（アンソロピック）という会社です。</p>
+            <p>2021年、アメリカ・サンフランシスコで設立された会社で、創業メンバーには、元OpenAIの研究者たちも名を連ねています。</p>
+            <ul class="solution-anthropic-list">
+              <li>2021年設立、アメリカ・サンフランシスコが拠点</li>
+              <li>AIチャット「Claude」を開発・提供している会社</li>
+              <li>創業メンバーには、元OpenAIの研究者も</li>
+            </ul>
+            <p>安永さんの「Anthropic公式アンバサダー」という肩書きは、このAnthropicから公式に認められたものです。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 安永智也さんとは -->
+  <section class="speakers section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">安永智也さんとは</h2>
+
+      <div class="speaker-card reveal">
+        <div class="speaker-head">
+          <div class="speaker-photo">
+            <img src="assets/yasunaga-portrait.jpg" alt="安永智也さん" width="600" height="800" loading="lazy">
+          </div>
+          <div>
+            <span class="speaker-role">ゲスト講師</span>
+            <p class="speaker-name">安永智也さん</p>
+          </div>
+        </div>
+
+        <ul class="speaker-titles">
+          <li>SKALWLTP合同会社 代表</li>
+          <li>株式会社デジタルゴリラ 執行役員</li>
+          <li>株式会社リライトシステムズ CAIO</li>
+          <li>SHIFT AI 複数部署マネージャー</li>
+          <li>東北大学大学院 RIPS「AI経営」講師</li>
+          <li class="is-highlight">Anthropic公式 Claude コミュニティアンバサダー</li>
+        </ul>
+
+        <div class="speaker-body">
+          <p>広告代理店勤務を経て1年間の世界一周へ。2014年の広島土砂災害では、災害ボランティアの中心人物として活動されました。</p>
+          <p>その後、福祉業界でAI活用による業務効率化を実現し、SHIFT AIで20以上のコースを修了、AIコンサルタントとして独立。現在は会員数23,000人を超える有料AIコミュニティ「SHIFT AI」の中核メンバーとして、これまでに5,000人以上にAIを指導。難しい用語を使わない、本質的な講義に定評があります。</p>
+          <p><strong class="turn-highlight">「AIは都市部のものではない」</strong>──大企業と地方中小企業の間に広がるAI格差を埋めることをライフワークとし、飲食店・不動産・印刷・WEB制作・社会福祉法人・IT・工場など、業種を問わず現場でAI活用を証明し続けている方です。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. 当日、お話しいただく内容 -->
+  <section class="agenda section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">当日、お話しいただく内容</h2>
+
+      <p class="agenda-lead reveal">セミナーのテーマは、</p>
+
+      <div class="agenda-theme reveal">
+        <p class="agenda-theme-title">これからの経営に必要なAI時代の成長戦略
+          <small>〜最先端のAI事情と活用方法〜</small>
+        </p>
+      </div>
+
+      <div class="agenda-body reveal">
+        <p>安永さんから、最先端のAI事情と、その活用方法について、現場で5,000人以上を指導してきた立場からお話しいただきます。</p>
+      </div>
+
+      <div class="speaker-note reveal">
+        <img src="assets/tanahara_rewrite.jpg" alt="棚原秀樹" width="52" height="52" loading="lazy">
+        <p class="speaker-note-text">そして僕も、ファシリテーターとして登壇します。
+          <span class="speaker-note-name">棚原秀樹（U-WAN／ファシリテーター）</span>
+        </p>
+      </div>
+
+      <!-- 以下の一文は棚原指示により改変禁止（そのまま掲載） -->
+      <p class="agenda-tba reveal">※詳細なカリキュラムは調整中のため、決まり次第このページに追記します</p>
+    </div>
+  </section>
+
+  <!-- 8. 特徴・ベネフィット -->
+  <section class="features section-pad">
+    <div class="wrap">
+      <h2 class="section-heading section-heading--center reveal">このセミナーで持って帰れるもの</h2>
+      <div class="feature-grid reveal-group">
+
+        <div class="feature-card reveal">
+          <p class="feature-title">「AIの使い方」ではなく「AIをどう経営に組み込むか」</p>
+          <p class="feature-desc">機能やツールの話ではなく、経営判断にどうつなげるかという視点で聞ける時間です。</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <p class="feature-title">沖縄で、直接、対話できる</p>
+          <p class="feature-desc">画面越しでは拾いきれない空気や質問のやり取りを、その場でできます。</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <p class="feature-title">5,000人以上を指導してきた、現場の実例</p>
+          <p class="feature-desc">都市部・地方を問わず、業種を問わず、現場でAI活用を証明してきた方の話をそのまま聞けます。</p>
+        </div>
+
+        <div class="feature-card reveal">
+          <p class="feature-title">定員30名だから、自分の状況に引き寄せて聞ける</p>
+          <p class="feature-desc">大人数の講演ではなく、少人数のリアル開催として設計しています。</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. AI活用の8段階（旧MYTHS&FACTSを全面差し替え。2026-09-13実装／04_8段階セクション.md準拠）
+       否定→訂正型の見せ方・危機を煽る表現は廃止し、加法トーンで再構成。
+       8段階の名称・説明・締め文は安永さん提供の一次情報のまま1文字も変更していない。 -->
+  <section class="myths section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">あなたのAI活用は、今どの段階にありますか？</h2>
+
+      <div class="myths-lead reveal">
+        <p>AIの活用には、実は明確な「段階」があります。</p>
+        <p>安永さんが整理した「AI活用の8段階」です。</p>
+        <p>順位をつけるためのものではなく、「今の自分がどこにいて、次にどこへ進めるか」を確かめるためのものさしとして、見てみてください。</p>
+      </div>
+
+      <!-- 2026-09-13追記：差し戻し対応③。8段階の中身を全開示していたのを引き上げ、
+           レベル1（チャットボット）のみ名前・説明を開示、レベル2〜8は番号のみ（名前・説明はHTMLに含めない）。
+           05_差し戻し対応.md準拠、文言そのまま。 -->
+      <div class="ai-stages reveal">
+        <div class="ai-stages-head">
+          <p class="ai-stages-title">AI活用の8段階</p>
+          <p class="ai-stages-sub">安永さんが整理した、AI活用の「今の自分」を確かめるものさし</p>
+        </div>
+
+        <div class="ai-stage-revealed">
+          <span class="ai-stage-num" aria-hidden="true">1</span>
+          <div class="ai-stage-body">
+            <p class="ai-stage-name">チャットボット</p>
+            <p class="ai-stage-desc">AIに質問・指示をすると、その場で回答してくれる。</p>
+          </div>
+        </div>
+
+        <p class="ai-stages-most"><strong class="turn-highlight">ほとんどの方がこのレベル1ではないでしょうか。</strong></p>
+
+        <!-- 2026-09-13追記：ユイ確定文（08_読後感修正2箇所.md 指摘1）。文言は一字一句そのまま。
+             強調なしで実装。「その先を知ると」だけ軽く効かせる案もあり得るが、判断せずコメントに残す：
+             候補）<strong class="turn-highlight">その先を知ると</strong> ← 未適用・マッチョ判断待ち -->
+        <p class="ai-stages-affirm">そこに立てているだけで、AIを実務に取り入れている証です。その先を知ると、使い方の幅がもっと広がっていきます。</p>
+
+        <p class="ai-stages-teaser">その上に、まだ7つの段階があります。<br>
+          名前と中身は、当日、安永さんの話の中でお伝えします。</p>
+
+        <p class="ai-stages-caption">上のレベルに上がっていくほど、自律性・複雑性・運用レベルが高まっていきます。</p>
+      </div>
+
+      <div class="myths-qa reveal-group">
+        <div class="myths-qa-item reveal">
+          <p class="myths-qa-q">「ChatGPTを使っている」と、「AIを使っている」は同じでしょうか？</p>
+          <div class="myths-qa-a">
+            <p>ChatGPTに質問して、答えをもらう——それ自体、十分に価値のある使い方です。<br>
+              ただ、8段階でいうと、それは主に「レベル1：チャットボット」の範囲に当てはまります。</p>
+            <p>今回のセミナーでは、安永さんの話を通じて、「何をもってAIを使っていると言えるのか」を自分の言葉で説明できるようになります。<br>
+              一歩先を知ることで、今の使い方の価値も、より具体的に見えてきます。</p>
+          </div>
+        </div>
+
+        <div class="myths-qa-item reveal">
+          <p class="myths-qa-q">自分のレベルが分かると、足りなさばかり見えてくるのでは？</p>
+          <div class="myths-qa-a">
+            <p>「まだ7段階もある」と聞くと、つい「自分はまだ下の方だ」と感じるかもしれません。<br>
+              ですが、この8段階は優劣を決めるためのものさしではありません。「今どこにいて、次にどの一段を上がれるか」を確かめるためのものです。どの段階からでも、次の一段は必ずあります。</p>
+            <p>終盤10分の質疑応答では、安永さんに自分の状況を直接聞くこともできます。</p>
+          </div>
+        </div>
+
+        <div class="myths-qa-item reveal">
+          <p class="myths-qa-q">8段階の話は、うちの規模や業種にも当てはまるんでしょうか？</p>
+          <div class="myths-qa-a">
+            <p>安永さんは、飲食店・不動産・印刷・WEB制作・社会福祉法人・IT・工場など、業種を問わず現場でAI活用を指導してきた方です。<br>
+              8段階は、大企業向けの理論ではなく、現場で実際に使われている「ものさし」として整理されたものです。</p>
+            <p>自社の状況に当てはめて聞けるよう、当日は質疑応答の時間も用意しています。</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="myths-closing reveal">僕自身、AI活用にゴールはないと思っています。<br>
+        今どの段階にいても、そこから一段上がる道は必ずあります。<br><br>
+        安永さんと一緒に、あなたの「次の一段」を、当日確かめられたらと思っています。</p>
+
+    </div>
+  </section>
+
+  <!-- 10. AFTER IMAGE -->
+  <section class="after section-pad">
+    <div class="wrap">
+      <h2 class="section-heading section-heading--center reveal">AFTER IMAGE</h2>
+      <div class="after-list reveal-group">
+        <div class="after-card reveal">
+          <span class="after-icon" aria-hidden="true">✓</span>
+          <p>「AIの使い方」でなく「AIを経営にどう使うか」を、自分の言葉で説明できるようになる</p>
+        </div>
+        <div class="after-card reveal">
+          <span class="after-icon" aria-hidden="true">✓</span>
+          <p>5,000人以上を指導してきた視点を、自社の状況に当てはめて考えられるようになる</p>
+        </div>
+        <div class="after-card reveal">
+          <span class="after-icon" aria-hidden="true">✓</span>
+          <p>沖縄で、同じ問題意識を持つ経営者と顔を合わせられる</p>
+        </div>
+        <div class="after-card reveal">
+          <span class="after-icon" aria-hidden="true">✓</span>
+          <p>Anthropic公式アンバサダーから直接聞いた話を、自社の判断材料として持ち帰れる</p>
+        </div>
+        <div class="after-card reveal">
+          <span class="after-icon" aria-hidden="true">✓</span>
+          <p>一人で試行錯誤していたAI活用について、話せる相手ができる</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 中間CTA -->
+  <section class="mid-cta section-pad">
+    <div class="wrap wrap--narrow">
+      <a class="btn btn-primary btn-arrow" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="mid_cta">参加を申し込む</a>
+    </div>
+  </section>
+
+  <!-- 11. 開催概要 -->
+  <section class="overview section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">開催概要</h2>
+
+      <dl class="overview-table reveal">
+        <div class="overview-row">
+          <dt>日時</dt>
+          <dd>2026年10月26日（月） 開場18:00／セミナー18:30〜20:30<br>
+          （終盤10分ほどは、安永さんに直接質問できる質疑応答の時間です）</dd>
+        </div>
+        <div class="overview-row">
+          <dt>会場</dt>
+          <dd>宜野湾ベイサイド情報センター（沖縄県宜野湾市）</dd>
+        </div>
+        <div class="overview-row">
+          <dt>定員</dt>
+          <dd>30名</dd>
+        </div>
+        <div class="overview-row">
+          <dt>形式</dt>
+          <dd>リアル開催<br>
+          オンライン配信・ハイブリッドはありません。</dd>
+        </div>
+      </dl>
+
+      <p class="overview-note reveal">会場は宜野湾ベイサイド情報センター、定員は30名です。画面越しではなく、その場で直接お話を聞いていただける機会として設けました。</p>
+
+      <div class="overview-actions reveal">
+        <a class="btn btn-secondary btn-arrow" href="https://maps.app.goo.gl/uBUHmyr1VZN5RHfTA" target="_blank" rel="noopener">会場までの地図はこちら</a>
+        <a class="btn btn-secondary" href="https://calendar.google.com/calendar/render?action=TEMPLATE&amp;text=%E6%B2%96%E7%B8%84AI%E3%82%BB%E3%83%9F%E3%83%8A%E3%83%BC+%E7%AC%AC2%E5%9B%9E%EF%BC%88U-WAN%EF%BC%89&amp;dates=20261026T183000%2F20261026T203000&amp;ctz=Asia%2FTokyo&amp;location=%E5%AE%9C%E9%87%8E%E6%B9%BE%E3%83%99%E3%82%A4%E3%82%B5%E3%82%A4%E3%83%89%E6%83%85%E5%A0%B1%E3%82%BB%E3%83%B3%E3%82%BF%E3%83%BC%EF%BC%88%E6%B2%96%E7%B8%84%E7%9C%8C%E5%AE%9C%E9%87%8E%E6%B9%BE%E5%B8%82%EF%BC%89&amp;details=%E8%A9%B3%E7%B4%B0%E3%83%BB%E3%81%8A%E7%94%B3%E3%81%97%E8%BE%BC%E3%81%BF%E3%81%AF%E3%81%93%E3%81%A1%E3%82%89%EF%BC%9Ahttps%3A%2F%2Fu-wan.jp%2Fokinawa-ai-seminar-02%2F" target="_blank" rel="noopener" data-calendar-add="google">カレンダーに追加</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 12. 参加費のご案内（アンカリング） -->
+  <section class="pricing section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">参加費のご案内</h2>
+
+      <p class="pricing-value reveal">参加費<b>11,000円<small style="font-size:0.4em;">（税込）</small></b></p>
+
+      <p class="pricing-lead reveal">この金額には、次の3つの理由があります。</p>
+
+      <ul class="pricing-reasons reveal">
+        <li>安永智也さんに沖縄まで来ていただく、ゲスト登壇のセミナーであること</li>
+        <li>会場を用意した、リアル開催であること（オンライン配信はありません）</li>
+        <li>定員30名の、少人数制であること</li>
+      </ul>
+
+      <p class="pricing-note reveal">当日は、安永さんによるAI時代の経営戦略の講義に加えて、棚原もファシリテーターとして登壇します。</p>
+
+      <ul class="pricing-includes reveal">
+        <li>当日のセミナー参加（120分）</li>
+        <li>安永さんの講義</li>
+        <li>棚原（ファシリテーター）のコメント</li>
+        <li>安永さんへの質疑応答の時間（終盤10分程度）</li>
+      </ul>
+
+      <p class="pricing-includes-note reveal">※資料の配布はございません。安永さんの話を直接聞くことに集中していただく、会場受講のセミナーです。</p>
+
+      <div class="pricing-cta reveal">
+        <a class="btn btn-secondary--light btn-arrow" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="pricing">参加を申し込む</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 13. FAQ（6問掲載。棚原判断で非掲載としたFAQ1問あり） -->
+  <section class="faq section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">よくあるご質問</h2>
+      <div class="faq-list reveal-group">
+
+        <details class="faq-item reveal">
+          <summary>日程が合わないのですが、別の日程はありますか？</summary>
+          <p class="faq-a">今回のリアル開催は、10月26日（月）の1回のみのご案内です。恐れ入りますが、現時点で別日程は予定していません。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>沖縄以外からでも参加できますか？オンライン配信はありますか？</summary>
+          <p class="faq-a">今回はリアル開催のみで、オンライン配信・ハイブリッド配信は行っていません。沖縄以外にお住まいの方は、恐れ入りますが会場までお越しいただく形になります。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>会場に駐車場はありますか？</summary>
+          <p class="faq-a">会場には駐車場がございますが、台数に限りがございます。少し早めのご来場や、公共交通機関のご利用もあわせてご検討いただけますと安心です。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>お支払い方法を教えてください</summary>
+          <p class="faq-a">お支払いは、クレジットカード決済（Stripe）のみとなっております。恐れ入りますが、銀行振込でのお支払いは承っておりません。</p>
+        </details>
+
+        <details class="faq-item reveal">
+          <summary>当日、都合が悪くなった場合のキャンセルはできますか？</summary>
+          <p class="faq-a">大変恐れ入りますが、お申し込み後のキャンセル・返金は承っておりません。定員30名の少人数開催のため、まずはご予定をよくご確認のうえ、お申し込みをお願いいたします。</p>
+          <p class="faq-a">もし当日どうしても参加が難しくなった場合は、お手数だとは思いますが、必ずご一報いただけますと助かります。定員に漏れてしまった方に、あらためて席をご案内できるようにするためです。ご連絡さえいただければ、次に待っている方の力になれますので、その時はどうぞ遠慮なくお知らせください。</p>
+        </details>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- 14. FINAL MESSAGE -->
+  <section id="final-cta" class="final-cta section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center">10月26日、宜野湾でお会いしましょう。</h2>
+      <p class="final-cta-lead"><strong class="turn-highlight">沖縄で、安永さんから直接この話を聞ける機会は、そう多くありません。</strong><br>10月26日、宜野湾でお会いできたらうれしいです。</p>
+      <a class="btn btn-primary btn-arrow" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="final_cta">参加を申し込む</a>
+      <p class="final-cta-note">参加費 11,000円（税込）でのお申し込みは、以下のボタンからお進みください。</p>
+    </div>
+  </section>
+
+  <!-- 15. 追伸 -->
+  <section class="postscript section-pad">
+    <div class="wrap wrap--narrow">
+      <h2 class="section-heading section-heading--center reveal">追伸</h2>
+      <div class="ps-block reveal">
+        <p>このページを最後まで読んでくださって、ありがとうございます。</p>
+        <p>安永さんが沖縄まで来てくださる機会は、そう多くありません。定員30名、リアル開催のみのセミナーです。</p>
+        <p>ご都合が合えば、10月26日、宜野湾でお会いできたら嬉しいです。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <p>沖縄AIセミナー 第2回</p>
+    <p>主催：棚原秀樹（<a href="https://u-wan.jp/">U-WAN</a>）</p>
+    <p>&copy; 2026 U-WAN</p>
+  </div>
+</footer>
+
+<!-- モバイル追従CTA（画面下固定）。フォーム・Cookie同意はこのページにないため常時表示可。
+     最終CTAセクションが画面内に入ったら app.js が一時的に隠す。 -->
+<div class="sticky-cta">
+  <a class="btn btn-primary btn-block" href="https://uw.u-wan.jp/p/okinawa_ai_seminar02_entry" data-cta-apply data-cta-location="sticky">参加を申し込む</a>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

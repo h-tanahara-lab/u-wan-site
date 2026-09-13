@@ -199,6 +199,17 @@ section { position: relative; }
   gap: 32px;
 }
 .hero-copy { padding-top: 12px; }
+
+/* シリーズ表記「沖縄AIセミナー 第1回」タグ（2026-09-13追加）。
+   既存のhero-tagの上にもう1段、小さめのタグとして積む。 */
+.hero-tags {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+.hero-tags .hero-tag { margin-bottom: 0; }
 .hero-tag {
   display: inline-flex;
   align-items: center;
@@ -211,6 +222,12 @@ section { position: relative; }
   padding: 7px 16px;
   border-radius: 999px;
   margin-bottom: 22px;
+}
+.hero-tag--series {
+  font-size: 11.5px;
+  padding: 5px 14px;
+  border-color: rgba(227, 178, 45, 0.5);
+  color: #C9D3E0;
 }
 .hero-title {
   font-family: var(--font-serif);
@@ -347,6 +364,15 @@ section { position: relative; }
 }
 @media (min-width: 420px) {
   .hero-main-cta { width: auto; min-width: 280px; }
+}
+
+/* 日程が合わない方向けの一行（2026-09-13追加。CTA直下） */
+.hero-series-note {
+  margin: 0 0 14px;
+  font-size: 13px;
+  line-height: 1.8;
+  font-weight: 700;
+  color: var(--gold);
 }
 
 .hero-info-sub {
@@ -861,6 +887,25 @@ section { position: relative; }
 }
 .ps-block p { margin: 0; color: var(--ink); }
 .ps-cta { text-align: center; margin-top: 30px; }
+
+/* ============ 第2回のご案内（2026-09-13追加） ============
+   日程が合わない方の受け皿を、10月26日開催の第2回（単独の別セミナー）へ案内するセクション。
+   追伸群の最後・フッター直前に配置。navy地で「もう一つの機会」を視覚的に切り分ける。 */
+.series-next { background: var(--navy); color: var(--white); }
+.series-next-body {
+  max-width: 640px;
+  margin: 0 auto;
+}
+.series-next-body p {
+  color: #E6ECF5;
+  margin: 0 0 16px;
+}
+.series-next-body p:last-child { margin-bottom: 0; }
+.series-next-tba {
+  font-size: 13px;
+  color: #AEB9CB !important;
+}
+.series-next-cta { text-align: center; margin-top: 28px; }
 
 /* ============ フッター ============ */
 .site-footer {

@@ -1,0 +1,1224 @@
+/* ============================================================
+   沖縄AIセミナー 第2回 通常LP — style.css
+   実装：ルイ（U-WAN 04_システム部）2026-09-12
+
+   デザイン方針（棚原指示・2026-09-12）：
+   ・白／淡いブルー基調・余白多め／本文は濃紺／アクセントは少量
+   ・CTAは青系の高コントラスト。モバイルは追従CTA（画面下固定）
+   ・グラデーション・過剰3D・絵文字アイコンは使用しない
+   ・色・余白・角丸・影はすべてCSS変数で管理（後からネイビー系に
+     戻せるよう、値の置き換えだけで配色が入れ替わる構造にしている）
+
+   第1回LP（ai-seminar/style.css）とタイポグラフィ・フォント読み込み
+   方針（Noto Sans JP + preconnect + font-display:swap）を揃えている。
+   ============================================================ */
+
+:root {
+  /* ---- カラートークン -------------------------------------------------
+     blue-900/700 : 見出し・本文・濃色パネルの地色（濃紺〜濃いブルー）
+     blue-500      : CTAボタンの高コントラストブルー（本ページの主アクセント）
+     blue-500-dark : CTAのhover/active
+     blue-accent   : 少量アクセント（バッジ・チェックマーク等。CTAとは別トーン）
+     blue-50/100   : 淡いブルーの背景面（セクションの背景切り替え用）
+     white/ink系   : 本文色・補助テキスト色
+     border        : 罫線・カード枠
+  ------------------------------------------------------------------- */
+  --blue-900: #0B2A4A;   /* 最も濃い紺。本文見出し・濃色セクション背景 */
+  --blue-800: #123A63;   /* 濃色セクションのグラデーション補助 */
+  --blue-500: #0B57D0;   /* CTA・主要アクセント（高コントラストブルー） */
+  --blue-500-dark: #08409E; /* CTA hover/active */
+  --blue-accent: #2E8FEA; /* 少量アクセント：チェックマーク等の装飾用（背景に文字を乗せない） */
+  --blue-accent-text: #9FCBF2; /* 濃紺背景の上に置く小さな文字用（コントラスト比AA確保） */
+  --blue-100: #EAF2FC;   /* 淡いブルー背景（セクション背景の切り替え） */
+  --blue-50: #F5F9FE;    /* ごく淡いブルー背景（ページ地色のバリエーション） */
+  --white: #FFFFFF;
+  --ink: #14213D;        /* 本文文字色（濃紺寄りの黒） */
+  --ink-soft: #4C5A72;   /* 補助テキスト・キャプション */
+  --border: #D9E4F5;     /* 罫線・カード枠線 */
+
+  /* ---- 余白トークン ----------------------------------------------------
+     セクション縦パディングとコンテンツ幅。
+     max-width 1120px（本ページ全体の最大幅）／本文幅は 720〜780px。
+  ------------------------------------------------------------------- */
+  --maxw: 1120px;
+  --maxw-narrow: 760px;
+  --section-pad-sm: 56px;
+  --section-pad-lg: 96px;
+  --sticky-cta-h: 68px; /* モバイル追従CTAバーの高さ（本文の下余白確保に使用） */
+
+  /* ---- 角丸トークン ------------------------------------------------- */
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+
+  /* ---- 影トークン ------------------------------------------------- */
+  --shadow-md: 0 18px 40px rgba(11, 42, 74, 0.12);
+  --shadow-sm: 0 6px 16px rgba(11, 42, 74, 0.08);
+
+  /* ---- タイポグラフィトークン ---------------------------------------
+     第1回LPと同一方針：Noto Sans JP（本文）／Noto Serif JP（強調見出しの一部）
+     フォールバックに Inter, system-ui を追加（棚原指示：フォント方針を統一）
+  ------------------------------------------------------------------- */
+  --font-sans: "Noto Sans JP", "Inter", system-ui, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+  --font-serif: "Noto Serif JP", "Yu Mincho", YuMincho, "游明朝体", serif;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--white);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  word-break: break-word;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+
+/* ============ ページ全体の強調（2026-09-13追記） ============
+   OTOページ（ai-seminar-oto/index.html）の<mark>／.turn-highlightの使い分けを踏襲。
+   このページは青系のため、OTOのゴールド系トークンは使わず、既存の青系トークンの
+   範囲内で成立させている（新しい色は追加していない）。
+   ・mark      … 文中の肩書き・固有名詞を一度だけ光らせる（チップ状の背景＋濃紺文字）
+   ・turn-highlight … そのセクションで一番言いたい一文（または中核部分）をボールド＋色で浮かせる
+   コントラストはAA基準（4.5:1）以上を確認済み（mark: 8.52:1／turn-highlight: 6.04〜8.52:1）。 */
+mark {
+  background: var(--blue-accent-text);
+  color: var(--blue-900);
+  font-weight: 700;
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.turn-highlight {
+  color: var(--blue-500);
+  font-weight: 700;
+}
+/* 濃紺の暗い背景セクション（FV相当のグラデーション）では、明るいアクセント色に切り替えてAAコントラストを確保 */
+.final-cta .turn-highlight,
+.transition .turn-highlight,
+.pricing .turn-highlight {
+  color: var(--blue-accent-text);
+}
+
+.wrap {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.wrap--narrow {
+  max-width: var(--maxw-narrow);
+}
+
+section { position: relative; }
+
+.section-pad { padding: var(--section-pad-sm) 0; }
+@media (min-width: 800px) {
+  .section-pad { padding: var(--section-pad-lg) 0; }
+}
+
+/* ============ 見出し ============ */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  font-weight: 700;
+  color: var(--blue-500);
+}
+.eyebrow::before {
+  content: "";
+  display: inline-block;
+  width: 28px;
+  height: 0;
+  border-top: 2px dashed var(--blue-accent);
+}
+
+.section-heading {
+  font-size: clamp(22px, 4.4vw, 32px);
+  font-weight: 700;
+  line-height: 1.55;
+  letter-spacing: 0.01em;
+  margin: 0 0 32px;
+  color: var(--blue-900);
+}
+.section-heading--center { text-align: center; }
+.section-heading--light { color: var(--white); }
+
+.section-lead {
+  max-width: 40em;
+  color: var(--ink-soft);
+  margin: -16px 0 32px;
+}
+.section-lead--center { margin-left: auto; margin-right: auto; text-align: center; }
+
+/* ============ 共通ボタン ============ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 18px 34px;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+  line-height: 1.3;
+  white-space: normal;
+  text-align: center;
+}
+.btn:focus-visible {
+  outline: 3px solid var(--blue-accent);
+  outline-offset: 3px;
+}
+.btn-primary {
+  background: var(--blue-500);
+  color: var(--white);
+  box-shadow: 0 10px 24px rgba(11, 87, 208, 0.32);
+}
+.btn-primary:hover { background: var(--blue-500-dark); transform: translateY(-2px); }
+.btn-secondary {
+  background: transparent;
+  color: var(--blue-900);
+  border: 2px solid var(--blue-900);
+}
+.btn-secondary:hover { background: var(--blue-900); color: var(--white); }
+.btn-secondary--light {
+  color: var(--white);
+  border: 2px solid rgba(255,255,255,0.6);
+}
+.btn-secondary--light:hover { background: var(--white); color: var(--blue-900); }
+.btn-arrow::after { content: "→"; font-weight: 700; }
+.btn-block { width: 100%; }
+
+/* ============ FV（ヒーロー） ============ */
+.hero {
+  position: relative;
+  background: linear-gradient(165deg, var(--blue-900) 0%, var(--blue-800) 55%, var(--blue-900) 100%);
+  color: var(--white);
+  padding: 40px 0 0;
+  overflow: hidden;
+}
+.hero-copy, .hero-photo { position: relative; z-index: 1; }
+.hero .wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.hero-copy { padding-top: 12px; }
+
+/* ---- モバイルFV：写真を見出し直後に持ち上げる（2026-09-12一次チェック差し戻し対応） ----
+   890px未満では.hero-copyをdisplay:contentsにして中身（hero-copy-top／hero-copy-main）を
+   .wrapの直接のflex itemとして扱い、hero-photoをその間にorderで割り込ませる。
+   900px以上ではこのルールは効かず、.hero-copyは従来どおり単一の左カラムのまま
+   （PCのレイアウト・座標は変更なし）。 */
+@media (max-width: 899px) {
+  .hero .wrap { gap: 18px; }
+  .hero-copy { display: contents; }
+  .hero-copy-top { order: 1; }
+  .hero-photo { order: 2; }
+  .hero-copy-main { order: 3; }
+  .hero-copy-top, .hero-copy-main { position: relative; z-index: 1; }
+}
+
+.hero-series-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px dashed var(--blue-accent);
+  color: var(--blue-accent-text);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 7px 16px;
+  border-radius: 999px;
+  margin-bottom: 22px;
+}
+.hero-title {
+  font-family: var(--font-serif);
+  font-size: clamp(28px, 7vw, 46px);
+  line-height: 1.5;
+  font-weight: 700;
+  margin: 0 0 22px;
+}
+@media (max-width: 899px) {
+  .hero-title { margin-bottom: 0; }
+}
+.hero-title .accent {
+  color: var(--blue-accent);
+}
+.hero-sub {
+  font-size: clamp(15px, 3.6vw, 18px);
+  color: #D7E4F7;
+  max-width: 46em;
+  margin: 0 0 28px;
+}
+
+.hero-photo {
+  position: relative;
+  margin: 0 -20px;
+}
+
+/* ---- 登壇者バナー（安永さん＝ゲスト講師をメイン写真／棚原＝ファシリテーターを円形バッジで右下に重ねる） ----
+   2026-09-13 棚原指示②：「FVの僕の画像が遺影っぽい」→ 四角い額縁バッジをやめ、
+   ◯で囲んだ棚原の写真を安永さん写真の右下に重ねる形に変更。 */
+.hero-speakers {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  padding: 0 20px;
+}
+.hero-speaker { position: relative; min-width: 0; }
+.hero-speaker--guest { flex: 1 1 0; }
+
+.hero-speaker-photo-wrap {
+  position: relative;
+}
+.hero-speaker-photo-wrap picture { display: block; }
+.hero-speaker-photo-wrap > picture > img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  object-position: 50% 10%;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+/* 棚原（ファシリテーター）の円形バッジ：写真右下に重ねる */
+.hero-host-badge {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  max-width: calc(100% - 24px);
+  padding: 4px 12px 4px 4px;
+  background: rgba(10, 20, 42, 0.62);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 999px;
+  box-shadow: var(--shadow-md);
+}
+.hero-host-badge-photo {
+  display: block;
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 2px solid var(--white);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.25);
+}
+.hero-host-badge-photo picture { display: block; width: 100%; height: 100%; }
+.hero-host-badge-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.hero-host-badge-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+  min-width: 0;
+  white-space: nowrap;
+}
+.hero-host-badge-role {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #AEC2DE;
+}
+.hero-host-badge-name {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--white);
+}
+
+.hero-speaker-label {
+  margin-top: 10px;
+  text-align: center;
+}
+.hero-speaker-role {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--blue-accent-text);
+  margin-bottom: 2px;
+}
+.hero-speaker-name {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+}
+.hero-speaker--guest .hero-speaker-name { font-size: 14.5px; }
+
+.hero-info {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  margin: 8px 0 20px;
+  display: grid;
+  gap: 12px;
+}
+.hero-info-row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+  font-size: 14.5px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.14);
+}
+.hero-info-row:last-child { border-bottom: none; padding-bottom: 0; }
+.hero-info-row dt {
+  font-weight: 700;
+  color: var(--white);
+  background: var(--blue-500);
+  align-self: start;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  text-align: center;
+  height: fit-content;
+}
+.hero-info-row dd { margin: 0; color: var(--white); line-height: 1.8; }
+.hero-info-row dd b { color: var(--white); font-size: 1.15em; }
+
+.hero-main-cta {
+  width: 100%;
+  margin-bottom: 12px;
+}
+@media (min-width: 420px) {
+  .hero-main-cta { width: auto; min-width: 280px; }
+}
+
+.hero-info-note {
+  margin: 0 0 8px;
+  font-size: 12.5px;
+  line-height: 1.9;
+  color: #AEC2DE;
+}
+
+@media (min-width: 900px) {
+  .hero { padding-top: 56px; padding-bottom: 64px; }
+  .hero .wrap {
+    flex-direction: row;
+    align-items: center;
+    gap: 56px;
+  }
+  .hero-copy { flex: 1 1 52%; padding-top: 0; }
+  .hero-photo {
+    flex: 1 1 48%;
+    margin: 0;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+  }
+  .hero-speakers { padding: 0; align-items: flex-end; gap: 20px; width: 100%; }
+  .hero-speaker-photo-wrap > picture > img { aspect-ratio: 3 / 4; object-position: 50% 8%; }
+  .hero-host-badge { right: 20px; bottom: 20px; gap: 10px; padding: 6px 18px 6px 6px; }
+  .hero-host-badge-photo { width: 68px; height: 68px; border-width: 3px; }
+  .hero-host-badge-photo img { object-position: 50% 22%; }
+  .hero-host-badge-role { font-size: 10px; }
+  .hero-host-badge-name { font-size: 14px; }
+  .hero-speaker-role { font-size: 11.5px; }
+  .hero-speaker-name { font-size: 14px; }
+  .hero-speaker--guest .hero-speaker-name { font-size: 16px; }
+}
+
+/* ============ 数字バー（STATS） ============ */
+.stats { background: var(--white); }
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+@media (min-width: 760px) {
+  .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+}
+.stat-card {
+  background: var(--blue-50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 22px 14px;
+  text-align: center;
+}
+.stat-number {
+  font-family: var(--font-serif);
+  font-size: clamp(24px, 6vw, 32px);
+  font-weight: 800;
+  color: var(--blue-500);
+  line-height: 1.2;
+  margin-bottom: 8px;
+}
+.stat-desc {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.7;
+}
+
+/* ============ 転換の一行（TRANSITION） ============ */
+.transition {
+  background: linear-gradient(165deg, var(--blue-900) 0%, var(--blue-800) 100%);
+  color: var(--white);
+  padding: 48px 0;
+  text-align: center;
+}
+.transition p {
+  font-family: var(--font-serif);
+  font-size: clamp(18px, 4.4vw, 24px);
+  line-height: 1.9;
+  max-width: 30em;
+  margin: 0 auto;
+  color: var(--white);
+}
+
+/* ============ SOLUTION（安永さん登場） ============ */
+/* 2026-09-13：見出し直前の写真を削除（棚原指示）。写真1点を前提にした2カラムgridから
+   テキスト単体の中央寄せブロックに変更。見出し・本文の文言は変更なし。 */
+.solution { background: var(--blue-50); }
+.solution-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+.solution-headline {
+  font-family: var(--font-serif);
+  font-size: clamp(20px, 5vw, 26px);
+  line-height: 1.6;
+  color: var(--blue-900);
+  font-weight: 700;
+  margin: 0 0 16px;
+}
+.solution-body p { color: var(--ink); margin: 0 0 12px; }
+.solution-body p:last-child { margin-bottom: 0; }
+
+/* ---- Anthropicとは？（2026-09-13追記・差し戻し対応②）----
+   地の文（solution-body）と読み分けられるよう、小さめのカード・枠囲みにする。
+   新しい色トークンは追加せず、既存トークン（white/border/blue-900/ink/ink-soft）のみ使用。 */
+.solution-anthropic {
+  margin-top: 24px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+  text-align: left;
+}
+.solution-anthropic-heading {
+  font-family: var(--font-serif);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue-900);
+  margin: 0 0 10px;
+}
+.solution-anthropic-body p {
+  margin: 0 0 10px;
+  color: var(--ink);
+  line-height: 1.8;
+  font-size: 14.5px;
+}
+.solution-anthropic-body p:last-child { margin-bottom: 0; }
+.solution-anthropic-list {
+  margin: 0 0 12px;
+  padding-left: 1.2em;
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.8;
+}
+.solution-anthropic-list li { margin-bottom: 4px; }
+.solution-anthropic-list li:last-child { margin-bottom: 0; }
+
+/* ============ こんな悩み（PROBLEM） ============ */
+.problem { background: var(--white); }
+.problem-list {
+  display: grid;
+  gap: 20px;
+}
+.problem-card {
+  border-left: 4px solid var(--blue-500);
+  background: var(--blue-50);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  padding: 26px 22px;
+}
+.problem-num {
+  font-family: var(--font-serif);
+  color: var(--blue-500);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
+}
+.problem-title {
+  font-size: clamp(17px, 3.8vw, 20px);
+  font-weight: 700;
+  color: var(--blue-900);
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+.problem-body p { margin: 0 0 12px; color: var(--ink); }
+.problem-body p:last-child { margin-bottom: 0; }
+
+/* ============ 参加後にできること（AFTER） ============ */
+.after { background: var(--blue-50); }
+.after-list {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 700px) {
+  .after-list { grid-template-columns: repeat(2, 1fr); }
+}
+.after-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 22px 20px;
+  box-shadow: var(--shadow-sm);
+}
+.after-icon {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--blue-accent);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 14px;
+}
+.after-card p { margin: 0; line-height: 1.75; color: var(--ink); }
+
+/* ============ 当日の内容（AGENDA） ============ */
+.agenda { background: var(--white); }
+.agenda-theme {
+  border-left: 4px solid var(--blue-accent);
+  background: var(--blue-50);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  padding: 22px 22px;
+  margin-bottom: 22px;
+}
+.agenda-theme-title {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  color: var(--blue-900);
+  font-size: clamp(17px, 4.4vw, 20px);
+  line-height: 1.7;
+  margin: 0;
+}
+.agenda-theme-title small {
+  display: block;
+  font-size: 0.72em;
+  font-weight: 500;
+  color: var(--ink-soft);
+  margin-top: 6px;
+}
+.agenda-lead { color: var(--ink-soft); font-weight: 700; margin: 0 0 14px; }
+.agenda-body p { color: var(--ink); margin: 0 0 14px; }
+.agenda-tba {
+  font-size: 14px;
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--border);
+  padding-top: 16px;
+  margin-top: 20px;
+}
+
+/* 当日の内容セクション内・棚原の一言（OTOページの speaker-note を移植） */
+.speaker-note {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 22px 0;
+  padding: 14px 16px;
+  background: var(--blue-50);
+  border-radius: var(--radius-sm);
+}
+.speaker-note img {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  border: 2px solid var(--white);
+  box-shadow: var(--shadow-sm);
+}
+.speaker-note-text { font-size: 15px; color: var(--ink); margin: 0; }
+.speaker-note-name {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+
+/* ============ 特徴・ベネフィット（FEATURES） ============ */
+.features { background: var(--white); }
+.feature-grid {
+  display: grid;
+  gap: 16px;
+}
+@media (min-width: 700px) {
+  .feature-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.feature-card {
+  background: var(--blue-50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px;
+}
+.feature-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--blue-900);
+  margin: 0 0 10px;
+  line-height: 1.6;
+}
+.feature-desc { margin: 0; color: var(--ink); line-height: 1.75; }
+
+/* ============ AI活用の8段階（旧MYTHS&FACTS） ============
+   2026-09-13実装：否定→訂正型の見せ方を廃止し、
+   (1)リード文 (2)8段階リスト (3)Q&A3項目 (4)締め の構成に全面差し替え。
+   色でレベルの優劣を演出しない（番号・段の高さのみで進行を示す）。
+   ------------------------------------------------------------- */
+.myths { background: var(--blue-50); }
+
+.myths-lead { margin: 0 0 32px; }
+.myths-lead p {
+  margin: 0 0 14px;
+  color: var(--ink);
+  line-height: 1.85;
+}
+.myths-lead p:last-child { margin-bottom: 0; }
+
+/* ---- 8段階リスト ---- */
+.ai-stages {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 20px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 28px;
+}
+.ai-stages-head { text-align: center; margin-bottom: 20px; }
+.ai-stages-title {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 15.5px;
+  color: var(--blue-900);
+}
+.ai-stages-sub {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---- レベル1のみ開示（2026-09-13追記・差し戻し対応③）----
+   レベル1だけ名前・説明を開示。既存の番号バッジ・名前・説明のスタイル（下の
+   .ai-stage-num / .ai-stage-body 系）をそのまま流用し、2〜8との情報量の差を
+   視覚的にはっきりさせる。 */
+.ai-stage-revealed {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px dashed var(--border);
+  margin-bottom: 20px;
+}
+
+/* 番号バッジ：レベル1のみ使用（塗りつぶし＝開示済みを示す）。 */
+.ai-stage-num {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--blue-500);
+  color: var(--white);
+  font-size: 14px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ai-stage-body { min-width: 0; }
+.ai-stage-name {
+  margin: 0 0 4px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--blue-900);
+}
+.ai-stage-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: var(--ink);
+}
+
+/* ---- 「ほとんどの方がこのレベル1」の一言（2026-09-13追記：番号2〜8のブロックを
+   削除し、棚原さんの一言に差し替え。レベル1のカードとteaserの間に配置） ---- */
+.ai-stages-most {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+/* ---- 「そこに立てているだけで〜」の一言（2026-09-13追記：08_読後感修正2箇所.md 指摘1）
+   ai-stages-mostは既にturn-highlightで強調済みのため、ここに強い強調は足さない。
+   ai-stages-mostより一段小さく・軽い色にして、teaser（枠囲み）に橋渡しする位置づけ。 ---- */
+.ai-stages-affirm {
+  margin: 0 0 18px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+
+.ai-stages-teaser {
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  background: var(--blue-50);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-size: 13.5px;
+  line-height: 1.8;
+  color: var(--ink-soft);
+}
+
+.ai-stages-caption {
+  margin: 18px 0 0;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+  text-align: center;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+/* ---- Q&A3項目：開閉なし・常時全文表示（否定→訂正の対比型は使わない） ---- */
+.myths-qa {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.myths-qa-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 20px 22px;
+}
+.myths-qa-q {
+  margin: 0 0 12px;
+  font-weight: 700;
+  color: var(--blue-900);
+  line-height: 1.7;
+}
+.myths-qa-a p {
+  margin: 0 0 10px;
+  color: var(--ink);
+  line-height: 1.8;
+}
+.myths-qa-a p:last-child { margin-bottom: 0; }
+
+.myths-closing {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.85;
+  text-align: center;
+}
+
+/* ============ 中間CTA（MID CTA） ============ */
+.mid-cta { background: var(--white); text-align: center; }
+
+/* ============ 講師 ============ */
+.speakers { background: var(--blue-50); }
+.speaker-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-sm);
+}
+.speaker-card:last-child { margin-bottom: 0; }
+.speaker-head {
+  display: grid;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+@media (min-width: 640px) {
+  .speaker-head {
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    gap: 28px;
+  }
+}
+.speaker-photo {
+  width: 180px;
+  margin: 0 auto;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+@media (min-width: 640px) { .speaker-photo { width: 100%; } }
+.speaker-photo img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+.speaker-role {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--blue-500);
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+.speaker-name {
+  font-family: var(--font-serif);
+  font-size: clamp(19px, 4.6vw, 24px);
+  font-weight: 700;
+  color: var(--blue-900);
+  margin: 0;
+}
+.speaker-titles {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  background: var(--blue-50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.speaker-titles li {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  color: var(--blue-900);
+  font-size: 14.5px;
+}
+.speaker-titles li:last-child { border-bottom: none; }
+.speaker-titles li.is-highlight {
+  background: var(--blue-500);
+  color: var(--white);
+  font-weight: 800;
+}
+.speaker-body p { color: var(--ink); margin: 0 0 14px; }
+.speaker-body p:last-child { margin-bottom: 0; }
+
+/* ============ 開催概要（OVERVIEW） ============ */
+.overview { background: var(--white); }
+.overview-table {
+  background: var(--blue-50);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  margin-bottom: 22px;
+}
+.overview-row {
+  display: grid;
+  grid-template-columns: 84px 1fr;
+  gap: 12px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  font-size: 15px;
+}
+.overview-row:last-child { border-bottom: none; }
+.overview-row dt {
+  font-weight: 700;
+  color: var(--white);
+  background: var(--blue-500);
+  align-self: start;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 12.5px;
+  text-align: center;
+  height: fit-content;
+}
+.overview-row dd { margin: 0; color: var(--ink); line-height: 1.8; }
+.overview-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+.overview-note {
+  color: var(--ink);
+  margin: 0 0 22px;
+  line-height: 1.85;
+}
+
+/* ============ 参加費のご案内（PRICING） ============ */
+.pricing {
+  background: linear-gradient(165deg, var(--blue-900) 0%, var(--blue-800) 100%);
+  color: var(--white);
+}
+.pricing .section-heading { color: var(--white); }
+.pricing-value {
+  text-align: center;
+  font-weight: 700;
+  font-size: clamp(15px, 3.6vw, 17px);
+  color: #D7E4F7;
+  margin: 0 0 8px;
+}
+.pricing-value b {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(34px, 9vw, 48px);
+  color: var(--white);
+  line-height: 1.3;
+}
+.pricing-lead {
+  text-align: center;
+  color: #D7E4F7;
+  margin: 0 0 20px;
+}
+.pricing-reasons {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius-lg);
+  padding: 22px 24px;
+  margin: 0 0 20px;
+  list-style: none;
+}
+.pricing-reasons li {
+  position: relative;
+  padding-left: 22px;
+  margin-bottom: 12px;
+  color: var(--white);
+  line-height: 1.8;
+}
+.pricing-reasons li:last-child { margin-bottom: 0; }
+.pricing-reasons li::before {
+  content: "・";
+  position: absolute;
+  left: 0;
+  color: var(--blue-accent-text);
+  font-weight: 700;
+}
+.pricing-note { color: #D7E4F7; margin: 0 0 24px; }
+.pricing-includes {
+  list-style: none;
+  margin: 0 0 28px;
+  padding: 0;
+  max-width: 34em;
+  margin-left: auto;
+  margin-right: auto;
+}
+.pricing-includes li {
+  position: relative;
+  padding-left: 26px;
+  margin-bottom: 10px;
+  color: var(--white);
+  line-height: 1.7;
+}
+.pricing-includes li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--blue-accent-text);
+  font-weight: 900;
+}
+.pricing-includes-note {
+  font-size: 14px;
+  color: var(--blue-accent-text);
+  border-top: 1px dashed rgba(255,255,255,0.3);
+  padding-top: 16px;
+  margin: 20px auto 24px;
+  max-width: 34em;
+}
+.pricing-cta { text-align: center; }
+
+/* ============ FAQ ============ */
+.faq { background: var(--blue-50); }
+.faq-list { display: grid; gap: 12px; }
+.faq-item {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 4px 0;
+}
+.faq-item summary {
+  cursor: pointer;
+  list-style: none;
+  padding: 18px 50px 18px 20px;
+  font-weight: 700;
+  color: var(--blue-900);
+  position: relative;
+  font-size: 15.5px;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: "+";
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 22px;
+  color: var(--blue-500);
+  font-weight: 400;
+  transition: transform 0.2s ease;
+}
+.faq-item[open] summary::after { transform: translateY(-50%) rotate(45deg); }
+.faq-item summary:focus-visible {
+  outline: 3px solid var(--blue-accent);
+  outline-offset: -2px;
+  border-radius: 6px;
+}
+.faq-a {
+  margin: 0;
+  padding: 0 20px 20px 20px;
+  color: var(--ink);
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* ============ 最終CTA ============ */
+.final-cta {
+  background: linear-gradient(165deg, var(--blue-900) 0%, var(--blue-800) 100%);
+  color: var(--white);
+  text-align: center;
+}
+.final-cta .section-heading { color: var(--white); }
+.final-cta-lead {
+  max-width: 34em;
+  margin: 0 auto 28px;
+  color: #D7E4F7;
+}
+.final-cta-note { margin-top: 16px; font-size: 13px; color: #AEC2DE; }
+
+/* ============ 追伸（POSTSCRIPT） ============ */
+.postscript { background: var(--blue-50); }
+.ps-block {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 28px 26px;
+  max-width: var(--maxw-narrow);
+  margin: 0 auto;
+}
+.ps-block p { color: var(--ink); margin: 0 0 14px; }
+.ps-block p:last-child { margin-bottom: 0; }
+
+/* ============ フッター ============ */
+.site-footer {
+  background: var(--blue-900);
+  color: rgba(255,255,255,0.7);
+  padding: 34px 0;
+  text-align: center;
+  font-size: 12.5px;
+}
+.site-footer a { color: var(--blue-accent-text); text-decoration: underline; }
+.site-footer p { margin: 6px 0; }
+/* モバイルは追従CTAバーの分だけ余白を確保 */
+@media (max-width: 767px) {
+  .site-footer { padding-bottom: calc(34px + var(--sticky-cta-h)); }
+}
+
+/* ============ モバイル追従CTA（画面下固定） ============
+   フォーム・Cookie同意はこのページに存在しないため常時表示で問題ないが、
+   最終CTAセクションが画面内に入ったら重複表示を避けるため非表示にする。
+   ------------------------------------------------------- */
+.sticky-cta {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -8px 24px rgba(11, 42, 74, 0.14);
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  display: none;
+  transition: transform 0.25s ease;
+}
+@media (max-width: 767px) {
+  .sticky-cta { display: block; }
+  .sticky-cta.is-hidden { transform: translateY(100%); }
+}
+.sticky-cta .btn {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 15px;
+}
+
+/* ============ 汎用 ============ */
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--blue-accent);
+  color: var(--blue-900);
+  padding: 10px 16px;
+  z-index: 100;
+  font-weight: 700;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus {
+  left: 0;
+}
+
+/* ============================================================
+   モーション（スクロールフェードイン）
+   参考：ai-seminar/style.css の実装パターンを移植。
+   prefers-reduced-motion を尊重。
+   ============================================================ */
+.reveal {
+  opacity: 1;
+  transform: none;
+}
+.js .reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .6s cubic-bezier(.22,.61,.36,1), transform .6s cubic-bezier(.22,.61,.36,1);
+  transition-delay: var(--reveal-delay, 0s);
+}
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-group > *:nth-child(1) { --reveal-delay: 0s; }
+.reveal-group > *:nth-child(2) { --reveal-delay: .08s; }
+.reveal-group > *:nth-child(3) { --reveal-delay: .16s; }
+.reveal-group > *:nth-child(4) { --reveal-delay: .24s; }
+.reveal-group > *:nth-child(5) { --reveal-delay: .32s; }
+.reveal-group > *:nth-child(6) { --reveal-delay: .4s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
