@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "1.0.0",
+  "_note": "T0開発用サンプル（ケン作成・2026-09-24）。T2実データCSVから数行を実際の値のまま抜粋。正式な全件整形（12業種×2階級・47都道府県フル）はヒナタT3で行う。ここに入っていない業種・都道府県はT3で追加される。",
+  "generatedAt": "2026-09-24",
+
+  "sources": [
+    {
+      "id": "S1_houjin_kigyou_toukei_2025",
+      "name": "法人企業統計調査 年次別調査 時系列データ 表1",
+      "publisher": "財務省",
+      "surveyYear": 2025,
+      "url": "https://www.e-stat.go.jp/dbview?sid=0003060791",
+      "retrievedDate": "2026-09-24"
+    },
+    {
+      "id": "S2_chiiki_saitei_chingin_r7",
+      "name": "地域別最低賃金の改定状況",
+      "publisher": "厚生労働省",
+      "surveyYear": "令和7年度",
+      "url": null,
+      "retrievedDate": "2026-09-24"
+    },
+    {
+      "id": "S3_chingin_kouzou_kihon_tanjikan_r7",
+      "name": "賃金構造基本統計調査 短時間労働者 産業計・男女計",
+      "publisher": "厚生労働省",
+      "surveyYear": "令和7年",
+      "url": null,
+      "retrievedDate": "2026-09-24"
+    }
+  ],
+
+  "allIndustry": {
+    "_note": "T2に全産業合計行が無いためT0時点はunavailable。T0スキーマ確定にあたっての申し送り3参照。",
+    "fiscalYear": 2025,
+    "arari": {
+      "grossMarginRate": { "value": null, "unit": "%", "sourceId": null, "confidence": "unavailable", "computed": false, "usedInCalc": true },
+      "atmark": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false, "usedInCalc": true }
+    },
+    "sourceId": null
+  },
+
+  "industries": [
+    {
+      "industryCode": "construction",
+      "industryName": "建設業",
+      "capitalClass": "1000to5000",
+      "capitalClassLabel": "1千万円以上-5千万円未満",
+      "fiscalYear": 2025,
+      "arari": {
+        "sales":          { "value": 5164803900, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "cogs":           { "value": 3772451900, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employees":      { "value": 1443345, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officers":       { "value": 333759, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officerSalary":  { "value": 224999300, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "officerBonus":   { "value": 17635600, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeSalary": { "value": 486649700, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeBonus":  { "value": 93449200, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "welfare":        { "value": 70060100, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "grossProfit":    { "value": 1392352000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "sales - cogs", "usedInCalc": true },
+        "grossMarginRate":{ "value": 27.0, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / sales * 100", "usedInCalc": true },
+        "atmark":         { "value": 783.5, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / (employees + officers)", "usedInCalc": true },
+        "laborPerEmployee":  { "value": 450.5, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(employeeSalary + employeeBonus + welfare) / employees", "usedInCalc": true },
+        "officerCompPerHead":{ "value": 727.0, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary + officerBonus) / officers", "usedInCalc": false },
+        "laborShare":        { "value": 64.1, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary+officerBonus+employeeSalary+employeeBonus+welfare) / grossProfit * 100", "usedInCalc": false }
+      },
+      "fukakachi": {
+        "usedInCalc": false,
+        "addedValue": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "operatingProfit": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "note": "T2時点では収集対象外。calc.jsは参照しない。"
+      },
+      "atmarkTopEst": { "value": 1175.2, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "estimated", "computed": true, "computeFormula": "atmark * 1.5", "usedInCalc": false, "note": "v1画面には出さない" },
+      "sourceId": "S1_houjin_kigyou_toukei_2025"
+    },
+    {
+      "industryCode": "construction",
+      "industryName": "建設業",
+      "capitalClass": "under1000",
+      "capitalClassLabel": "1千万円未満",
+      "fiscalYear": 2025,
+      "arari": {
+        "sales":          { "value": 3208108500, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "cogs":           { "value": 1989037500, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employees":      { "value": 1317249, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officers":       { "value": 659918, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officerSalary":  { "value": 280012500, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "officerBonus":   { "value": 10956000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeSalary": { "value": 413020300, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeBonus":  { "value": 37258000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "welfare":        { "value": 58050500, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "grossProfit":    { "value": 1219071000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "sales - cogs", "usedInCalc": true },
+        "grossMarginRate":{ "value": 38.0, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / sales * 100", "usedInCalc": true },
+        "atmark":         { "value": 616.6, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / (employees + officers)", "usedInCalc": true },
+        "laborPerEmployee":  { "value": 385.9, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(employeeSalary + employeeBonus + welfare) / employees", "usedInCalc": true },
+        "officerCompPerHead":{ "value": 440.9, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary + officerBonus) / officers", "usedInCalc": false },
+        "laborShare":        { "value": 65.6, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary+officerBonus+employeeSalary+employeeBonus+welfare) / grossProfit * 100", "usedInCalc": false }
+      },
+      "fukakachi": {
+        "usedInCalc": false,
+        "addedValue": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "operatingProfit": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "note": "T2時点では収集対象外。calc.jsは参照しない。"
+      },
+      "atmarkTopEst": { "value": 924.9, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "estimated", "computed": true, "computeFormula": "atmark * 1.5", "usedInCalc": false, "note": "v1画面には出さない" },
+      "sourceId": "S1_houjin_kigyou_toukei_2025"
+    },
+    {
+      "industryCode": "manufacturing",
+      "industryName": "製造業",
+      "capitalClass": "1000to5000",
+      "capitalClassLabel": "1千万円以上-5千万円未満",
+      "fiscalYear": 2025,
+      "arari": {
+        "sales":          { "value": 6464568000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "cogs":           { "value": 4973752800, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employees":      { "value": 2689290, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officers":       { "value": 296999, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officerSalary":  { "value": 194550700, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "officerBonus":   { "value": 9636600, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeSalary": { "value": 818785300, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeBonus":  { "value": 132431400, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "welfare":        { "value": 116966700, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "grossProfit":    { "value": 1490815200, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "sales - cogs", "usedInCalc": true },
+        "grossMarginRate":{ "value": 23.1, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / sales * 100", "usedInCalc": true },
+        "atmark":         { "value": 499.2, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / (employees + officers)", "usedInCalc": true },
+        "laborPerEmployee":  { "value": 397.2, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(employeeSalary + employeeBonus + welfare) / employees", "usedInCalc": true },
+        "officerCompPerHead":{ "value": 687.5, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary + officerBonus) / officers", "usedInCalc": false },
+        "laborShare":        { "value": 85.3, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary+officerBonus+employeeSalary+employeeBonus+welfare) / grossProfit * 100", "usedInCalc": false }
+      },
+      "fukakachi": {
+        "usedInCalc": false,
+        "addedValue": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "operatingProfit": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "note": "T2時点では収集対象外。calc.jsは参照しない。"
+      },
+      "atmarkTopEst": { "value": 748.8, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "estimated", "computed": true, "computeFormula": "atmark * 1.5", "usedInCalc": false, "note": "v1画面には出さない" },
+      "sourceId": "S1_houjin_kigyou_toukei_2025"
+    },
+    {
+      "industryCode": "it_communication",
+      "industryName": "情報通信業",
+      "capitalClass": "1000to5000",
+      "capitalClassLabel": "1千万円以上-5千万円未満",
+      "fiscalYear": 2025,
+      "arari": {
+        "sales":          { "value": 1745047400, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "cogs":           { "value": 805867000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employees":      { "value": 986144, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officers":       { "value": 83709, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officerSalary":  { "value": 54830300, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "officerBonus":   { "value": 4787200, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeSalary": { "value": 454073600, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeBonus":  { "value": 48164000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "welfare":        { "value": 42185600, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "grossProfit":    { "value": 939180400, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "sales - cogs", "usedInCalc": true },
+        "grossMarginRate":{ "value": 53.8, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / sales * 100", "usedInCalc": true },
+        "atmark":         { "value": 877.9, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / (employees + officers)", "usedInCalc": true },
+        "laborPerEmployee":  { "value": 552.1, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(employeeSalary + employeeBonus + welfare) / employees", "usedInCalc": true },
+        "officerCompPerHead":{ "value": 712.2, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary + officerBonus) / officers", "usedInCalc": false },
+        "laborShare":        { "value": 64.3, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary+officerBonus+employeeSalary+employeeBonus+welfare) / grossProfit * 100", "usedInCalc": false }
+      },
+      "fukakachi": {
+        "usedInCalc": false,
+        "addedValue": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "operatingProfit": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "note": "T2時点では収集対象外。calc.jsは参照しない。"
+      },
+      "atmarkTopEst": { "value": 1316.8, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "estimated", "computed": true, "computeFormula": "atmark * 1.5", "usedInCalc": false, "note": "v1画面には出さない" },
+      "sourceId": "S1_houjin_kigyou_toukei_2025"
+    },
+    {
+      "industryCode": "retail",
+      "industryName": "小売業",
+      "capitalClass": "1000to5000",
+      "capitalClassLabel": "1千万円以上-5千万円未満",
+      "fiscalYear": 2025,
+      "arari": {
+        "sales":          { "value": 5933826200, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "cogs":           { "value": 4500161900, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employees":      { "value": 1488306, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officers":       { "value": 168984, "unit": "人", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": true },
+        "officerSalary":  { "value": 80757600, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "officerBonus":   { "value": 2527000, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeSalary": { "value": 403424800, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "employeeBonus":  { "value": 50634100, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "welfare":        { "value": 45576700, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": false, "usedInCalc": false },
+        "grossProfit":    { "value": 1433664300, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "sales - cogs", "usedInCalc": true },
+        "grossMarginRate":{ "value": 24.2, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / sales * 100", "usedInCalc": true },
+        "atmark":         { "value": 865.1, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "grossProfit / (employees + officers)", "usedInCalc": true },
+        "laborPerEmployee":  { "value": 335.7, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(employeeSalary + employeeBonus + welfare) / employees", "usedInCalc": true },
+        "officerCompPerHead":{ "value": 492.9, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary + officerBonus) / officers", "usedInCalc": false },
+        "laborShare":        { "value": 40.7, "unit": "%", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "confirmed", "computed": true, "computeFormula": "(officerSalary+officerBonus+employeeSalary+employeeBonus+welfare) / grossProfit * 100", "usedInCalc": false }
+      },
+      "fukakachi": {
+        "usedInCalc": false,
+        "addedValue": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "operatingProfit": { "value": null, "unit": "万円", "sourceId": null, "confidence": "unavailable", "computed": false },
+        "note": "T2時点では収集対象外。calc.jsは参照しない。"
+      },
+      "atmarkTopEst": { "value": 1297.6, "unit": "万円", "sourceId": "S1_houjin_kigyou_toukei_2025", "confidence": "estimated", "computed": true, "computeFormula": "atmark * 1.5", "usedInCalc": false, "note": "v1画面には出さない" },
+      "sourceId": "S1_houjin_kigyou_toukei_2025"
+    }
+  ],
+
+  "stages": [
+    { "stageNumber": 1, "label": "ステージ1", "atmark": { "value": 1000, "unit": "万円", "sourceId": "S4_tanahara_stage_ron", "confidence": "estimated", "computed": false }, "basis": "月35万円の生活費からの逆算" },
+    { "stageNumber": 2, "label": "ステージ2", "atmark": { "value": 2000, "unit": "万円", "sourceId": "S4_tanahara_stage_ron", "confidence": "estimated", "computed": false }, "basis": "月35万円の生活費からの逆算" },
+    { "stageNumber": 3, "label": "ステージ3", "atmark": { "value": 3000, "unit": "万円", "sourceId": "S4_tanahara_stage_ron", "confidence": "estimated", "computed": false }, "basis": "月35万円の生活費からの逆算" }
+  ],
+
+  "minWage": [
+    { "pref": "北海道", "amount": { "value": 1075, "unit": "円", "sourceId": "S2_chiiki_saitei_chingin_r7", "confidence": "confirmed", "computed": false }, "effectiveDate": "令和7年10月4日", "prevAmount": { "value": null, "unit": "円", "sourceId": null, "confidence": "unavailable", "computed": false } },
+    { "pref": "東京", "amount": { "value": 1226, "unit": "円", "sourceId": "S2_chiiki_saitei_chingin_r7", "confidence": "confirmed", "computed": false }, "effectiveDate": "令和7年10月3日", "prevAmount": { "value": null, "unit": "円", "sourceId": null, "confidence": "unavailable", "computed": false } },
+    { "pref": "愛知", "amount": { "value": 1140, "unit": "円", "sourceId": "S2_chiiki_saitei_chingin_r7", "confidence": "confirmed", "computed": false }, "effectiveDate": "令和7年10月18日", "prevAmount": { "value": null, "unit": "円", "sourceId": null, "confidence": "unavailable", "computed": false } },
+    { "pref": "大阪", "amount": { "value": 1177, "unit": "円", "sourceId": "S2_chiiki_saitei_chingin_r7", "confidence": "confirmed", "computed": false }, "effectiveDate": "令和7年10月16日", "prevAmount": { "value": null, "unit": "円", "sourceId": null, "confidence": "unavailable", "computed": false } },
+    { "pref": "沖縄", "amount": { "value": 1023, "unit": "円", "sourceId": "S2_chiiki_saitei_chingin_r7", "confidence": "confirmed", "computed": false }, "effectiveDate": "令和7年12月1日", "prevAmount": { "value": null, "unit": "円", "sourceId": null, "confidence": "unavailable", "computed": false } }
+  ],
+
+  "partWage": [
+    { "pref": "北海道", "amount": { "value": 1361, "unit": "円", "sourceId": "S3_chingin_kouzou_kihon_tanjikan_r7", "confidence": "confirmed", "computed": false }, "year": 2025, "label": "パート・アルバイトの平均時給（短時間労働者）" },
+    { "pref": "東京", "amount": { "value": 1779, "unit": "円", "sourceId": "S3_chingin_kouzou_kihon_tanjikan_r7", "confidence": "confirmed", "computed": false }, "year": 2025, "label": "パート・アルバイトの平均時給（短時間労働者）" },
+    { "pref": "愛知", "amount": { "value": 1452, "unit": "円", "sourceId": "S3_chingin_kouzou_kihon_tanjikan_r7", "confidence": "confirmed", "computed": false }, "year": 2025, "label": "パート・アルバイトの平均時給（短時間労働者）" },
+    { "pref": "大阪", "amount": { "value": 1658, "unit": "円", "sourceId": "S3_chingin_kouzou_kihon_tanjikan_r7", "confidence": "confirmed", "computed": false }, "year": 2025, "label": "パート・アルバイトの平均時給（短時間労働者）" },
+    { "pref": "沖縄", "amount": { "value": 1263, "unit": "円", "sourceId": "S3_chingin_kouzou_kihon_tanjikan_r7", "confidence": "confirmed", "computed": false }, "year": 2025, "label": "パート・アルバイトの平均時給（短時間労働者）" }
+  ]
+}
