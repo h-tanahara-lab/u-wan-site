@@ -41,6 +41,19 @@
   }
   function fmtPct1(v) { return isFiniteNum(v) ? v.toFixed(1) : '—'; }
 
+  /**
+   * 「粗利率が分からない」導線（fix5）：原価Cから粗利率gを画面表示用に計算する。
+   * calc.js（AtmarkCalc.deriveMargin）は inputs.C が入っていれば内部で同じ式
+   * （g=(S-C)/S*100）を使って計算する。ここでの計算はあくまで「原価を入力した
+   * 瞬間に粗利率欄へ即時反映する」ための表示用で、実際の計算はcalc.js側の
+   * 結果（current.g／branch判定）が正。二重に定義しているわけではなく式は同一。
+   */
+  function computeMarginFromCost(S, C) {
+    if (!isFiniteNum(S) || S <= 0 || !isFiniteNum(C)) return null;
+    return ((S - C) / S) * 100;
+  }
+  function isValidMarginPct(g) { return isFiniteNum(g) && g > 0 && g <= 100; }
+
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
       return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
@@ -476,10 +489,26 @@
       html += hintRowHtml();
     } else if (qkey === 'q2') {
       var usingCost = isFiniteNum(i.C);
-      html += '<div class="field-group">' +
-        '<label class="field-label" for="field-g">' + esc(usingCost ? t('self.q2.costLabel') : t('self.q2.marginLabel')) + '</label>' +
-        '<input class="field-input" id="field-g" type="number" step="0.1" data-bind="' + (usingCost ? 'C' : 'g') + '" value="' + (usingCost ? (i.C == null ? '' : i.C) : (i.g == null ? '' : i.g)) + '">' +
-        '</div>';
+      if (!usingCost) {
+        html += '<div class="field-group">' +
+          '<label class="field-label" for="field-g">' + esc(t('self.q2.marginLabel')) + '</label>' +
+          '<input class="field-input" id="field-g" type="number" step="0.1" data-bind="g" value="' + (i.g == null ? '' : i.g) + '">' +
+          '</div>';
+      } else {
+        var derivedG = computeMarginFromCost(i.S, i.C);
+        var derivedOk = isValidMarginPct(derivedG);
+        var showErr = isFiniteNum(i.C) && !derivedOk;
+        html += '<div class="field-group">' +
+          '<label class="field-label" for="field-g">' + esc(t('self.q2.costLabel')) + '</label>' +
+          '<input class="field-input" id="field-g" type="number" step="1" min="0" data-bind="C" value="' + (i.C == null ? '' : i.C) + '">' +
+          '<p class="hint-row">' + esc(t('self.q2.costLabelNote')) + '</p>' +
+          '</div>' +
+          '<div class="field-group">' +
+          '<label class="field-label">' + esc(t('self.q2.marginLabel')) + '</label>' +
+          '<input class="field-input field-input--readonly" id="field-g-readout" type="text" readonly value="' + esc(derivedOk ? fmtPct1(derivedG) + '%' : '—') + '">' +
+          '<p class="field-error' + (showErr ? ' is-visible' : '') + '" id="field-g-error">' + esc(t('validation.marginInvalid')) + '</p>' +
+          '</div>';
+      }
       html += '<button type="button" class="link-btn" data-action="q2-toggle-mode">' + esc(usingCost ? t('self.q2.toggleToPercent') : t('self.q2.toggleToCost')) + '</button><br>';
       html += '<button type="button" class="link-btn" data-action="q2-unknown">' + esc(t('self.q2.unknownButton')) + '</button>';
       if (!i.ind) {
@@ -763,6 +792,16 @@
       if (bind === 'C') selfState.inputs.g = null;
       updateQNextState();
       persistSelf();
+      if (bind === 'C') {
+        // fix5：原価入力の度にフル再描画（renderQuestion）はせず、読み取り表示だけを直接更新する
+        // （フル再描画するとフォーカスが外れて連続入力できなくなるため）
+        var readoutEl = document.getElementById('field-g-readout');
+        var errEl = document.getElementById('field-g-error');
+        var derived = computeMarginFromCost(selfState.inputs.S, selfState.inputs.C);
+        var ok = isValidMarginPct(derived);
+        if (readoutEl) readoutEl.value = ok ? fmtPct1(derived) + '%' : '—';
+        if (errEl) errEl.classList.toggle('is-visible', isFiniteNum(selfState.inputs.C) && !ok);
+      }
     }
     var bindTarget = t2.getAttribute('data-bind-target');
     if (bindTarget) {
@@ -826,8 +865,17 @@
       renderQuestion(); persistSelf();
     }
     if (action === 'q2-toggle-mode') {
-      if (isFiniteNum(selfState.inputs.C)) { selfState.inputs.C = null; } else { selfState.inputs.g = null; selfState.inputs.C = 0; }
+      if (isFiniteNum(selfState.inputs.C)) {
+        // 原価入力 → ％入力：直前まで表示していた粗利率をそのまま引き継ぐ（入力し直させない）
+        var derived = computeMarginFromCost(selfState.inputs.S, selfState.inputs.C);
+        selfState.inputs.C = null;
+        selfState.inputs.g = isValidMarginPct(derived) ? Math.round(derived * 10) / 10 : null;
+      } else {
+        selfState.inputs.g = null;
+        selfState.inputs.C = 0;
+      }
       renderQuestion();
+      persistSelf();
     }
     if (action === 'q2-unknown') {
       var entry = selfState.inputs.ind ? findIndustry(selfState.inputs.ind) : null;
@@ -936,6 +984,8 @@
       target: { W: null, hourlyWage: null, lastEdited: null },
       stage: 0,
       lastField: 'S',
+      costMode: false, // fix5：粗利率欄を「原価から入れる」に切り替えているか
+      gManuallyEdited: false, // fix5：粗利率を手で変更済み（業種選択での自動代入を止める）
     };
   }
   var demoState = defaultDemoState();
@@ -947,27 +997,33 @@
     N: { min: 1, max: 50, step: 0.5 },
     R: { min: 0, max: 5000, step: 10 },
     H: { min: 1, max: 100, step: 1 },
+    C: { min: 0, max: 50000, step: 10 }, // fix5：原価入力モード時の↑/↓キー操作用
   };
   var demoRefs = {};
+
+  function demoNumberSliderItemHtml(f) {
+    var cfg = demoFieldConfig[f];
+    var labelKey = { S: 'sales', N: 'count', R: 'comp', H: 'hours' }[f];
+    return '<div class="demo-inputbar__item">' +
+      '<label class="demo-inputbar__label">' + esc(t('demo.inputLabels.' + labelKey)) + '</label>' +
+      '<div class="demo-inputbar__row">' +
+      '<input type="number" class="demo-inputbar__number" id="demo-num-' + f + '" min="' + cfg.min + '" max="' + cfg.max + '" step="' + cfg.step + '">' +
+      '</div>' +
+      '<input type="range" class="demo-inputbar__slider" id="demo-slider-' + f + '" min="' + cfg.min + '" max="' + cfg.max + '" step="' + cfg.step + '">' +
+      '</div>';
+  }
 
   function buildDemoInputBar() {
     var bar = qs('#demo-inputbar');
     var html = '';
-    ['S', 'g', 'N', 'R', 'H'].forEach(function (f) {
-      var cfg = demoFieldConfig[f];
-      html += '<div class="demo-inputbar__item">' +
-        '<label class="demo-inputbar__label">' + esc(t('demo.inputLabels.' + { S: 'sales', g: 'margin', N: 'count', R: 'comp', H: 'hours' }[f])) + '</label>' +
-        '<div class="demo-inputbar__row">' +
-        '<input type="number" class="demo-inputbar__number" id="demo-num-' + f + '" min="' + cfg.min + '" max="' + cfg.max + '" step="' + cfg.step + '">' +
-        '</div>' +
-        '<input type="range" class="demo-inputbar__slider" id="demo-slider-' + f + '" min="' + cfg.min + '" max="' + cfg.max + '" step="' + cfg.step + '">' +
-        '</div>';
-    });
+    html += demoNumberSliderItemHtml('S');
+    html += '<div class="demo-inputbar__item" id="demo-margin-field"></div>';
+    ['N', 'R', 'H'].forEach(function (f) { html += demoNumberSliderItemHtml(f); });
     html += '<div class="demo-inputbar__item"><label class="demo-inputbar__label">' + esc(t('demo.inputLabels.industry')) + '</label>' + industrySelectHtml('demo-select-ind', demoState.inputs.ind) + '</div>';
     html += '<div class="demo-inputbar__item"><label class="demo-inputbar__label">' + esc(t('demo.inputLabels.pref')) + '</label>' + prefSelectHtml('demo-select-pref', demoState.inputs.pref) + '</div>';
     bar.innerHTML = html;
 
-    ['S', 'g', 'N', 'R', 'H'].forEach(function (f) {
+    ['S', 'N', 'R', 'H'].forEach(function (f) {
       demoRefs[f + 'num'] = qs('#demo-num-' + f);
       demoRefs[f + 'slider'] = qs('#demo-slider-' + f);
       on(demoRefs[f + 'num'], 'input', function () { onDemoFieldChange(f, this.value === '' ? null : parseFloat(this.value)); });
@@ -975,7 +1031,14 @@
       on(demoRefs[f + 'num'], 'focus', function () { demoState.lastField = f; });
       on(demoRefs[f + 'slider'], 'focus', function () { demoState.lastField = f; });
     });
-    on(qs('#demo-select-ind'), 'change', function () { demoState.inputs.ind = this.value; persistDemo(); renderDemoAll(); });
+    on(qs('#demo-select-ind'), 'change', function () {
+      demoState.inputs.ind = this.value;
+      // fix5：業種選択時、粗利率を手で変えていなければ業界平均を自動で入れる（事前診断と同じ考え方）
+      maybeAutoFillMarginFromIndustry();
+      persistDemo();
+      renderDemoMarginField();
+      renderDemoAll();
+    });
     on(qs('#demo-select-pref'), 'change', function () { demoState.inputs.pref = this.value; persistDemo(); renderDemoAll(); });
 
     var dotsWrap = qs('#demo-stage-dots');
@@ -983,24 +1046,124 @@
       return '<button type="button" class="demo-stage-dot" data-action="demo-goto-stage" data-stage="' + i + '" role="tab">' + i + '</button>';
     }).join('');
 
+    renderDemoMarginField();
+
     qs('#demo-keyboard-help').textContent = t('demo.keyboardHelp', 'demo');
+  }
+
+  // fix5：粗利率が分からない場合の「原価から入れる」導線。業種選択で自動代入する対象は
+  // 「まだ手で変えていない粗利率」だけ（activeElement判定＋手入力済みフラグの両方で保護）
+  function maybeAutoFillMarginFromIndustry() {
+    if (demoState.costMode || demoState.gManuallyEdited) return;
+    var gNumEl = document.getElementById('demo-num-g');
+    var gSliderEl = document.getElementById('demo-slider-g');
+    if (document.activeElement === gNumEl || document.activeElement === gSliderEl) return;
+    var entry = demoState.inputs.ind ? findIndustry(demoState.inputs.ind) : null;
+    var mw = entry && entry.arari && entry.arari.grossMarginRate;
+    if (mw && isFiniteNum(mw.value) && mw.confidence !== 'unavailable') {
+      demoState.inputs.g = mw.value;
+      demoState.inputs.C = null;
+    }
+  }
+
+  // fix5：粗利率欄（％入力 ⇄ 原価から入れる）のHTML。costModeで出し分ける
+  function demoMarginFieldInnerHtml() {
+    if (demoState.costMode) {
+      return '<label class="demo-inputbar__label">' + esc(t('demo.inputLabels.cost')) + '</label>' +
+        '<div class="demo-inputbar__row">' +
+        '<input type="number" class="demo-inputbar__number" id="demo-num-c" min="0" step="10">' +
+        '</div>' +
+        '<p class="demo-inputbar__hint">' + esc(t('demo.inputLabels.costNote')) + '</p>' +
+        '<div class="demo-inputbar__row">' +
+        '<input type="text" class="demo-inputbar__number demo-inputbar__number--readonly" id="demo-margin-readout" readonly aria-label="' + esc(t('demo.inputLabels.margin')) + '">' +
+        '</div>' +
+        '<p class="field-error" id="demo-margin-error">' + esc(t('validation.marginInvalid')) + '</p>' +
+        '<button type="button" class="link-btn" data-action="demo-cost-toggle">' + esc(t('demo.inputLabels.costToggleOff')) + '</button>';
+    }
+    var cfg = demoFieldConfig.g;
+    return '<label class="demo-inputbar__label">' + esc(t('demo.inputLabels.margin')) + '</label>' +
+      '<div class="demo-inputbar__row">' +
+      '<input type="number" class="demo-inputbar__number" id="demo-num-g" min="' + cfg.min + '" max="' + cfg.max + '" step="' + cfg.step + '">' +
+      '</div>' +
+      '<input type="range" class="demo-inputbar__slider" id="demo-slider-g" min="' + cfg.min + '" max="' + cfg.max + '" step="' + cfg.step + '">' +
+      '<span id="demo-margin-chip-slot"></span>' +
+      '<button type="button" class="link-btn" data-action="demo-cost-toggle">' + esc(t('demo.inputLabels.costToggleOn')) + '</button>';
+  }
+
+  function bindDemoMarginFieldEvents() {
+    if (demoState.costMode) {
+      var cEl = qs('#demo-num-c');
+      // 他の数値欄（S/N/R/H）と同じく、キー入力の都度 onDemoFieldChange→renderDemoAll で
+      // ステージパネルまで即時反映する（renderDemoAllは構造再構築をしないためフォーカスは保持される）
+      on(cEl, 'input', function () { onDemoFieldChange('C', this.value === '' ? null : parseFloat(this.value)); });
+      on(cEl, 'focus', function () { demoState.lastField = 'C'; });
+    } else {
+      demoRefs.gnum = qs('#demo-num-g');
+      demoRefs.gslider = qs('#demo-slider-g');
+      on(demoRefs.gnum, 'input', function () { onDemoFieldChange('g', this.value === '' ? null : parseFloat(this.value)); });
+      on(demoRefs.gslider, 'input', function () { onDemoFieldChange('g', parseFloat(this.value)); });
+      on(demoRefs.gnum, 'focus', function () { demoState.lastField = 'g'; });
+      on(demoRefs.gslider, 'focus', function () { demoState.lastField = 'g'; });
+    }
+  }
+
+  // fix5：costMode切替・業種変更など構造が変わる時だけ呼ぶ（キー入力の度に呼ぶとフォーカスが飛ぶ）
+  function renderDemoMarginField() {
+    var slot = qs('#demo-margin-field');
+    if (!slot) return;
+    slot.innerHTML = demoMarginFieldInnerHtml();
+    bindDemoMarginFieldEvents();
+    syncDemoMarginField();
+  }
+
+  // fix5：値の同期のみ（DOM構造は変えない）。renderDemoAll経由で毎回呼ばれる
+  function syncDemoMarginField() {
+    var i = demoState.inputs;
+    if (demoState.costMode) {
+      var cEl = qs('#demo-num-c');
+      if (cEl && document.activeElement !== cEl) cEl.value = i.C == null ? '' : i.C;
+      var readout = qs('#demo-margin-readout');
+      var derived = computeMarginFromCost(i.S, i.C);
+      var ok = isValidMarginPct(derived);
+      if (readout) readout.value = ok ? fmtPct1(derived) + '%' : '—';
+      var errEl = qs('#demo-margin-error');
+      if (errEl) errEl.classList.toggle('is-visible', isFiniteNum(i.C) && !ok);
+    } else {
+      var cfg = demoFieldConfig.g;
+      var numEl = qs('#demo-num-g'), sliderEl = qs('#demo-slider-g');
+      if (numEl && document.activeElement !== numEl) numEl.value = i.g == null ? '' : i.g;
+      if (sliderEl && document.activeElement !== sliderEl) sliderEl.value = isFiniteNum(i.g) ? i.g : cfg.min;
+      var chipSlot = qs('#demo-margin-chip-slot');
+      if (chipSlot) {
+        var entry = i.ind ? findIndustry(i.ind) : null;
+        var mw = entry && entry.arari && entry.arari.grossMarginRate;
+        var show = mw && isFiniteNum(mw.value) && mw.confidence !== 'unavailable' && isFiniteNum(i.g) && Math.abs(i.g - mw.value) < 0.05;
+        chipSlot.innerHTML = show ? sourceChipHtml(mw, 'demo') : '';
+      }
+    }
   }
 
   function onDemoFieldChange(field, value) {
     demoState.inputs[field] = value;
-    if (field === 'g') demoState.inputs.C = null;
+    if (field === 'g') {
+      demoState.inputs.C = null;
+      demoState.gManuallyEdited = true; // fix5：手で変えたら以後、業種選択での自動代入は止める
+    } else if (field === 'C') {
+      demoState.inputs.g = null; // fix5：原価入力中はgを常に空にしておく（古いgへのフォールバックを防ぐ）
+    }
     persistDemo();
     renderDemoAll();
   }
 
   function syncDemoInputBar() {
     var i = demoState.inputs;
-    ['S', 'g', 'N', 'R', 'H'].forEach(function (f) {
+    ['S', 'N', 'R', 'H'].forEach(function (f) {
       var numEl = demoRefs[f + 'num'], sliderEl = demoRefs[f + 'slider'];
       var v = i[f];
       if (numEl && document.activeElement !== numEl) numEl.value = v == null ? '' : v;
       if (sliderEl && document.activeElement !== sliderEl) sliderEl.value = isFiniteNum(v) ? v : demoFieldConfig[f].min;
     });
+    syncDemoMarginField();
     var indEl = qs('#demo-select-ind'); if (indEl && document.activeElement !== indEl) indEl.value = i.ind || '';
     var prefEl = qs('#demo-select-pref'); if (prefEl && document.activeElement !== prefEl) prefEl.value = i.pref || '';
 
@@ -1204,6 +1367,23 @@
     if (action === 'demo-goto-stage') { demoState.stage = parseInt(el.getAttribute('data-stage'), 10); persistDemo(); renderDemoAll(); }
     if (action === 'demo-toggle-mode') { demoState.idealMode = el.getAttribute('data-mode'); persistDemo(); renderDemoAll(); }
     if (action === 'demo-bench-select') { demoState.benchmarkId = el.getAttribute('data-bench-id'); persistDemo(); renderDemoAll(); }
+    if (action === 'demo-cost-toggle') {
+      if (!demoState.costMode) {
+        demoState.costMode = true;
+        demoState.inputs.g = null; // fix5：原価モードに入ったら古いgに戻らないようクリア
+        demoState.inputs.C = null;
+      } else {
+        // 原価から入れる → ％で入力する：直前まで表示していた粗利率をそのまま引き継ぐ
+        var derived = computeMarginFromCost(demoState.inputs.S, demoState.inputs.C);
+        demoState.costMode = false;
+        demoState.inputs.g = isValidMarginPct(derived) ? Math.round(derived * 10) / 10 : null;
+        demoState.inputs.C = null;
+        demoState.gManuallyEdited = true; // 原価から引き継いだ値は「入力済み」扱い（業種変更で上書きしない）
+      }
+      persistDemo();
+      renderDemoMarginField();
+      renderDemoAll();
+    }
     if (action === 'source-open') { openSourceSheet(el.getAttribute('data-source-id'), el.getAttribute('data-source-conf'), el.getAttribute('data-source-formula'), 'demo'); }
     if (action === 'guard-suggest') {
       var ctx = demoComputation();
