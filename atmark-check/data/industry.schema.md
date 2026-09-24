@@ -244,5 +244,5 @@ CSVセクションBの `pref, part_hourly, part_hourly_year` 列に対応。
 
 1. **`allIndustry`（全産業平均）はT2に元データが無い。** 現状スキーマは `confidence:"unavailable"` で通す設計。I2粗利率の初期値をどう出すかはルイ（UI）判断が必要になるため、マッチョに要確認としてT0中間報告で明記した。
 2. **`minWage[].prevAmount`（発効前の旧額）もT2に元データが無い。** 同様に `unavailable` で通す。「未発効ならprevAmountを表示」の要件を満たすタイミングは次回データ収集ラウンド判断。
-3. **`stages[]` の `sourceId`（`S4_tanahara_stage_ron`）は暫定発番。** `sources[]` への正式登録は棚原さんのステージ論数値確認（承認ゲート7番）後に行う。
+3. **`stages[]` の `sourceId`（`S4_tanahara_stage_ron`）は 2026-09-24 に棚原さん本人がステージ論数値（1,000/2,000/3,000万円・月35万円逆算）を確認済み → `sources[]` に正式登録・`confidence: confirmed`。**
 4. 上記3点はいずれも「値が無い＝`unavailable`」で表現しており、**`null`や`0`で埋めるアンチパターンは踏んでいない**（ヒナタへの申し送りと同じ基準をスキーマ自身が強制する）。
