@@ -14,7 +14,7 @@ build_industry.py — T2 CSV（業種データ本体・タクミ）→ data/indu
 【マッチョ確定事項（T3ブリーフより）】
 - allIndustry（全産業平均）は不要 → unavailable のまま
 - minWage[].prevAmount はv1では不要（令和7年度分は全都道府県で発効済み） → unavailable のまま
-- stages[] は confidence: estimated 固定（棚原さん本人の確認待ち）
+- stages[] は confidence: confirmed 固定（棚原さん本人が2026-09-24に確認済み・マッチョ指示によりestimatedから変更）
 """
 
 import csv
@@ -206,15 +206,29 @@ def build_sources():
             "url": "https://www.e-stat.go.jp/stat-search/files?page=1&toukei=00450091&tstat=000001011429&tclass1=000001229845",
             "retrievedDate": "2026-09-24",
         },
+        {
+            # 棚原確定（2026-09-24・マッチョ指示）：ステージ論（1,000/2,000/3,000万円・月35万円の生活費からの逆算）は
+            # 棚原さん本人が確認済み。sources[]へ正式登録し、stages[]のconfidenceをconfirmedに変更する。
+            # name はpublisher・surveyYearを含めない（sourcesListHtml/出典シートが自動で
+            # 「name（publisher・surveyYear）」の形に組み立てるため、含めると二重表示になる。
+            # 結果として画面には「棚原メソッド ＠ステージ論（U-WAN・2026）」と表示される。
+            "id": "S4_tanahara_stage_ron",
+            "name": "棚原メソッド ＠ステージ論",
+            "publisher": "U-WAN",
+            "surveyYear": 2026,
+            "url": None,
+            "retrievedDate": "2026-09-24",
+        },
     ]
 
 
 def build_stages():
+    # 棚原確定（2026-09-24・マッチョ指示）：ステージ論の数値は棚原さん本人が確認済みのため confirmed 固定。
     basis = "月35万円の生活費からの逆算"
     return [
-        {"stageNumber": 1, "label": "ステージ1", "atmark": value_wrapper(1000, "万円", "S4_tanahara_stage_ron", "estimated"), "basis": basis},
-        {"stageNumber": 2, "label": "ステージ2", "atmark": value_wrapper(2000, "万円", "S4_tanahara_stage_ron", "estimated"), "basis": basis},
-        {"stageNumber": 3, "label": "ステージ3", "atmark": value_wrapper(3000, "万円", "S4_tanahara_stage_ron", "estimated"), "basis": basis},
+        {"stageNumber": 1, "label": "ステージ1", "atmark": value_wrapper(1000, "万円", "S4_tanahara_stage_ron", "confirmed"), "basis": basis},
+        {"stageNumber": 2, "label": "ステージ2", "atmark": value_wrapper(2000, "万円", "S4_tanahara_stage_ron", "confirmed"), "basis": basis},
+        {"stageNumber": 3, "label": "ステージ3", "atmark": value_wrapper(3000, "万円", "S4_tanahara_stage_ron", "confirmed"), "basis": basis},
     ]
 
 

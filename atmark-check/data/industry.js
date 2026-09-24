@@ -2,7 +2,7 @@
  * 自動生成ファイル。手で編集しない。
  * 生成元: scripts/build-industry-js.js
  * 入力: data/industry.json
- * 生成日時: 2026-09-24T04:27:35.573Z
+ * 生成日時: 2026-09-24T06:11:30.480Z
  *
  * file:// で <script src="data/industry.js"></script> として読み込むためのJSON埋め込み版。
  * 正は data/industry.json（またはT3完了前は data/industry.sample.json）。
@@ -34,6 +34,14 @@ var INDUSTRY_DATA = {
       "publisher": "厚生労働省",
       "surveyYear": "令和7年",
       "url": "https://www.e-stat.go.jp/stat-search/files?page=1&toukei=00450091&tstat=000001011429&tclass1=000001229845",
+      "retrievedDate": "2026-09-24"
+    },
+    {
+      "id": "S4_tanahara_stage_ron",
+      "name": "棚原メソッド ＠ステージ論",
+      "publisher": "U-WAN",
+      "surveyYear": 2026,
+      "url": null,
       "retrievedDate": "2026-09-24"
     }
   ],
@@ -4320,7 +4328,7 @@ var INDUSTRY_DATA = {
         "value": 1000,
         "unit": "万円",
         "sourceId": "S4_tanahara_stage_ron",
-        "confidence": "estimated",
+        "confidence": "confirmed",
         "computed": false,
         "computeFormula": null,
         "usedInCalc": false
@@ -4334,7 +4342,7 @@ var INDUSTRY_DATA = {
         "value": 2000,
         "unit": "万円",
         "sourceId": "S4_tanahara_stage_ron",
-        "confidence": "estimated",
+        "confidence": "confirmed",
         "computed": false,
         "computeFormula": null,
         "usedInCalc": false
@@ -4348,7 +4356,7 @@ var INDUSTRY_DATA = {
         "value": 3000,
         "unit": "万円",
         "sourceId": "S4_tanahara_stage_ron",
-        "confidence": "estimated",
+        "confidence": "confirmed",
         "computed": false,
         "computeFormula": null,
         "usedInCalc": false

@@ -25,6 +25,14 @@
       "surveyYear": "令和7年",
       "url": "https://www.e-stat.go.jp/stat-search/files?page=1&toukei=00450091&tstat=000001011429&tclass1=000001229845",
       "retrievedDate": "2026-09-24"
+    },
+    {
+      "id": "S4_tanahara_stage_ron",
+      "name": "棚原メソッド ＠ステージ論",
+      "publisher": "U-WAN",
+      "surveyYear": 2026,
+      "url": null,
+      "retrievedDate": "2026-09-24"
     }
   ],
   "allIndustry": {
@@ -4310,7 +4318,7 @@
         "value": 1000,
         "unit": "万円",
         "sourceId": "S4_tanahara_stage_ron",
-        "confidence": "estimated",
+        "confidence": "confirmed",
         "computed": false,
         "computeFormula": null,
         "usedInCalc": false
@@ -4324,7 +4332,7 @@
         "value": 2000,
         "unit": "万円",
         "sourceId": "S4_tanahara_stage_ron",
-        "confidence": "estimated",
+        "confidence": "confirmed",
         "computed": false,
         "computeFormula": null,
         "usedInCalc": false
@@ -4338,7 +4346,7 @@
         "value": 3000,
         "unit": "万円",
         "sourceId": "S4_tanahara_stage_ron",
-        "confidence": "estimated",
+        "confidence": "confirmed",
         "computed": false,
         "computeFormula": null,
         "usedInCalc": false
