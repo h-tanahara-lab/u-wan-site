@@ -20,6 +20,20 @@
 
   function isFiniteNum(v) { return typeof v === 'number' && isFinite(v); }
 
+  /**
+   * calc.js の branch:'invalidInput' は S<=0／N<1／H範囲外／欠損マージンをまとめて
+   * 返すため、実際にどの入力が原因かを同じ優先順位（deriveMargin→validateNH）で
+   * 判定し、content.js の validation.* から正しい文言キーを選ぶ。
+   * marginInvalid（branch:'invalidMargin'）はこの関数を通さず呼び出し側で直接分岐する。
+   */
+  function inferInvalidInputKey(inputs) {
+    if (!isFiniteNum(inputs.S) || inputs.S <= 0) return 'salesRequired';
+    if (!isFiniteNum(inputs.N) || inputs.N < 1) return 'countTooLow';
+    var hProvided = inputs.H !== undefined && inputs.H !== null && inputs.H !== '';
+    if (hProvided && (!isFiniteNum(inputs.H) || inputs.H <= 0 || inputs.H > 100)) return 'hoursOutOfRange';
+    return 'salesRequired';
+  }
+
   function fmtNum(v) { return isFiniteNum(v) ? Math.round(v).toLocaleString('ja-JP') : '—'; }
   function fmtSigned(v) {
     if (!isFiniteNum(v)) return '—';
@@ -391,12 +405,15 @@
     }
   }
 
-  function showSelfPhase(phase) {
+  function showSelfPhase(phase, skipPersist) {
     selfState.phase = phase;
     qs('#self-intro').style.display = phase === 'intro' ? 'block' : 'none';
     qs('#self-question').style.display = phase === 'question' ? 'block' : 'none';
     qs('#self-result').style.display = phase === 'result' ? 'block' : 'none';
-    persistSelf();
+    // skipPersist: 初回起動時（boot()）の intro 表示では保存済み状態を上書きしない。
+    // ここで persistSelf() すると、renderSelfIntro() が読んだ「前回の続きから」用の
+    // 保存状態が空のintro状態で即座に上書きされ、続きボタンが機能しなくなるため。
+    if (!skipPersist) persistSelf();
   }
 
   /* ---------- Q1〜Q7 ---------- */
@@ -545,7 +562,7 @@
     var mode = 'self';
 
     if (ctx.current.branch !== 'ok') {
-      var invalidKey = ctx.current.branch === 'invalidMargin' ? 'marginInvalid' : 'salesRequired';
+      var invalidKey = ctx.current.branch === 'invalidMargin' ? 'marginInvalid' : inferInvalidInputKey(selfState.inputs);
       qs('#self-stage0').innerHTML = '<p class="guard-box__text">' + esc(t('validation.' + invalidKey)) + '</p>';
       qs('#self-stage0').style.display = 'block';
       ['#self-stage1', '#self-stage2a', '#self-stage2b', '#self-stage3', '#self-stage4'].forEach(function (s) { qs(s).style.display = 'none'; });
@@ -627,9 +644,9 @@
       s3html += guardBoxHtml(ctx.branch, mode, ctx);
     }
     if (ctx.branch === 'noTarget' || ctx.branch === 'noBenchmark') {
-      s3html += '<p class="guard-box__text">' + (ctx.branch === 'noTarget'
-        ? 'Stage2で、欲しい年収・時給を入力するか「参考を見る」から水準を選んでください。'
-        : 'Stage2の参考カードから、比べたい水準を選んでください。') + '</p>';
+      s3html += '<p class="guard-box__text">' + esc(ctx.branch === 'noTarget'
+        ? t('self.stage3.guardNoTarget')
+        : t('self.stage3.guardNoBenchmark')) + '</p>';
     }
     if (ctx.allocation) {
       s3html += allocationBarHtml(ctx.allocation, current, mode);
@@ -993,7 +1010,8 @@
     var mode = 'demo';
 
     if (ctx.branch === 'invalidInput' || ctx.branch === 'invalidMargin') {
-      panel.innerHTML = '<p class="guard-box__text">' + esc(t('validation.' + (ctx.branch === 'invalidMargin' ? 'marginInvalid' : 'salesRequired'))) + '</p>';
+      var demoInvalidKey = ctx.branch === 'invalidMargin' ? 'marginInvalid' : inferInvalidInputKey(demoState.inputs);
+      panel.innerHTML = '<p class="guard-box__text">' + esc(t('validation.' + demoInvalidKey)) + '</p>';
       return;
     }
 
@@ -1011,7 +1029,7 @@
       var partW = demoState.inputs.pref ? findPartWage(demoState.inputs.pref) : null;
       if (!demoState.inputs.pref) {
         html += '<div class="big-number">' + (current.W0 == null ? '—' : fmtNum(current.W0)) + '<span class="big-number__unit">円/時</span></div>';
-        html += '<p class="hint-row">都道府県を選ぶと、最低賃金・パート時給と並べて表示します。</p>';
+        html += '<p class="hint-row">' + esc(t('demo.stage1.hintPrefSelect', mode)) + '</p>';
       } else {
         html += '<div class="wage-compare">' +
           '<div class="wage-compare__item"><div class="wage-compare__label">社長の時給</div><div class="wage-compare__value">' + (current.W0 == null ? '—' : fmtNum(current.W0) + '円') + '</div></div>' +
@@ -1045,7 +1063,7 @@
       if (current.laborShareHigh) html += guardBoxHtml('laborShareHigh', mode, ctx).replace('guard-box', 'labor-share-box');
       if (['alreadyAbove', 'belowKeep', 'targetBelowCurrent', 'reachableNow', 'stageOnly'].indexOf(ctx.branch) !== -1) html += guardBoxHtml(ctx.branch, mode, ctx);
       if (ctx.branch === 'noTarget' || ctx.branch === 'noBenchmark') {
-        html += '<p class="guard-box__text">' + (ctx.branch === 'noTarget' ? '欲しい年収・時給を入力してください。' : 'ベンチマークを選んでください（Bキーで切替）。') + '</p>';
+        html += '<p class="guard-box__text">' + esc(ctx.branch === 'noTarget' ? t('demo.stage2.guardNoTarget', mode) : t('demo.stage2.guardNoBenchmark', mode)) + '</p>';
       }
       if (ctx.allocation) {
         html += allocationBarHtml(ctx.allocation, current, mode);
@@ -1061,14 +1079,14 @@
       html += '<div class="demo-stage-heading">' + esc(t('demo.stage4.heading', mode)) + '</div>';
       if (ctx.diff) {
         html += '<div class="demo-columns">';
-        html += colHtml(t('demo.columnHeaders.current', mode), current, ctx.wageAssumption);
-        html += colHtml(t('demo.columnHeaders.ideal', mode), demoIdealGeneric(ctx));
+        html += colHtml(t('demo.columnHeaders.current', mode), current, 'current');
+        html += colHtml(t('demo.columnHeaders.ideal', mode), demoIdealGeneric(ctx), 'ideal');
         html += diffColHtml(t('demo.columnHeaders.diff', mode), ctx.diff);
         html += '</div>';
         var reqSalesGrowth = ctx.ideal.salesGrowthPct;
         if (isFiniteNum(reqSalesGrowth)) html += '<p class="hint-row">' + esc(t('common.salesGrowthNote', mode)) + '　' + fmtSigned(reqSalesGrowth) + '%</p>';
       } else if (ctx.branch === 'noTarget' || ctx.branch === 'noBenchmark') {
-        html += '<p class="guard-box__text">Stage2で理想の水準を選んでください。</p>';
+        html += '<p class="guard-box__text">' + esc(t('demo.stage4.guardStage2Required', mode)) + '</p>';
       } else {
         html += guardBoxHtml(ctx.branch, mode, ctx);
       }
@@ -1091,22 +1109,28 @@
     return { atmark: ctx.ideal.A1, grossProfit: ctx.ideal.G1, officerComp: ctx.ideal.R1, hourlyWage: ctx.ideal.W1, requiredSales: ctx.ideal.S1 };
   }
 
-  function colHtml(header, v) {
+  function colHtml(header, v, colType) {
+    // colType: 'current'（現状列＝実績の売上高） | 'ideal'（理想列＝到達に必要な売上高）
+    // 現状列に「必要売上」ラベルを使い回すと、既に達成済みの実績を「これから必要な数字」
+    // であるかのように誤読させるため、列種別でラベルを出し分ける（T14バグ④/T15指摘対応）。
+    var salesLabel = colType === 'current'
+      ? t('demo.rowLabels.currentSales', 'demo')
+      : t('demo.rowLabels.requiredSales', 'demo');
     return '<div><div class="demo-col-header">' + esc(header) + '</div>' +
       '<div class="diff-list">' +
-      '<div class="diff-row"><span class="diff-row__label">＠</span><span class="diff-value">' + fmtNum(v.atmark != null ? v.atmark : v.A0) + '万円</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">粗利</span><span class="diff-value">' + fmtNum(v.grossProfit != null ? v.grossProfit : v.G) + '万円</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">役員報酬</span><span class="diff-value">' + fmtNum(v.officerComp != null ? v.officerComp : v.R) + '万円</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">時給</span><span class="diff-value">' + (isFiniteNum(v.hourlyWage != null ? v.hourlyWage : v.W0) ? fmtNum(v.hourlyWage != null ? v.hourlyWage : v.W0) + '円' : '—') + '</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">必要売上</span><span class="diff-value">' + fmtNum(v.requiredSales != null ? v.requiredSales : v.S) + '万円</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.atmark', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.atmark != null ? v.atmark : v.A0) + '万円</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.grossProfit', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.grossProfit != null ? v.grossProfit : v.G) + '万円</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.officerComp', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.officerComp != null ? v.officerComp : v.R) + '万円</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.hourlyWage', 'demo')) + '</span><span class="diff-value">' + (isFiniteNum(v.hourlyWage != null ? v.hourlyWage : v.W0) ? fmtNum(v.hourlyWage != null ? v.hourlyWage : v.W0) + '円' : '—') + '</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(salesLabel) + '</span><span class="diff-value">' + fmtNum(v.requiredSales != null ? v.requiredSales : v.S) + '万円</span></div>' +
       '</div></div>';
   }
   function diffColHtml(header, diff) {
     return '<div><div class="demo-col-header">' + esc(header) + '</div>' +
       '<div class="diff-list">' +
-      diffRowRaw('＠', diff.atmark, false) + diffRowRaw('粗利', diff.grossProfit, false) +
-      diffRowRaw('役員報酬', diff.officerComp, false) + diffRowRaw('時給', diff.hourlyWage, true) +
-      diffRowRaw('必要売上', diff.requiredSales, false) +
+      diffRowRaw(t('demo.rowLabels.atmark', 'demo'), diff.atmark, false) + diffRowRaw(t('demo.rowLabels.grossProfit', 'demo'), diff.grossProfit, false) +
+      diffRowRaw(t('demo.rowLabels.officerComp', 'demo'), diff.officerComp, false) + diffRowRaw(t('demo.rowLabels.hourlyWage', 'demo'), diff.hourlyWage, true) +
+      diffRowRaw(t('demo.rowLabels.requiredSales', 'demo'), diff.requiredSales, false) +
       '</div></div>';
   }
   function diffRowRaw(label, v, isHourly) {
@@ -1163,7 +1187,7 @@
       demoState.idealMode = demoState.idealMode === 'benchmark' ? 'target' : 'benchmark';
       persistDemo(); renderDemoAll();
     } else if (e.key === 'r' || e.key === 'R') {
-      if (window.confirm('入力をリセットしますか？')) { demoState = defaultDemoState(); persistDemo(); syncDemoInputBar(); renderDemoAll(); }
+      if (window.confirm(t('demo.resetConfirm', 'demo'))) { demoState = defaultDemoState(); persistDemo(); syncDemoInputBar(); renderDemoAll(); }
     } else if (e.key === 'f' || e.key === 'F') {
       if (document.fullscreenElement) document.exitFullscreen();
       else if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
@@ -1206,7 +1230,7 @@
       selfState = defaultSelfState();
       applyStateFromHash(selfState.inputs);
       renderSelfIntro();
-      showSelfPhase('intro');
+      showSelfPhase('intro', true);
     }
   }
 

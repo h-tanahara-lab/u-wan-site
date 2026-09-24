@@ -644,7 +644,7 @@ html[data-display="projector"] .demo-shell {
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
 }
-@media (max-width: 768px) {
+@media (max-width: 767.98px) {
   .demo-columns { grid-template-columns: 1fr; }
 }
 .demo-col-header {

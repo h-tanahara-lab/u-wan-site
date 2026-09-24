@@ -149,6 +149,8 @@
         labelProfit: '利益｜会社に残す利益',
         idealComp: '理想の役員報酬　{{R1}}万円',
         idealHourly: '理想の時給　{{W1}}円',
+        guardNoTarget: 'Stage2で、欲しい年収・時給を入力するか「参考を見る」から水準を選んでください。',
+        guardNoBenchmark: 'Stage2の参考カードから、比べたい水準を選んでください。',
       },
       stage4: {
         heading: '差額',
@@ -185,12 +187,31 @@
         pref: '都道府県',
       },
       columnHeaders: { current: '現状', ideal: '理想', diff: '差額' },
+      rowLabels: {
+        atmark: '＠',
+        grossProfit: '粗利',
+        officerComp: '役員報酬',
+        hourlyWage: '時給',
+        currentSales: '売上高',
+        requiredSales: '必要売上',
+      },
       stage0: { heading: '今の＠' },
-      stage1: { heading: '社長の時給' },
-      stage2: { heading: '理想の＠' },
+      stage1: {
+        heading: '社長の時給',
+        hintPrefSelect: '都道府県を選ぶと、最低賃金・パート時給と並べて表示します。',
+      },
+      stage2: {
+        heading: '理想の＠',
+        guardNoTarget: '欲しい年収・時給を入力してください。',
+        guardNoBenchmark: 'ベンチマークを選んでください（Bキーで切替）。',
+      },
       stage3: { heading: '粗利の配分（4:2:2:2）' },
-      stage4: { heading: '差額と次の一歩' },
+      stage4: {
+        heading: '差額と次の一歩',
+        guardStage2Required: 'Stage2で理想の水準を選んでください。',
+      },
       keyboardHelp: '←/→でステージ移動、0〜4で直接ジャンプ、↑/↓で数値調整、Bでベンチマーク切替、Mで理想モード切替、Rでリセット、Fでフルスクリーン',
+      resetConfirm: '入力をリセットしますか？',
     },
 
     guard: {
@@ -220,7 +241,7 @@
         button: { demo: '社員給与を入力する', self: '社員給与を入力する' },
       },
       laborShareHigh: {
-        demo: '人件費への投資が大きい会社です',
+        demo: '人件費が粗利の{{rho0}}%を占めています。＠が{{atmarkBe}}万円を超えると、100万円上がるごとに{{fortyN}}万円の余裕が生まれます。',
         self: '今は粗利のうち人件費が{{rho0}}%を占めています。つまり、この会社は人に投資している会社です。＠が{{atmarkBe}}万円を超えると、人件費枠に余裕が生まれ始めます。そこから先は、＠が100万円上がるごとに{{fortyN}}万円の余裕が生まれます。伸びしろが一番大きいのはここです。',
         button: { demo: '一つ上の水準を提案する', self: '一つ上の水準を提案する' },
       },
