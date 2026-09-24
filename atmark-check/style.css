@@ -624,6 +624,11 @@ html[data-display="projector"] .demo-shell {
 }
 .demo-stage-dot.is-active { background: var(--color-navy); color: var(--color-white); border-color: var(--color-navy); }
 .demo-mode-toggle { display: flex; gap: 8px; }
+.demo-mode-hint {
+  margin: -8px 0 16px;
+  font-size: 0.8rem;
+  color: var(--color-text-light);
+}
 
 .demo-stage {
   background: var(--color-white);

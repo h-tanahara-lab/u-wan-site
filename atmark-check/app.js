@@ -228,6 +228,27 @@
     };
   }
 
+  /**
+   * syncTargetPair(target, inputs, editedField)
+   * fix3-1：「欲しい年収(W・万円)」と「欲しい時給(hourlyWage・円)」の双方向同期。
+   * editedField（'W'|'hourlyWage'）に入っている値を正として、年収(万円) = 時給(円) ×
+   * 週労働時間T(=H×WEEKS_PER_YEAR) ÷ 10000（calc.js computeIdealByTarget と同じ式）から
+   * もう片方を再計算する。週労働時間Hが変わった後の再同期にも同じ関数を使う
+   * （直近に編集した方＝editedFieldを正として計算し直す）。
+   * 参照：STRAC_v1.html L1473-1528 renderStrategy/onStrategyInput（片方を正・もう片方を導出する方式）。
+   */
+  function syncTargetPair(target, inputs, editedField) {
+    target.lastEdited = editedField;
+    var wageAssumption = AtmarkCalc.resolveWageAssumption(inputs, inputs.ind ? findIndustry(inputs.ind) : null);
+    var current = AtmarkCalc.computeCurrent(inputs, wageAssumption);
+    var T = (current.branch === 'ok' && isFiniteNum(current.T) && current.T > 0) ? current.T : null;
+    if (editedField === 'W') {
+      target.hourlyWage = (T && isFiniteNum(target.W)) ? Math.round((target.W * 10000) / T) : null;
+    } else if (editedField === 'hourlyWage') {
+      target.W = (T && isFiniteNum(target.hourlyWage)) ? Math.round((target.hourlyWage * T) / 10000) : null;
+    }
+  }
+
   /* ============================================================
      出典ボトムシート
      ============================================================ */
@@ -373,7 +394,7 @@
       stageIndex: 0,
       idealMode: 'target', // self既定：まず「あなたはいくら欲しいですか」（Stage2a）
       benchmarkId: null,
-      target: { W: null, hourlyWage: null },
+      target: { W: null, hourlyWage: null, lastEdited: null },
     };
   }
 
@@ -596,14 +617,17 @@
 
     // Stage2a
     var s2a = qs('#self-stage2a');
+    // fix3-1：Q5で週労働時間(H)を入力/変更した後にStage2aへ来た場合も、直近に編集した
+    // 方（lastEdited）を正として、現在のTでもう片方を再計算してから表示する
+    if (selfState.target.lastEdited) syncTargetPair(selfState.target, selfState.inputs, selfState.target.lastEdited);
     var incomeVal = selfState.target.W;
     var hourlyVal = selfState.target.hourlyWage;
     s2a.innerHTML = '<div class="stage-heading">' + esc(t('self.stage2a.heading')) + '</div>' +
       '<p class="stage-subtext">' + esc(t('self.stage2a.subtext')) + '</p>' +
       '<div class="field-group"><label class="field-label">' + esc(t('self.stage2a.inputLabelIncome')) + '</label>' +
-      '<input class="field-input" type="number" data-bind-target="W" value="' + (incomeVal == null ? '' : incomeVal) + '"></div>' +
+      '<input class="field-input" type="number" id="self-target-w" data-bind-target="W" value="' + (incomeVal == null ? '' : incomeVal) + '"></div>' +
       '<div class="field-group"><label class="field-label">' + esc(t('self.stage2a.inputLabelHourly')) + '</label>' +
-      '<input class="field-input" type="number" data-bind-target="hourlyWage" value="' + (hourlyVal == null ? '' : hourlyVal) + '"></div>' +
+      '<input class="field-input" type="number" id="self-target-hourly" data-bind-target="hourlyWage" value="' + (hourlyVal == null ? '' : hourlyVal) + '"></div>' +
       '<div class="q-nav">' +
       '<button type="button" class="btn btn--ghost btn--sm" data-action="stage2a-skip">' + esc(t('self.stage2a.skipButton')) + '</button>' +
       '<button type="button" class="btn btn--primary" data-action="stage2a-use-target">' + esc(t('self.stage2a.useTargetButton')) + '</button>' +
@@ -742,10 +766,17 @@
     }
     var bindTarget = t2.getAttribute('data-bind-target');
     if (bindTarget) {
+      // fix3-1：年収⇄時給の双方向同期。入力中のフィールドを正とし、もう片方は
+      // STRAC_v1.html L1473-1528と同じ「document.activeElementでないときだけ書き戻す」方式で更新する
       var v2 = t2.value === '' ? null : parseFloat(t2.value);
       selfState.target[bindTarget] = v2;
-      if (bindTarget === 'W') selfState.target.hourlyWage = null;
-      if (bindTarget === 'hourlyWage') selfState.target.W = null;
+      syncTargetPair(selfState.target, selfState.inputs, bindTarget);
+      var pairId = bindTarget === 'W' ? 'self-target-hourly' : 'self-target-w';
+      var pairEl = document.getElementById(pairId);
+      if (pairEl && document.activeElement !== pairEl) {
+        var pairVal = bindTarget === 'W' ? selfState.target.hourlyWage : selfState.target.W;
+        pairEl.value = pairVal == null ? '' : pairVal;
+      }
       persistSelf();
     }
   });
@@ -902,7 +933,7 @@
       inputs: { S: 5000, g: 40, C: null, N: 3, R: 600, H: 60, E: null, ind: '', pref: '' },
       idealMode: 'benchmark',
       benchmarkId: 'stage1',
-      target: { W: null, hourlyWage: null },
+      target: { W: null, hourlyWage: null, lastEdited: null },
       stage: 0,
       lastField: 'S',
     };
@@ -985,6 +1016,11 @@
       b.classList.toggle('btn--primary', b.getAttribute('data-mode') === demoState.idealMode);
       b.classList.toggle('btn--ghost', b.getAttribute('data-mode') !== demoState.idealMode);
     });
+
+    // fix3-2：「目安から選ぶ」「欲しい年収から逆算」ボタンの意味が分からない指摘への対応。
+    // 切替後の画面冒頭（ボタン直下）に、今選ばれているモードの1行説明を出す
+    var modeHintEl = qs('#demo-mode-hint');
+    if (modeHintEl) modeHintEl.textContent = t('demo.modeToggleHint.' + demoState.idealMode, 'demo');
   }
 
   function demoComputation() {
@@ -1050,6 +1086,9 @@
             '<span class="bench-card__value">' + fmtNum(b.atmark) + esc(t('common.unit.manyen')) + ' ' + sourceChipHtml(b, mode) + '</span></button>';
         }).join('') + '</div>';
       } else {
+        // fix3-1：Hスライダーを動かした後の再描画でも、直近に編集した方（lastEdited）を
+        // 正として、現在のTでもう片方を再計算してから表示する
+        if (demoState.target.lastEdited) syncTargetPair(demoState.target, demoState.inputs, demoState.target.lastEdited);
         html += '<div class="demo-idealmode-inputs">' +
           '<div class="field-group"><label class="field-label">' + esc(t('demo.stage2.targetIncomeLabel', mode)) + '</label><input class="field-input" type="number" id="demo-target-w" value="' + (demoState.target.W == null ? '' : demoState.target.W) + '"></div>' +
           '<div class="field-group"><label class="field-label">' + esc(t('demo.stage2.targetHourlyLabel', mode)) + '</label><input class="field-input" type="number" id="demo-target-hourly" value="' + (demoState.target.hourlyWage == null ? '' : demoState.target.hourlyWage) + '"></div>' +
@@ -1094,8 +1133,28 @@
     panel.innerHTML = html;
 
     if (stage === 2 && demoState.idealMode === 'target') {
-      on(qs('#demo-target-w'), 'change', function () { demoState.target.W = this.value === '' ? null : parseFloat(this.value); demoState.target.hourlyWage = null; persistDemo(); renderDemoAll(); });
-      on(qs('#demo-target-hourly'), 'change', function () { demoState.target.hourlyWage = this.value === '' ? null : parseFloat(this.value); demoState.target.W = null; persistDemo(); renderDemoAll(); });
+      // fix3-1：年収⇄時給の双方向同期。'input'では書き戻しのみ（focus中のフィールドを
+      // 奪わないためrenderDemoAllは呼ばない）、'change'（確定時）でガード文言等を再描画する
+      var demoTargetWEl = qs('#demo-target-w');
+      var demoTargetHEl = qs('#demo-target-hourly');
+      on(demoTargetWEl, 'input', function () {
+        demoState.target.W = this.value === '' ? null : parseFloat(this.value);
+        syncTargetPair(demoState.target, demoState.inputs, 'W');
+        if (demoTargetHEl && document.activeElement !== demoTargetHEl) {
+          demoTargetHEl.value = demoState.target.hourlyWage == null ? '' : demoState.target.hourlyWage;
+        }
+        persistDemo();
+      });
+      on(demoTargetHEl, 'input', function () {
+        demoState.target.hourlyWage = this.value === '' ? null : parseFloat(this.value);
+        syncTargetPair(demoState.target, demoState.inputs, 'hourlyWage');
+        if (demoTargetWEl && document.activeElement !== demoTargetWEl) {
+          demoTargetWEl.value = demoState.target.W == null ? '' : demoState.target.W;
+        }
+        persistDemo();
+      });
+      on(demoTargetWEl, 'change', function () { renderDemoAll(); });
+      on(demoTargetHEl, 'change', function () { renderDemoAll(); });
     }
   }
 
