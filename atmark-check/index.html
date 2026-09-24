@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>＠診断｜社長の時給が見える2分ツール</title>
+<meta name="description" content="売上・粗利率・人数・役員報酬だけで、一人当たり粗利（＠）と社長の時給を2分で見る診断ツールです。">
+
+<meta property="og:title" content="＠診断｜社長の時給が見える2分ツール">
+<meta property="og:description" content="売上・粗利率・人数・役員報酬だけで、一人当たり粗利（＠）と社長の時給を2分で見る診断ツールです。">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="ja_JP">
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="＠診断｜社長の時給が見える2分ツール">
+<meta name="twitter:description" content="売上・粗利率・人数・役員報酬だけで、一人当たり粗利（＠）と社長の時給を2分で見る診断ツールです。">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "＠診断",
+  "description": "一人当たり粗利（＠）と社長の時給を、売上・粗利率・人数・役員報酬から算出する簡易診断ツール",
+  "applicationCategory": "BusinessApplication",
+  "publisher": { "@type": "Organization", "name": "U-WAN" }
+}
+</script>
+
+<!-- 外部CDN・外部フォント不使用（会場ネット事故対策）。システムフォントのみ。 -->
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<noscript>
+  <div class="noscript-banner">このツールの表示にはJavaScriptが必要です。ブラウザの設定でJavaScriptを有効にしてください。</div>
+</noscript>
+
+<div id="js-error-banner" class="js-error-banner" role="alert"></div>
+
+<header class="site-header" role="banner">
+  <div class="site-header__inner">
+    <span class="site-header__logo">＠診断</span>
+    <span class="site-header__badge" id="mode-badge">事前診断</span>
+  </div>
+</header>
+
+<main id="main-content" role="main">
+
+  <!-- =========================================================
+       事前診断モード（既定・self）
+       ========================================================= -->
+  <div id="view-self" data-view="self">
+
+    <!-- intro -->
+    <section id="self-intro" class="container-narrow" aria-labelledby="self-intro-title">
+      <div class="card">
+        <h1 id="self-intro-title" class="self-intro__title"></h1>
+        <div class="self-intro__block" id="self-intro-whatyouget"></div>
+        <div class="self-intro__block" id="self-intro-duration"></div>
+        <div class="self-intro__privacy" id="self-intro-privacy"></div>
+
+        <div id="self-returning" class="self-returning" style="display:none;">
+          <button id="btn-returning-continue" data-action="self-returning-continue" class="btn btn--primary" type="button"></button>
+          <button id="btn-returning-restart" data-action="self-returning-restart" class="btn btn--ghost" type="button"></button>
+        </div>
+
+        <button id="btn-self-start" data-action="self-start" class="btn btn--cta btn--block" type="button"></button>
+      </div>
+    </section>
+
+    <!-- Q1〜Q7 ステッパー -->
+    <section id="self-question" class="container-narrow" style="display:none;" aria-labelledby="q-text" aria-live="polite">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span id="q-progress-label"></span>
+          <span id="q-progress-count"></span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="q-progress-fill" style="width:0%"></div></div>
+      </div>
+
+      <div class="card q-card">
+        <h2 class="q-text" id="q-text"></h2>
+        <p class="q-note" id="q-note"></p>
+
+        <div id="q-body"><!-- JSで質問ごとの入力UIをレンダリング --></div>
+
+        <div class="q-nav">
+          <button id="btn-q-prev" class="btn btn--ghost btn--sm" type="button" style="display:none;">&#8592; 戻る</button>
+          <button id="btn-q-next" class="btn btn--primary" type="button">次へ</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stage0〜4 -->
+    <section id="self-result" class="container-narrow" style="display:none;" aria-live="polite">
+      <div class="card" id="self-stage0" data-stage="0"></div>
+      <div class="card" id="self-stage1" data-stage="1" style="display:none;"></div>
+      <div class="card" id="self-stage2a" data-stage="2a" style="display:none;"></div>
+      <div class="card" id="self-stage2b" data-stage="2b" style="display:none;"></div>
+      <div class="card" id="self-stage3" data-stage="3" style="display:none;"></div>
+      <div class="card" id="self-stage4" data-stage="4" style="display:none;"></div>
+    </section>
+
+    <div class="footer-note">＠診断｜u-wan.jp/atmark-check/</div>
+  </div>
+
+  <!-- =========================================================
+       実演モード（?mode=demo）
+       ========================================================= -->
+  <div id="view-demo" data-view="demo">
+    <div class="demo-shell">
+
+      <div class="demo-inputbar" id="demo-inputbar"><!-- JSレンダリング --></div>
+
+      <div class="demo-stage-nav">
+        <div class="demo-stage-dots" id="demo-stage-dots" role="tablist" aria-label="ステージ"></div>
+        <div class="demo-mode-toggle" id="demo-mode-toggle"></div>
+      </div>
+
+      <div class="demo-stage" id="demo-stage-panel"><!-- JSレンダリング --></div>
+
+      <p class="demo-keyboard-help" id="demo-keyboard-help"></p>
+    </div>
+  </div>
+
+</main>
+
+<!-- 出典ボトムシート -->
+<div class="source-sheet-overlay" id="source-sheet-overlay">
+  <div class="source-sheet" id="source-sheet" role="dialog" aria-modal="true" aria-labelledby="source-sheet-title">
+    <button class="source-sheet__close" id="source-sheet-close" type="button" aria-label="閉じる">&times;</button>
+    <div class="source-sheet__title" id="source-sheet-title">出典</div>
+    <div id="source-sheet-body"></div>
+  </div>
+</div>
+
+<script src="calc.js"></script>
+<script src="data/industry.js"></script>
+<script src="content.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
