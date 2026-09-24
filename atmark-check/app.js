@@ -983,11 +983,6 @@
       return '<button type="button" class="demo-stage-dot" data-action="demo-goto-stage" data-stage="' + i + '" role="tab">' + i + '</button>';
     }).join('');
 
-    var toggleWrap = qs('#demo-mode-toggle');
-    toggleWrap.innerHTML =
-      '<button type="button" class="btn btn--ghost btn--sm" data-action="demo-toggle-mode" data-mode="benchmark">' + esc(t('demo.modeToggle.benchmark', 'demo')) + '</button>' +
-      '<button type="button" class="btn btn--ghost btn--sm" data-action="demo-toggle-mode" data-mode="target">' + esc(t('demo.modeToggle.target', 'demo')) + '</button>';
-
     qs('#demo-keyboard-help').textContent = t('demo.keyboardHelp', 'demo');
   }
 
@@ -1012,15 +1007,17 @@
     qsa('#demo-stage-dots .demo-stage-dot').forEach(function (dot) {
       dot.classList.toggle('is-active', parseInt(dot.getAttribute('data-stage'), 10) === demoState.stage);
     });
-    qsa('#demo-mode-toggle button').forEach(function (b) {
-      b.classList.toggle('btn--primary', b.getAttribute('data-mode') === demoState.idealMode);
-      b.classList.toggle('btn--ghost', b.getAttribute('data-mode') !== demoState.idealMode);
-    });
+  }
 
-    // fix3-2：「目安から選ぶ」「欲しい年収から逆算」ボタンの意味が分からない指摘への対応。
-    // 切替後の画面冒頭（ボタン直下）に、今選ばれているモードの1行説明を出す
-    var modeHintEl = qs('#demo-mode-hint');
-    if (modeHintEl) modeHintEl.textContent = t('demo.modeToggleHint.' + demoState.idealMode, 'demo');
+  // fix4：目安から選ぶ／欲しい年収から逆算の切替ボタン＋1行説明。Stage2カード内でのみ呼ぶ
+  function demoModeToggleHtml() {
+    return '<div class="demo-mode-toggle">' +
+      ['benchmark', 'target'].map(function (m) {
+        var activeCls = demoState.idealMode === m ? 'btn--primary' : 'btn--ghost';
+        return '<button type="button" class="btn ' + activeCls + ' btn--sm" data-action="demo-toggle-mode" data-mode="' + m + '">' + esc(t('demo.modeToggle.' + m, 'demo')) + '</button>';
+      }).join('') +
+      '</div>' +
+      '<p class="demo-mode-hint">' + esc(t('demo.modeToggleHint.' + demoState.idealMode, 'demo')) + '</p>';
   }
 
   function demoComputation() {
@@ -1075,6 +1072,9 @@
       html += weeklyHoursAssumedHtml(current, mode);
     } else if (stage === 2) {
       html += '<div class="demo-stage-heading">' + esc(t('demo.stage2.heading', mode)) + '</div>';
+      // fix4：目安/逆算の切替ボタンと1行説明は、常時表示だと「いつ押すものか分からない」ため
+      // Stage2カードの先頭（見出し直下）だけに出す。Stage0/1/3/4では表示しない
+      html += demoModeToggleHtml();
       if (demoState.idealMode === 'benchmark') {
         var benches = buildBenches(demoState.inputs.ind ? findIndustry(demoState.inputs.ind) : null);
         var threshold = Math.max(current.A0, isFiniteNum(current.atmarkKeep) ? current.atmarkKeep : current.A0);
@@ -1241,7 +1241,9 @@
         persistDemo(); renderDemoAll();
       }
     } else if (e.key === 'm' || e.key === 'M') {
+      // fix4：切替ボタンをStage2内に移したため、Mキーで切替えたら見える位置＝Stage2へ移動する
       demoState.idealMode = demoState.idealMode === 'benchmark' ? 'target' : 'benchmark';
+      demoState.stage = 2;
       persistDemo(); renderDemoAll();
     } else if (e.key === 'r' || e.key === 'R') {
       if (window.confirm(t('demo.resetConfirm', 'demo'))) { demoState = defaultDemoState(); persistDemo(); syncDemoInputBar(); renderDemoAll(); }

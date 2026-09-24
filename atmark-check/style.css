@@ -623,9 +623,10 @@ html[data-display="projector"] .demo-shell {
   display: flex; align-items: center; justify-content: center;
 }
 .demo-stage-dot.is-active { background: var(--color-navy); color: var(--color-white); border-color: var(--color-navy); }
-.demo-mode-toggle { display: flex; gap: 8px; }
+/* fix4：Stage2カード内（見出し直下）に表示する切替ボタン＋1行説明 */
+.demo-mode-toggle { display: flex; gap: 8px; margin-bottom: 8px; }
 .demo-mode-hint {
-  margin: -8px 0 16px;
+  margin: 0 0 20px;
   font-size: 0.8rem;
   color: var(--color-text-light);
 }
