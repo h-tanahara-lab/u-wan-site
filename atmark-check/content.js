@@ -27,6 +27,20 @@
     h1Sub: '一人当たり粗利と、社長の時給を2分で見る',
 
     common: {
+      unit: {
+        manyen: '万円',
+        yen: '円',
+        yenPerHour: '円/時',
+      },
+      notSelected: '選ばない',
+      benchmarkIndustryLabel: '業界平均',
+      allocationBarLabel: '目安（4:2:2:2）',
+      allocationCurrentLabel: '今の実配分（人件費 {{rho0}}%）',
+      modeBadge: { demo: '実演モード', self: '事前診断' },
+      button: {
+        next: '次へ',
+        seeResult: '結果を見る',
+      },
       atmarkDefinition: {
         demo: '＠＝粗利 ÷ 人数（社長を含む）',
         self: '＠（アットマーク）は、粗利を人数で割った数字です。人数には社長自身も含みます。',
@@ -38,6 +52,7 @@
         estimated: '出典：{{sourceName}}（{{sourceYear}}）｜推計',
         estimatedSelf: '出典：{{sourceName}}（{{sourceYear}}）をもとにした推計値です。',
         formula: '算式：{{computeFormula}}',
+        publisherLabel: '発行元：',
       },
       estimatedBadge: '推計',
       fukakachiNote: {
@@ -89,17 +104,24 @@
       q1: {
         text: '年間の売上高は、だいたいいくらくらいですか？',
         note: 'だいたいで大丈夫です。あとで直せます。',
+        chipLabels: ['1,000', '3,000', '5,000', '1億', '3億'],
       },
       q2: {
         text: '粗利率（売上に対して、原価を引いた残りの割合）は、どれくらいですか？',
         note: '原価の金額で入力することもできます。分からない場合は、業種の平均値で進められます。',
         unknownButton: '分からない → 業界平均で進む',
+        costLabel: '売上原価（万円）',
+        marginLabel: '粗利率（%）',
+        toggleToPercent: '％で入力する',
+        toggleToCost: '原価の金額で入力する',
+        industryFirst: '先に業種を選んでください',
       },
       q3: {
         text: '社長を含めて、何人で今の粗利を作っていますか？',
         note: 'パートは0.5人としてカウントしてください。AI社員や外注は人数に含めません。',
         helpIcon: '？',
         helpText: 'パートは0.5人／AI社員や外注は人数に含めません',
+        countLabel: '人数（社長を含む）',
       },
       q4: {
         text: '社長ご自身の、年間の役員報酬はいくらですか？',
@@ -108,10 +130,14 @@
       q5: {
         text: '社長の、1週間あたりの労働時間はどれくらいですか？',
         note: '分からない場合は、あとの結果で週60時間として仮に計算します。',
+        hoursChip: '週{{h}}時間',
+        noAnswer: '未回答',
       },
       q6: {
         text: '業種と都道府県を教えてください（任意）',
         note: '選んでいただくと、業界の数字と比べられるようになります。都道府県は選ばなくても進められます。',
+        industryLabel: '業種',
+        prefLabel: '都道府県',
       },
       q7: {
         text: '社員の給与総額（役員報酬は除く）が分かれば、教えてください（任意）',
@@ -132,6 +158,7 @@
         inputLabelIncome: '欲しい年収（万円）',
         inputLabelHourly: '欲しい時給（円）',
         skipButton: 'まだ決めていない → 参考を見る',
+        useTargetButton: 'この金額で見る',
       },
       stage2b: {
         heading: '参考：理想の＠の目安',
@@ -151,6 +178,7 @@
         idealHourly: '理想の時給　{{W1}}円',
         guardNoTarget: 'Stage2で、欲しい年収・時給を入力するか「参考を見る」から水準を選んでください。',
         guardNoBenchmark: 'Stage2の参考カードから、比べたい水準を選んでください。',
+        nextButton: '差額を見る',
       },
       stage4: {
         heading: '差額',
@@ -166,6 +194,7 @@
         ctaText: 'この数字をもとに、個別相談で次の一歩を一緒に整理できます。',
         ctaButton: '個別相談で次の一歩を聞く',
         copyLink: 'この結果のリンクをコピー — 個別相談で、この数字からそのまま話を続けられます（お名前・メールは含まれません）',
+        copyLinkButton: '結果のリンクをコピー',
         copyLinkDone: 'リンクをコピーしました',
         copyLinkSendNote: 'コピーしたリンクを、LINE・メール・Chatworkのいずれかで棚原に送ってください。',
       },
@@ -199,17 +228,22 @@
       stage1: {
         heading: '社長の時給',
         hintPrefSelect: '都道府県を選ぶと、最低賃金・パート時給と並べて表示します。',
+        presidentWageLabel: '社長の時給',
+        minWageUnavailable: '最低賃金（データなし）',
       },
       stage2: {
         heading: '理想の＠',
         guardNoTarget: '欲しい年収・時給を入力してください。',
         guardNoBenchmark: 'ベンチマークを選んでください（Bキーで切替）。',
+        targetIncomeLabel: '欲しい年収（万円）',
+        targetHourlyLabel: '欲しい時給（円）',
       },
       stage3: { heading: '粗利の配分（4:2:2:2）' },
       stage4: {
         heading: '差額と次の一歩',
         guardStage2Required: 'Stage2で理想の水準を選んでください。',
       },
+      modeToggle: { benchmark: 'ベンチマーク', target: '逆算' },
       keyboardHelp: '←/→でステージ移動、0〜4で直接ジャンプ、↑/↓で数値調整、Bでベンチマーク切替、Mで理想モード切替、Rでリセット、Fでフルスクリーン',
       resetConfirm: '入力をリセットしますか？',
     },

@@ -134,7 +134,7 @@
       benches.push({
         id: 'industry',
         kind: 'industry',
-        label: '業界平均',
+        label: t('common.benchmarkIndustryLabel'),
         atmark: industryEntry.arari.atmark.value,
         industryName: industryEntry.industryName,
         confidence: industryEntry.arari.atmark.confidence,
@@ -242,7 +242,7 @@
         ? tpl(t('common.sourceChip.estimated', mode), { sourceName: src.name, sourceYear: src.surveyYear })
         : tpl(t('common.sourceChip.confirmed', mode), { sourceName: src.name, sourceYear: src.surveyYear });
       lines.push('<p>' + esc(label) + '</p>');
-      lines.push('<p style="margin-top:8px;color:var(--color-text-muted)">発行元：' + esc(src.publisher) + '</p>');
+      lines.push('<p style="margin-top:8px;color:var(--color-text-muted)">' + esc(t('common.sourceChip.publisherLabel', mode)) + esc(src.publisher) + '</p>');
     }
     if (computeFormula) {
       lines.push('<p style="margin-top:8px;">' + esc(tpl(t('common.sourceChip.formula', mode), { computeFormula: computeFormula })) + '</p>');
@@ -288,7 +288,7 @@
       '<span class="alloc-legend__item"><span class="alloc-legend__dot" style="background:var(--color-profit)"></span>' + esc(t('self.stage3.labelProfit', mode)) + '</span>' +
       '</div>';
 
-    var bar = '<div class="alloc-bar-label">目安（4:2:2:2）</div>' +
+    var bar = '<div class="alloc-bar-label">' + esc(t('common.allocationBarLabel', mode)) + '</div>' +
       '<div class="alloc-bar">' +
       '<div class="alloc-bar__seg alloc-bar__seg--labor" style="width:' + pct(jinken) + '%">40%</div>' +
       '<div class="alloc-bar__seg alloc-bar__seg--fixed" style="width:' + pct(kotei) + '%">20%</div>' +
@@ -298,7 +298,7 @@
 
     var currentBar = '';
     if (rho0 !== null) {
-      currentBar = '<div class="alloc-bar-label">今の実配分（人件費 ' + fmtPct1(rho0) + '%）</div>' +
+      currentBar = '<div class="alloc-bar-label">' + esc(tpl(t('common.allocationCurrentLabel', mode), { rho0: fmtPct1(rho0) })) + '</div>' +
         '<div class="alloc-bar-current">' +
         '<div class="alloc-bar-current__labor" style="width:' + rho0 + '%"></div>' +
         '<div class="alloc-bar-current__rest" style="width:' + (100 - rho0) + '%"></div>' +
@@ -318,7 +318,7 @@
   /* ============================================================
      ガード分岐メッセージ
      ============================================================ */
-  function guardBoxHtml(branch, mode, ctx) {
+  function guardBoxHtml(branch, mode, ctx, hideButton) {
     var key = 'guard.' + branch;
     var msg = t(key, mode);
     if (branch === 'laborShareHigh') {
@@ -333,7 +333,7 @@
       alreadyAbove: 'guard-suggest', belowKeep: 'guard-suggest', laborShareHigh: 'guard-suggest',
       targetBelowCurrent: 'guard-reinput', reachableNow: 'guard-view-allocation', stageOnly: 'guard-focus-e',
     };
-    var action = actionMap[branch] || '';
+    var action = hideButton ? '' : (actionMap[branch] || '');
     return '<div class="guard-box"><p class="guard-box__text">' + esc(msg) + '</p>' +
       (action ? '<button type="button" class="btn btn--ghost btn--sm" data-action="' + action + '">' + esc(btnLabel) + '</button>' : '') +
       '</div>';
@@ -450,41 +450,41 @@
     var html = '';
 
     if (qkey === 'q1') {
-      html += fieldInputHtml('field-s', 'number', i.S, '万円');
-      html += chipRowHtml('s', [1000, 3000, 5000, 10000, 30000], i.S, ['1,000', '3,000', '5,000', '1億', '3億']);
+      html += fieldInputHtml('field-s', 'number', i.S, t('common.unit.manyen'));
+      html += chipRowHtml('s', [1000, 3000, 5000, 10000, 30000], i.S, ATMARK_CONTENT.self.q1.chipLabels);
       html += hintRowHtml();
     } else if (qkey === 'q2') {
       var usingCost = isFiniteNum(i.C);
       html += '<div class="field-group">' +
-        '<label class="field-label" for="field-g">' + (usingCost ? '売上原価（万円）' : '粗利率（%）') + '</label>' +
+        '<label class="field-label" for="field-g">' + esc(usingCost ? t('self.q2.costLabel') : t('self.q2.marginLabel')) + '</label>' +
         '<input class="field-input" id="field-g" type="number" step="0.1" data-bind="' + (usingCost ? 'C' : 'g') + '" value="' + (usingCost ? (i.C == null ? '' : i.C) : (i.g == null ? '' : i.g)) + '">' +
         '</div>';
-      html += '<button type="button" class="link-btn" data-action="q2-toggle-mode">' + (usingCost ? '％で入力する' : '原価の金額で入力する') + '</button><br>';
+      html += '<button type="button" class="link-btn" data-action="q2-toggle-mode">' + esc(usingCost ? t('self.q2.toggleToPercent') : t('self.q2.toggleToCost')) + '</button><br>';
       html += '<button type="button" class="link-btn" data-action="q2-unknown">' + esc(t('self.q2.unknownButton')) + '</button>';
       if (!i.ind) {
         html += '<div id="q2-inline-industry" class="field-group" style="display:none;margin-top:10px;">' +
-          '<label class="field-label">先に業種を選んでください</label>' +
+          '<label class="field-label">' + esc(t('self.q2.industryFirst')) + '</label>' +
           industrySelectHtml('q2-inline-ind', '') + '</div>';
       }
       html += hintRowHtml();
     } else if (qkey === 'q3') {
-      html += '<div class="field-group"><label class="field-label" for="field-n">人数（社長を含む）</label>' +
+      html += '<div class="field-group"><label class="field-label" for="field-n">' + esc(t('self.q3.countLabel')) + '</label>' +
         '<input class="field-input" id="field-n" type="number" step="0.5" min="1" data-bind="N" value="' + (i.N == null ? '' : i.N) + '"></div>' +
         '<span class="help-icon" data-action="q3-help-toggle">' + esc(t('self.q3.helpIcon')) + '</span>' +
         '<p class="help-text" id="q3-help-text">' + esc(t('self.q3.helpText')) + '</p>';
     } else if (qkey === 'q4') {
-      html += fieldInputHtml('field-r', 'number', i.R, '万円');
+      html += fieldInputHtml('field-r', 'number', i.R, t('common.unit.manyen'));
       html += chipRowHtml('r', [300, 600, 1000, 1500, 2000], i.R, ['300', '600', '1,000', '1,500', '2,000']);
       html += hintRowHtml();
     } else if (qkey === 'q5') {
       html += '<div class="chip-row">' + [40, 50, 60, 70, 80, 90].map(function (h) {
-        return '<button type="button" class="chip' + (i.H === h ? ' is-selected' : '') + '" data-action="q5-pick" data-value="' + h + '">週' + h + '時間</button>';
-      }).join('') + '<button type="button" class="chip' + (i.H == null ? ' is-selected' : '') + '" data-action="q5-pick" data-value="">未回答</button></div>';
+        return '<button type="button" class="chip' + (i.H === h ? ' is-selected' : '') + '" data-action="q5-pick" data-value="' + h + '">' + esc(tpl(t('self.q5.hoursChip'), { h: h })) + '</button>';
+      }).join('') + '<button type="button" class="chip' + (i.H == null ? ' is-selected' : '') + '" data-action="q5-pick" data-value="">' + esc(t('self.q5.noAnswer')) + '</button></div>';
     } else if (qkey === 'q6') {
-      html += '<div class="field-group"><label class="field-label">業種</label>' + industrySelectHtml('field-ind', i.ind) + '</div>';
-      html += '<div class="field-group"><label class="field-label">都道府県</label>' + prefSelectHtml('field-pref', i.pref) + '</div>';
+      html += '<div class="field-group"><label class="field-label">' + esc(t('self.q6.industryLabel')) + '</label>' + industrySelectHtml('field-ind', i.ind) + '</div>';
+      html += '<div class="field-group"><label class="field-label">' + esc(t('self.q6.prefLabel')) + '</label>' + prefSelectHtml('field-pref', i.pref) + '</div>';
     } else if (qkey === 'q7') {
-      html += fieldInputHtml('field-e', 'number', i.E, '万円');
+      html += fieldInputHtml('field-e', 'number', i.E, t('common.unit.manyen'));
       html += hintRowHtml();
     }
 
@@ -493,7 +493,7 @@
 
     var prevBtn = qs('#btn-q-prev');
     prevBtn.style.display = selfState.qIndex > 0 ? 'inline-flex' : 'none';
-    qs('#btn-q-next').textContent = (selfState.qIndex === total - 1) ? '結果を見る' : '次へ';
+    qs('#btn-q-next').textContent = (selfState.qIndex === total - 1) ? t('common.button.seeResult') : t('common.button.next');
   }
 
   function fieldInputHtml(id, type, val, unit) {
@@ -514,13 +514,13 @@
     return '<p class="hint-row">' + esc(t('common.inputHintRough')) + '　' + esc(t('common.inputHintEditable')) + '</p>';
   }
   function industrySelectHtml(id, selected) {
-    var opts = '<option value="">選ばない</option>' + getIndustryList().map(function (x) {
+    var opts = '<option value="">' + esc(t('common.notSelected')) + '</option>' + getIndustryList().map(function (x) {
       return '<option value="' + esc(x.code) + '"' + (x.code === selected ? ' selected' : '') + '>' + esc(x.name) + '</option>';
     }).join('');
     return '<select class="field-select" id="' + id + '" data-bind="ind">' + opts + '</select>';
   }
   function prefSelectHtml(id, selected) {
-    var opts = '<option value="">選ばない</option>' + getPrefList().map(function (p) {
+    var opts = '<option value="">' + esc(t('common.notSelected')) + '</option>' + getPrefList().map(function (p) {
       return '<option value="' + esc(p) + '"' + (p === selected ? ' selected' : '') + '>' + esc(p) + '</option>';
     }).join('');
     return '<select class="field-select" id="' + id + '" data-bind="pref">' + opts + '</select>';
@@ -574,9 +574,9 @@
     // Stage0
     var s0 = qs('#self-stage0');
     s0.innerHTML = '<div class="stage-heading">' + esc(t('self.stage0.heading')) + '</div>' +
-      '<div class="big-number">' + fmtNum(current.A0) + '<span class="big-number__unit">万円</span></div>' +
+      '<div class="big-number">' + fmtNum(current.A0) + '<span class="big-number__unit">' + esc(t('common.unit.manyen')) + '</span></div>' +
       '<p class="stage-subtext">' + esc(tpl(t('self.stage0.subtext'), { A0: fmtNum(current.A0) })) + '</p>' +
-      '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to1">次へ</button></div>';
+      '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to1">' + esc(t('common.button.next')) + '</button></div>';
     s0.style.display = 'block';
 
     if (selfState.stageIndex < 1) { hideFrom(['#self-stage1', '#self-stage2a', '#self-stage2b', '#self-stage3', '#self-stage4']); return; }
@@ -585,11 +585,11 @@
     var s1 = qs('#self-stage1');
     var w0html = current.W0 == null
       ? '<div class="big-number">—</div><p class="stage-subtext">' + esc(t('self.stage1.zeroCompNote')) + '</p>'
-      : '<div class="big-number">' + fmtNum(current.W0) + '<span class="big-number__unit">円/時</span></div>';
+      : '<div class="big-number">' + fmtNum(current.W0) + '<span class="big-number__unit">' + esc(t('common.unit.yenPerHour')) + '</span></div>';
     s1.innerHTML = '<div class="stage-heading">' + esc(t('self.stage1.heading')) + '</div>' +
       w0html + '<p class="stage-subtext">' + esc(t('self.stage1.subtext')) + '</p>' +
       weeklyHoursAssumedHtml(current, mode) +
-      '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to2">次へ</button></div>';
+      '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to2">' + esc(t('common.button.next')) + '</button></div>';
     s1.style.display = selfState.stageIndex >= 1 ? 'block' : 'none';
 
     if (selfState.stageIndex < 2) { hideFrom(['#self-stage2a', '#self-stage2b', '#self-stage3', '#self-stage4']); return; }
@@ -606,7 +606,7 @@
       '<input class="field-input" type="number" data-bind-target="hourlyWage" value="' + (hourlyVal == null ? '' : hourlyVal) + '"></div>' +
       '<div class="q-nav">' +
       '<button type="button" class="btn btn--ghost btn--sm" data-action="stage2a-skip">' + esc(t('self.stage2a.skipButton')) + '</button>' +
-      '<button type="button" class="btn btn--primary" data-action="stage2a-use-target">この金額で見る</button>' +
+      '<button type="button" class="btn btn--primary" data-action="stage2a-use-target">' + esc(t('self.stage2a.useTargetButton')) + '</button>' +
       '</div>';
     s2a.style.display = selfState.stageIndex >= 2 ? 'block' : 'none';
 
@@ -625,13 +625,13 @@
       return '<button type="button" class="bench-card' + (guarded ? ' is-guarded' : '') + (active ? ' is-active' : '') + '" data-action="bench-select" data-bench-id="' + esc(b.id) + '">' +
         '<span class="bench-card__body"><span class="bench-card__label">' + esc(b.label) + '</span>' +
         '<span class="bench-card__desc">' + esc(desc) + '</span></span>' +
-        '<span class="bench-card__value">' + fmtNum(b.atmark) + '万円 ' + sourceChipHtml(b, mode) + '</span>' +
+        '<span class="bench-card__value">' + fmtNum(b.atmark) + esc(t('common.unit.manyen')) + ' ' + sourceChipHtml(b, mode) + '</span>' +
         '</button>';
     }).join('');
     s2b.innerHTML = '<div class="stage-heading">' + esc(t('self.stage2b.heading')) + '</div>' +
       '<p class="stage-subtext">' + esc(t('self.stage2b.subtext')) + '</p>' +
       '<div class="bench-list">' + benchCards + '</div>' +
-      '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to3">次へ</button></div>';
+      '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to3">' + esc(t('common.button.next')) + '</button></div>';
     s2b.style.display = selfState.stageIndex >= 2 ? 'block' : 'none';
 
     if (selfState.stageIndex < 3) { hideFrom(['#self-stage3', '#self-stage4']); return; }
@@ -639,7 +639,8 @@
     // Stage3
     var s3 = qs('#self-stage3');
     var s3html = '<div class="stage-heading">' + esc(t('self.stage3.heading')) + '</div>';
-    if (current.laborShareHigh) s3html += guardBoxHtml('laborShareHigh', mode, ctx).replace('guard-box', 'labor-share-box');
+    // laborShareHighとbelowKeepが同時に立つと同文言のボタンが2つ並ぶため、belowKeep側にのみボタンを残す（fix2 item5）
+    if (current.laborShareHigh) s3html += guardBoxHtml('laborShareHigh', mode, ctx, ctx.branch === 'belowKeep').replace('guard-box', 'labor-share-box');
     if (ctx.branch === 'alreadyAbove' || ctx.branch === 'belowKeep' || ctx.branch === 'targetBelowCurrent' || ctx.branch === 'reachableNow' || ctx.branch === 'stageOnly') {
       s3html += guardBoxHtml(ctx.branch, mode, ctx);
     }
@@ -659,7 +660,7 @@
     }
     s3html += wageAssumptionLineHtml(ctx.wageAssumption, mode);
     if (ctx.branch === 'normal' || (ctx.branch === 'stageOnly' && ctx.diff)) {
-      s3html += '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to4">差額を見る</button></div>';
+      s3html += '<div class="q-nav"><button type="button" class="btn btn--primary" data-action="self-stage-to4">' + esc(t('self.stage3.nextButton')) + '</button></div>';
     }
     s3.innerHTML = s3html;
     s3.style.display = selfState.stageIndex >= 3 ? 'block' : 'none';
@@ -682,10 +683,7 @@
       }
       var reqSales = selfState.idealMode === 'target' ? ctx.ideal.S2 : ctx.ideal.S1;
       if (isFiniteNum(reqSales)) s4html += '<p class="stage-subtext">' + esc(tpl(t('self.stage4.requiredSales'), { S1: fmtNum(reqSales) })) + '</p>';
-      var growthPct = ctx.ideal.salesGrowthPct;
-      if (isFiniteNum(growthPct)) {
-        s4html += '<p class="hint-row">' + esc(t('common.salesGrowthNote')) + '　' + fmtSigned(growthPct) + '%</p>';
-      }
+      // 棚原確定：参考「必要売上の増加率」は表示しない（content.jsのキーcommon.salesGrowthNoteは残すが描画しない）
       if (ctx.branch === 'normal') {
         var w1 = selfState.idealMode === 'target' ? ctx.ideal.W2 : ctx.ideal.W1;
         s4html += '<p class="stage-subtext">' + esc(tpl(t('self.stage4.nextStep'), { diffA: fmtSigned(ctx.diff.atmark), W1: fmtNum(w1) })) + '</p>';
@@ -700,7 +698,7 @@
 
     s4html += '<div class="copy-link-box">' +
       '<p>' + esc(t('self.stage4.copyLink')) + '</p>' +
-      '<button type="button" class="btn btn--primary" data-action="copy-link">結果のリンクをコピー</button>' +
+      '<button type="button" class="btn btn--primary" data-action="copy-link">' + esc(t('self.stage4.copyLinkButton')) + '</button>' +
       '<span class="copy-link-toast" id="copy-link-toast" style="display:none;">' + esc(t('self.stage4.copyLinkDone')) + '</span>' +
       '<p class="copy-link-box__note">' + esc(t('self.stage4.copyLinkSendNote')) + '</p>' +
       '</div>';
@@ -713,7 +711,7 @@
 
   function diffRow(label, key, v, isHourly) {
     var cls = v > 0 ? 'diff-value--pos' : (v < 0 ? 'diff-value--neg' : '');
-    var valStr = isHourly ? fmtSigned(v) + '円' : fmtSigned(v) + '万円';
+    var valStr = isHourly ? fmtSigned(v) + t('common.unit.yen') : fmtSigned(v) + t('common.unit.manyen');
     return '<div class="diff-row"><span class="diff-row__label">' + esc(label.replace(/\s*[\d{{].*/, '')) + '</span>' +
       '<span class="diff-value ' + cls + '">' + valStr + '</span></div>';
   }
@@ -956,8 +954,8 @@
 
     var toggleWrap = qs('#demo-mode-toggle');
     toggleWrap.innerHTML =
-      '<button type="button" class="btn btn--ghost btn--sm" data-action="demo-toggle-mode" data-mode="benchmark">ベンチマーク</button>' +
-      '<button type="button" class="btn btn--ghost btn--sm" data-action="demo-toggle-mode" data-mode="target">逆算</button>';
+      '<button type="button" class="btn btn--ghost btn--sm" data-action="demo-toggle-mode" data-mode="benchmark">' + esc(t('demo.modeToggle.benchmark', 'demo')) + '</button>' +
+      '<button type="button" class="btn btn--ghost btn--sm" data-action="demo-toggle-mode" data-mode="target">' + esc(t('demo.modeToggle.target', 'demo')) + '</button>';
 
     qs('#demo-keyboard-help').textContent = t('demo.keyboardHelp', 'demo');
   }
@@ -1021,20 +1019,20 @@
 
     if (stage === 0) {
       html += '<div class="demo-stage-heading">' + esc(t('demo.stage0.heading', mode)) + '</div>' +
-        '<div class="big-number">' + fmtNum(current.A0) + '<span class="big-number__unit">万円</span></div>' +
+        '<div class="big-number">' + fmtNum(current.A0) + '<span class="big-number__unit">' + esc(t('common.unit.manyen')) + '</span></div>' +
         '<p class="hint-row">' + esc(t('common.atmarkDefinition', mode)) + '</p>';
     } else if (stage === 1) {
       html += '<div class="demo-stage-heading">' + esc(t('demo.stage1.heading', mode)) + '</div>';
       var minW = demoState.inputs.pref ? findMinWage(demoState.inputs.pref) : null;
       var partW = demoState.inputs.pref ? findPartWage(demoState.inputs.pref) : null;
       if (!demoState.inputs.pref) {
-        html += '<div class="big-number">' + (current.W0 == null ? '—' : fmtNum(current.W0)) + '<span class="big-number__unit">円/時</span></div>';
+        html += '<div class="big-number">' + (current.W0 == null ? '—' : fmtNum(current.W0)) + '<span class="big-number__unit">' + esc(t('common.unit.yenPerHour')) + '</span></div>';
         html += '<p class="hint-row">' + esc(t('demo.stage1.hintPrefSelect', mode)) + '</p>';
       } else {
         html += '<div class="wage-compare">' +
-          '<div class="wage-compare__item"><div class="wage-compare__label">社長の時給</div><div class="wage-compare__value">' + (current.W0 == null ? '—' : fmtNum(current.W0) + '円') + '</div></div>' +
-          '<div class="wage-compare__item"><div class="wage-compare__label">' + (minW ? esc(tpl(t('common.minWageLabel', mode), { pref: minW.pref, amount: fmtNum(minW.amount.value), effectiveDate: minW.effectiveDate })) : '最低賃金（データなし）') + '</div><div class="wage-compare__value">' + (minW ? fmtNum(minW.amount.value) + '円' : '—') + ' ' + (minW ? sourceChipHtml(minW.amount, mode) : '') + '</div></div>' +
-          '<div class="wage-compare__item"><div class="wage-compare__label">' + esc(t('common.partWageLabel', mode)) + '</div><div class="wage-compare__value">' + (partW ? fmtNum(partW.amount.value) + '円' : '—') + ' ' + (partW ? sourceChipHtml(partW.amount, mode) : '') + '</div></div>' +
+          '<div class="wage-compare__item"><div class="wage-compare__label">' + esc(t('demo.stage1.presidentWageLabel', mode)) + '</div><div class="wage-compare__value">' + (current.W0 == null ? '—' : fmtNum(current.W0) + esc(t('common.unit.yen'))) + '</div></div>' +
+          '<div class="wage-compare__item"><div class="wage-compare__label">' + (minW ? esc(tpl(t('common.minWageLabel', mode), { pref: minW.pref, amount: fmtNum(minW.amount.value), effectiveDate: minW.effectiveDate })) : esc(t('demo.stage1.minWageUnavailable', mode))) + '</div><div class="wage-compare__value">' + (minW ? fmtNum(minW.amount.value) + esc(t('common.unit.yen')) : '—') + ' ' + (minW ? sourceChipHtml(minW.amount, mode) : '') + '</div></div>' +
+          '<div class="wage-compare__item"><div class="wage-compare__label">' + esc(t('common.partWageLabel', mode)) + '</div><div class="wage-compare__value">' + (partW ? fmtNum(partW.amount.value) + esc(t('common.unit.yen')) : '—') + ' ' + (partW ? sourceChipHtml(partW.amount, mode) : '') + '</div></div>' +
           '</div>';
       }
       if (current.W0 == null) html += '<p class="hint-row">' + esc(t('validation.zeroCompNoHourly')) + '</p>';
@@ -1049,18 +1047,19 @@
           var active = demoState.benchmarkId === b.id;
           return '<button type="button" class="bench-card' + (guarded ? ' is-guarded' : '') + (active ? ' is-active' : '') + '" data-action="demo-bench-select" data-bench-id="' + esc(b.id) + '">' +
             '<span class="bench-card__body"><span class="bench-card__label">' + esc(b.label) + '</span></span>' +
-            '<span class="bench-card__value">' + fmtNum(b.atmark) + '万円 ' + sourceChipHtml(b, mode) + '</span></button>';
+            '<span class="bench-card__value">' + fmtNum(b.atmark) + esc(t('common.unit.manyen')) + ' ' + sourceChipHtml(b, mode) + '</span></button>';
         }).join('') + '</div>';
       } else {
         html += '<div class="demo-idealmode-inputs">' +
-          '<div class="field-group"><label class="field-label">欲しい年収（万円）</label><input class="field-input" type="number" id="demo-target-w" value="' + (demoState.target.W == null ? '' : demoState.target.W) + '"></div>' +
-          '<div class="field-group"><label class="field-label">欲しい時給（円）</label><input class="field-input" type="number" id="demo-target-hourly" value="' + (demoState.target.hourlyWage == null ? '' : demoState.target.hourlyWage) + '"></div>' +
+          '<div class="field-group"><label class="field-label">' + esc(t('demo.stage2.targetIncomeLabel', mode)) + '</label><input class="field-input" type="number" id="demo-target-w" value="' + (demoState.target.W == null ? '' : demoState.target.W) + '"></div>' +
+          '<div class="field-group"><label class="field-label">' + esc(t('demo.stage2.targetHourlyLabel', mode)) + '</label><input class="field-input" type="number" id="demo-target-hourly" value="' + (demoState.target.hourlyWage == null ? '' : demoState.target.hourlyWage) + '"></div>' +
           '</div>';
       }
       if (ctx.branch !== 'normal') html += guardBoxHtml(ctx.branch, mode, ctx);
     } else if (stage === 3) {
       html += '<div class="demo-stage-heading">' + esc(t('demo.stage3.heading', mode)) + '</div>';
-      if (current.laborShareHigh) html += guardBoxHtml('laborShareHigh', mode, ctx).replace('guard-box', 'labor-share-box');
+      // laborShareHighとbelowKeepが同時に立つと同文言のボタンが2つ並ぶため、belowKeep側にのみボタンを残す（fix2 item5）
+      if (current.laborShareHigh) html += guardBoxHtml('laborShareHigh', mode, ctx, ctx.branch === 'belowKeep').replace('guard-box', 'labor-share-box');
       if (['alreadyAbove', 'belowKeep', 'targetBelowCurrent', 'reachableNow', 'stageOnly'].indexOf(ctx.branch) !== -1) html += guardBoxHtml(ctx.branch, mode, ctx);
       if (ctx.branch === 'noTarget' || ctx.branch === 'noBenchmark') {
         html += '<p class="guard-box__text">' + esc(ctx.branch === 'noTarget' ? t('demo.stage2.guardNoTarget', mode) : t('demo.stage2.guardNoBenchmark', mode)) + '</p>';
@@ -1083,8 +1082,7 @@
         html += colHtml(t('demo.columnHeaders.ideal', mode), demoIdealGeneric(ctx), 'ideal');
         html += diffColHtml(t('demo.columnHeaders.diff', mode), ctx.diff);
         html += '</div>';
-        var reqSalesGrowth = ctx.ideal.salesGrowthPct;
-        if (isFiniteNum(reqSalesGrowth)) html += '<p class="hint-row">' + esc(t('common.salesGrowthNote', mode)) + '　' + fmtSigned(reqSalesGrowth) + '%</p>';
+        // 棚原確定：参考「必要売上の増加率」は表示しない（content.jsのキーcommon.salesGrowthNoteは残すが描画しない）
       } else if (ctx.branch === 'noTarget' || ctx.branch === 'noBenchmark') {
         html += '<p class="guard-box__text">' + esc(t('demo.stage4.guardStage2Required', mode)) + '</p>';
       } else {
@@ -1118,11 +1116,11 @@
       : t('demo.rowLabels.requiredSales', 'demo');
     return '<div><div class="demo-col-header">' + esc(header) + '</div>' +
       '<div class="diff-list">' +
-      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.atmark', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.atmark != null ? v.atmark : v.A0) + '万円</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.grossProfit', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.grossProfit != null ? v.grossProfit : v.G) + '万円</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.officerComp', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.officerComp != null ? v.officerComp : v.R) + '万円</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.hourlyWage', 'demo')) + '</span><span class="diff-value">' + (isFiniteNum(v.hourlyWage != null ? v.hourlyWage : v.W0) ? fmtNum(v.hourlyWage != null ? v.hourlyWage : v.W0) + '円' : '—') + '</span></div>' +
-      '<div class="diff-row"><span class="diff-row__label">' + esc(salesLabel) + '</span><span class="diff-value">' + fmtNum(v.requiredSales != null ? v.requiredSales : v.S) + '万円</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.atmark', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.atmark != null ? v.atmark : v.A0) + esc(t('common.unit.manyen')) + '</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.grossProfit', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.grossProfit != null ? v.grossProfit : v.G) + esc(t('common.unit.manyen')) + '</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.officerComp', 'demo')) + '</span><span class="diff-value">' + fmtNum(v.officerComp != null ? v.officerComp : v.R) + esc(t('common.unit.manyen')) + '</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(t('demo.rowLabels.hourlyWage', 'demo')) + '</span><span class="diff-value">' + (isFiniteNum(v.hourlyWage != null ? v.hourlyWage : v.W0) ? fmtNum(v.hourlyWage != null ? v.hourlyWage : v.W0) + esc(t('common.unit.yen')) : '—') + '</span></div>' +
+      '<div class="diff-row"><span class="diff-row__label">' + esc(salesLabel) + '</span><span class="diff-value">' + fmtNum(v.requiredSales != null ? v.requiredSales : v.S) + esc(t('common.unit.manyen')) + '</span></div>' +
       '</div></div>';
   }
   function diffColHtml(header, diff) {
@@ -1136,7 +1134,7 @@
   function diffRowRaw(label, v, isHourly) {
     if (!isFiniteNum(v)) return '<div class="diff-row"><span class="diff-row__label">' + esc(label) + '</span><span class="diff-value">—</span></div>';
     var cls = v > 0 ? 'diff-value--pos' : (v < 0 ? 'diff-value--neg' : '');
-    return '<div class="diff-row"><span class="diff-row__label">' + esc(label) + '</span><span class="diff-value ' + cls + '">' + fmtSigned(v) + (isHourly ? '円' : '万円') + '</span></div>';
+    return '<div class="diff-row"><span class="diff-row__label">' + esc(label) + '</span><span class="diff-value ' + cls + '">' + fmtSigned(v) + (isHourly ? t('common.unit.yen') : t('common.unit.manyen')) + '</span></div>';
   }
 
   document.addEventListener('click', function (e) {
@@ -1215,7 +1213,7 @@
 
     if (display === 'projector') document.documentElement.setAttribute('data-display', 'projector');
 
-    document.getElementById('mode-badge').textContent = currentMode === 'demo' ? '実演モード' : '事前診断';
+    document.getElementById('mode-badge').textContent = t('common.modeBadge', currentMode);
     document.getElementById('view-self').classList.toggle('is-active', currentMode === 'self');
     document.getElementById('view-demo').classList.toggle('is-active', currentMode === 'demo');
 
