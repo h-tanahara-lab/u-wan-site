@@ -500,6 +500,51 @@ test('fmtManyen/fmtHourly/fmtPct', function () {
   assert.strictEqual(calc.fmtHourly(undefined), '—');
 });
 
+console.log('--- T6追加：境界ケース（ユウキ） ---');
+
+test('追加1: E入力あり＋業種あり → 入力値が業界平均より優先される（優先1>優先2）', function () {
+  var industry = { arari: { laborPerEmployee: { value: 999, confidence: 'confirmed' } } };
+  var wage = calc.resolveWageAssumption({ N: 5, E: 1800 }, industry);
+  assert.strictEqual(wage.source, 'input');
+  approx(wage.E, 1800, 0.01, '業種データ(999×4=3996)ではなく入力値1800が採用されること');
+});
+
+test('追加2: ρ0がちょうど40%ちょうど → laborShareHigh=false（境界は>40の厳密不等号）', function () {
+  // S=2500, g=40 → G=1000。E=200,R=200 → L0=400 → rho0=400/1000*100=40ちょうど
+  var wage = { E: 200, source: 'input', confidence: 'confirmed' };
+  var cur = calc.computeCurrent({ S: 2500, g: 40, N: 3, R: 200, H: 40 }, wage);
+  approx(cur.rho0, 40, 0.01);
+  assert.strictEqual(cur.laborShareHigh, false, 'rho0=40ちょうどはlaborShareHigh対象外（>40のみtrue）');
+});
+
+test('追加3: A1が＠_keepとちょうど等しい境界 → belowKeep（<=なのでnormalには入らない）', function () {
+  // ①のケース：E=1800,R=600,N=5 → atmarkKeep=(1800+600)/(5*0.4)=1200
+  var wage = { E: 1800, source: 'input', confidence: 'confirmed' };
+  var inputs = { S: 12000, g: 40, N: 5, R: 600, H: 60 };
+  var cur = calc.computeCurrent(inputs, wage);
+  approx(cur.atmarkKeep, 1200, 0.01);
+  var ideal = calc.computeIdealByBenchmark(inputs, cur.atmarkKeep, wage);
+  assert.strictEqual(ideal.branch, 'belowKeep', 'A1===＠_keepちょうどはnormalではなくbelowKeep（境界を含むガード）');
+});
+
+test('追加4: N=1.5・業種ありをcomputeCurrent経由のフルフローで確認（resolveWageAssumption単体テストだけでなく現状計算まで通す）', function () {
+  var industry = { arari: { laborPerEmployee: { value: 400, confidence: 'confirmed' } } };
+  var wage = calc.resolveWageAssumption({ N: 1.5 }, industry);
+  var cur = calc.computeCurrent({ S: 3000, g: 40, N: 1.5, R: 300, H: 40 }, wage);
+  assert.strictEqual(cur.branch, 'ok');
+  approx(cur.E, 200, 0.01, '400 × max(1.5-1,0) = 200が現状計算まで正しく伝播すること');
+  approx(cur.G, 1200, 0.01);
+  approx(cur.rho0, 41.6666667, 0.01);
+});
+
+test('追加5: A1がA0とちょうど等しい境界 → alreadyAbove（<=なのでnormalには入らない）', function () {
+  var wage = { E: 1800, source: 'input', confidence: 'confirmed' };
+  var inputs = { S: 12000, g: 40, N: 5, R: 600, H: 60 };
+  var cur = calc.computeCurrent(inputs, wage);
+  var ideal = calc.computeIdealByBenchmark(inputs, cur.A0, wage);
+  assert.strictEqual(ideal.branch, 'alreadyAbove', 'A1===A0ちょうどはalreadyAbove（差額0を「理想」として見せない）');
+});
+
 /* ============================================================
    結果サマリー
    ============================================================ */
