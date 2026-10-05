@@ -518,21 +518,12 @@ a { color: var(--color-navy); }
 .cta-box__heading { font-weight: 900; font-size: 1.1rem; margin-bottom: 8px; }
 .cta-box__text { font-size: 0.9rem; opacity: 0.9; margin-bottom: 16px; }
 
-.copy-link-box {
-  margin-top: 18px;
-  padding: 16px;
-  background: var(--color-bg-alt);
-  border-radius: var(--radius-md);
-  font-size: 0.85rem;
+.cta-box__done {
+  min-height: 1.6em; margin-top: 10px;
+  color: #FFD9A8; font-weight: 700; font-size: 0.9rem;
 }
-.copy-link-box__note { margin-top: 10px; color: var(--color-text-muted); font-size: 0.78rem; }
-.copy-link-toast {
-  display: inline-block;
-  margin-left: 10px;
-  color: var(--color-success);
-  font-weight: 700;
-  font-size: 0.82rem;
-}
+.cta-box__send-note { margin-top: 6px; font-size: 0.85rem; opacity: 0.95; }
+.cta-box__data-note { margin-top: 8px; font-size: 0.75rem; opacity: 0.8; }
 
 /* 出典チップ・ボトムシート */
 .source-chip {

@@ -746,14 +746,10 @@
     s4html += '<div class="cta-box">' +
       '<div class="cta-box__heading">' + esc(t('self.stage4.ctaHeading')) + '</div>' +
       '<div class="cta-box__text">' + esc(t('self.stage4.ctaText')) + '</div>' +
-      '<button type="button" class="btn btn--cta" data-action="self-cta">' + esc(t('self.stage4.ctaButton')) + '</button>' +
-      '</div>';
-
-    s4html += '<div class="copy-link-box">' +
-      '<p>' + esc(t('self.stage4.copyLink')) + '</p>' +
-      '<button type="button" class="btn btn--primary" data-action="copy-link">' + esc(t('self.stage4.copyLinkButton')) + '</button>' +
-      '<span class="copy-link-toast" id="copy-link-toast" style="display:none;">' + esc(t('self.stage4.copyLinkDone')) + '</span>' +
-      '<p class="copy-link-box__note">' + esc(t('self.stage4.copyLinkSendNote')) + '</p>' +
+      '<button type="button" class="btn btn--cta" data-action="copy-link">' + esc(t('self.stage4.ctaButton')) + '</button>' +
+      '<div class="cta-box__done" id="copy-link-toast" role="status" aria-live="polite"></div>' +
+      '<p class="cta-box__send-note">' + esc(t('self.stage4.copyLinkSendNote')) + '</p>' +
+      '<p class="cta-box__data-note">' + esc(t('self.stage4.copyLinkDataNote')) + '</p>' +
       '</div>';
 
     s4html += sourcesListHtml(mode);
@@ -932,7 +928,6 @@
     }
 
     if (action === 'copy-link') { doCopyLink(); }
-    if (action === 'self-cta') { /* 個別相談導線：外部送信なし。リンクコピーで案内 */ doCopyLink(); }
   });
 
   on(qs('#btn-q-next'), 'click', function () {
@@ -953,7 +948,13 @@
     var hash = '#s=' + AtmarkCalc.encodeState(selfState.inputs);
     var url = location.origin + location.pathname + hash;
     var toast = qs('#copy-link-toast');
-    function showToast() { if (toast) { toast.style.display = 'inline-block'; setTimeout(function () { toast.style.display = 'none'; }, 2500); } }
+    var doneText = t('self.stage4.copyLinkDone');
+    function showToast() {
+      if (!toast) return;
+      toast.textContent = doneText;
+      clearTimeout(showToast._timer);
+      showToast._timer = setTimeout(function () { toast.textContent = ''; }, 2500);
+    }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(showToast, function () { fallbackCopy(url); showToast(); });
     } else {

@@ -193,11 +193,10 @@
         nextStep: 'ここに伸びしろがあります。＠があと{{diffA}}万円動くと、社長の時給は{{W1}}円になります。',
         ctaHeading: '次の一歩',
         ctaText: 'この数字をもとに、個別相談で次の一歩を一緒に整理できます。',
-        ctaButton: '個別相談で次の一歩を聞く',
-        copyLink: 'この結果のリンクをコピー — 個別相談で、この数字からそのまま話を続けられます（お名前・メールは含まれません）',
-        copyLinkButton: '結果のリンクをコピー',
+        ctaButton: '結果のリンクをコピーして、棚原に送る',
         copyLinkDone: 'リンクをコピーしました',
         copyLinkSendNote: 'コピーしたリンクを、LINE・メール・Chatworkのいずれかで棚原に送ってください。',
+        copyLinkDataNote: 'リンクには、入力した数字が含まれます。お名前・メールは含まれません。',
       },
       idealMode2: {
         resultHeading: 'あなたが決めた理想の＠',
