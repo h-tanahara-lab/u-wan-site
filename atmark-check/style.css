@@ -111,6 +111,9 @@ a { color: var(--color-navy); }
   box-shadow: 0 4px 18px rgba(230, 126, 34, 0.30);
 }
 .btn--cta:hover { background: var(--color-orange-dark); }
+/* 文言の途中で折り返さず、読点（<wbr>）の位置でだけ折り返す */
+.btn--phrase-wrap { line-height: 1.5; }
+.btn--phrase-wrap > span { word-break: keep-all; overflow-wrap: anywhere; text-align: center; }
 .btn--primary {
   background: var(--color-navy);
   color: var(--color-white);

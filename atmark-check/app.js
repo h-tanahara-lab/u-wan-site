@@ -746,7 +746,7 @@
     s4html += '<div class="cta-box">' +
       '<div class="cta-box__heading">' + esc(t('self.stage4.ctaHeading')) + '</div>' +
       '<div class="cta-box__text">' + esc(t('self.stage4.ctaText')) + '</div>' +
-      '<button type="button" class="btn btn--cta" data-action="copy-link">' + esc(t('self.stage4.ctaButton')) + '</button>' +
+      '<button type="button" class="btn btn--cta btn--phrase-wrap" data-action="copy-link"><span>' + esc(t('self.stage4.ctaButton')).replace(/(リンクを|、)/g, '$1<wbr>') + '</span></button>' +
       '<div class="cta-box__done" id="copy-link-toast" role="status" aria-live="polite"></div>' +
       '<p class="cta-box__send-note">' + esc(t('self.stage4.copyLinkSendNote')) + '</p>' +
       '<p class="cta-box__data-note">' + esc(t('self.stage4.copyLinkDataNote')) + '</p>' +
@@ -944,6 +944,7 @@
     el.classList.add('js-just-appeared');
   }
 
+  var copyToastTimer = null;
   function doCopyLink() {
     var hash = '#s=' + AtmarkCalc.encodeState(selfState.inputs);
     var url = location.origin + location.pathname + hash;
@@ -952,8 +953,8 @@
     function showToast() {
       if (!toast) return;
       toast.textContent = doneText;
-      clearTimeout(showToast._timer);
-      showToast._timer = setTimeout(function () { toast.textContent = ''; }, 2500);
+      clearTimeout(copyToastTimer);
+      copyToastTimer = setTimeout(function () { toast.textContent = ''; }, 2500);
     }
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(url).then(showToast, function () { fallbackCopy(url); showToast(); });
