@@ -434,3 +434,6 @@ main{overflow-x:clip}
 /* S-1：取り消し線は金額部分のみ */
 .price-card .price-old{text-decoration:none}
 .price-old-num{text-decoration:line-through;text-decoration-style:double;text-decoration-thickness:2px;text-decoration-color:var(--gold);text-decoration-skip-ink:none}
+
+/* ヘッドコピー中央揃え */
+.hero-lead{text-align:center}
