@@ -395,3 +395,31 @@ main{overflow-x:clip}
 }
 @media (max-width:700px){.infographic svg text[font-size="16"]{font-size:30px}}
 @media (max-width:360px){.infographic svg text{font-size:42px}.infographic svg .ig-lab-mid{font-size:40px}.infographic svg text[font-size="16"]{font-size:32px}}
+
+/* ===== v2.5先行：FV写真を背景オーバーレイ化・単一カラム ===== */
+.hero{position:relative}
+.hero-bg{position:absolute;inset:0;z-index:0;overflow:hidden}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:70% 22%}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,30,62,.9) 0%,rgba(4,30,62,.9) 60%,rgba(4,30,62,.95) 100%)}
+@media (min-width:900px){.hero-bg::after{background:linear-gradient(90deg,rgba(4,30,62,.95) 0%,rgba(4,30,62,.9) 55%,rgba(4,30,62,.8) 100%)}}
+.hero-grid{position:relative;z-index:1;display:grid;grid-template-columns:minmax(0,1fr)!important;padding-bottom:40px}
+.hero-copy>.hero-people{order:4;grid-column:1;display:flex;flex-direction:column;gap:8px;padding:0;margin:0 0 20px}
+.hero-people .person{background:rgba(4,30,62,.7)}
+@media (min-width:900px){
+  .hero-copy>.hero-tags,.hero-copy>.hero-title,.hero-copy>.hero-badges,.hero-copy>.troubles,.hero-copy>.hero-lead,.hero-copy>.hero-people{grid-column:1;max-width:760px}
+  .hero-copy>.hero-people{flex-direction:row;flex-wrap:wrap}
+  .hero-copy>.hero-people .person{flex:0 1 auto}
+  .hero-copy>.core{grid-column:1}
+  .hero-grid{padding-bottom:56px}
+}
+.hero-photo{display:none}
+.hero-copy>.hero-people .person b{white-space:nowrap}
+/* 見出し中央 */
+.sec-title.center-t{text-align:center}
+.sec-title.center-t::after{margin-left:auto;margin-right:auto}
+.solution-text{text-align:center}
+/* 料金（取り消し線・大見出し）／PROBLEM数字の準備 */
+.price-old{display:block;margin:0 0 6px;font-size:clamp(20px,5vw,26px);font-weight:700;color:#C9D3E0;text-decoration:line-through;text-decoration-style:double;text-decoration-thickness:2px;text-decoration-color:var(--gold)}
+.price-badge{display:inline-block;margin:0 0 8px;font-size:clamp(20px,5.2vw,28px);font-weight:800;color:var(--gold);font-family:var(--serif)}
+.big-stat,.big-stat-em{font-family:var(--serif);font-size:1.5em;color:var(--orange-dark);font-weight:700}
+.solution-text{text-align:left}.solution-text .sec-title{text-align:center}
