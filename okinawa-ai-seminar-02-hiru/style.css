@@ -53,7 +53,7 @@ main{overflow-x:clip}
 
 /* FV */
 .hero{background:linear-gradient(165deg,var(--navy) 0%,var(--navy-2) 55%,var(--navy) 100%);color:#fff;padding:36px 0 0;overflow:hidden}
-.hero-grid{display:flex;flex-direction:column;gap:32px}
+
 .series-tag{display:inline-block;margin:0 0 20px;border:1px dashed var(--gold);color:var(--gold);font-size:12.5px;font-weight:700;letter-spacing:.06em;padding:6px 16px;border-radius:999px}
 .hero-title{font-family:var(--serif);font-weight:700;margin:0 0 22px;line-height:1.5;font-size:clamp(17px,5.4vw,32px)}
 .hero-title .kicker{display:block;font-family:var(--sans);font-size:clamp(13px,3.6vw,17px);font-weight:700;color:var(--gold);letter-spacing:.04em;margin-bottom:10px}
@@ -78,10 +78,8 @@ main{overflow-x:clip}
 .person small{font-size:11.5px;color:#C9D3E0}
 @media (min-width:900px){
   .hero{padding:56px 0 64px}
-  .hero-grid{flex-direction:row;align-items:center;gap:56px}
-  .hero-copy{flex:1 1 55%}
   .cta-block .btn{width:auto;min-width:300px}
-  .hero-photo{flex:1 1 45%;margin:0;border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:var(--navy)}
+  .hero-photo{border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);background:var(--navy)}
   .hero-photo>picture img{aspect-ratio:4/5;object-position:50% 25%}
   .hero-people{padding:14px}
 }
@@ -329,16 +327,6 @@ main{overflow-x:clip}
 /* ヘッドコピー：タイトルに次ぐ強さ */
 .hero-lead{font-size:clamp(19px,5.2vw,28px);line-height:1.6;font-weight:800;margin:0 0 20px;padding:16px 18px;background:linear-gradient(90deg,rgba(227,178,45,.22),rgba(227,178,45,.06));border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);border-radius:4px}
 .hero-lead em{font-style:normal;color:var(--gold);font-weight:800}
-/* スマホ：写真をタイトル・バッジの直後へ（数字バーの手前に溜めない）。hero-copyを展開して並び順を指定 */
-@media (max-width:899px){
-  .hero-grid{gap:0}
-  .hero-copy{display:contents}
-  .hero-grid>*,.hero-copy>*{order:20}
-  .hero-copy>.hero-tags{order:1}.hero-copy>.hero-title{order:2}.hero-copy>.hero-badges{order:3}
-  .hero-photo{order:4;margin:6px -20px 24px}
-  .hero-copy>.troubles{order:5}.hero-copy>.hero-lead{order:6}.hero-copy>.hero-sub{order:7}.hero-copy>.hero-target{order:8}.hero-copy>.hero-info{order:9}.hero-copy>.cta-block{order:10}
-  .hero-grid{padding-bottom:36px}
-}
 /* AFTER：写真を濃いネイビーのオーバーレイで背景に */
 .after-stage{position:relative;border-radius:var(--radius);overflow:hidden;padding:28px 20px;background:var(--navy)}
 .after-bg{position:absolute;inset:0}
@@ -349,3 +337,52 @@ main{overflow-x:clip}
 @media (min-width:900px){.after-stage{padding:44px 48px}}
 @media (max-width:480px){.hero-lead{font-size:17px;padding:14px 14px}}
 @media (max-width:360px){.hero-lead{font-size:15px}}
+
+/* ===== v2.2：FVをグリッド化・核ブロック・PROBLEM・インフォグラフィック ===== */
+.hero-grid{display:grid;grid-template-columns:1fr;gap:0}
+.hero-copy{display:contents}
+.hero-grid>*,.hero-copy>*{min-width:0}
+.hero-copy>.hero-tags{order:1}.hero-copy>.hero-title{order:2}.hero-copy>.hero-badges{order:3}
+.hero-photo{order:4;margin:6px -20px 24px}
+.hero-copy>.troubles{order:5}.hero-copy>.hero-lead{order:6}.hero-copy>.core{order:7}.hero-copy>.hero-target{order:8}.hero-copy>.hero-info{order:9}.hero-copy>.cta-block{order:10}
+.hero-grid{padding-bottom:40px}
+@media (min-width:900px){
+  .hero-grid{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);column-gap:56px;padding-bottom:0}
+  .hero-copy>.hero-tags,.hero-copy>.hero-title,.hero-copy>.hero-badges,.hero-copy>.troubles,.hero-copy>.hero-lead{grid-column:1}
+  .hero-photo{grid-column:2;grid-row:1/span 5;order:0;margin:0;align-self:start}
+  .hero-copy>.core{grid-column:1/-1;margin-top:12px}
+  .hero-copy>.hero-target,.hero-copy>.hero-info,.hero-copy>.cta-block{grid-column:1/-1;max-width:760px}
+}
+.hero-target{margin:22px 0 20px}
+/* 核のブロック：FVの中で独立して見える、明るい地の図解 */
+.core{background:#FBF8F2;color:var(--navy);border-radius:var(--radius);padding:30px 20px 26px;margin:6px 0 4px;box-shadow:0 18px 44px rgba(0,0,0,.28);border-top:6px solid var(--gold)}
+.core-eyebrow{margin:0 0 8px;text-align:center;font-weight:800;font-size:12.5px;letter-spacing:.14em;color:#7A5A0A}
+.core-title{margin:0 0 10px;text-align:center;font-family:var(--serif);font-size:clamp(23px,6.2vw,38px);line-height:1.45;font-weight:700;color:var(--navy)}
+.core-lead{margin:0 0 22px;text-align:center;font-size:14.5px;color:var(--ink-soft)}
+.core-cards{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.core-card{position:relative;background:var(--navy);color:#fff;border-radius:var(--radius);padding:24px 20px 22px;text-align:center}
+.core-no{position:absolute;left:14px;top:12px;width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
+.core-ico{display:block;width:64px;height:64px;margin:0 auto 12px;color:var(--gold)}
+.core-ico--text{display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:58px;font-weight:700;line-height:1;width:auto;height:64px}
+.core-card h3{margin:0 0 8px;font-size:clamp(21px,5vw,26px);line-height:1.4;font-weight:800;font-family:var(--serif);color:#fff}
+.core-card p{margin:0;font-size:14px;line-height:1.75;color:#DCE4F0}
+@media (min-width:700px){.core{padding:40px 36px 34px}.core-cards{grid-template-columns:repeat(3,1fr);gap:18px}}
+/* PROBLEM */
+.problem-title{font-family:var(--serif);font-size:clamp(23px,5.6vw,36px)}
+.hl{background:linear-gradient(transparent 62%,rgba(227,178,45,.55) 62%);color:var(--navy);padding:0 4px}
+.problem-body p{font-size:16px;margin:0 0 14px}
+.big-stat{font-family:var(--serif);font-size:1.5em;color:var(--orange-dark);font-weight:700}
+.problem-kicker{padding:14px 18px;background:#fff;border-left:4px solid var(--gold);border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-weight:700;color:var(--navy)}
+.self-note{max-width:none}
+.infographic{margin:22px 0 0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.18);border-radius:var(--radius-sm);padding:16px 12px 10px}
+.infographic svg{display:block;width:100%;height:auto}
+.infographic figcaption{margin:6px 0 0;text-align:center;font-size:12.5px;color:#C9D3E0}
+.js-motion .infographic .ig-up{stroke-dasharray:700;stroke-dashoffset:700;transition:stroke-dashoffset 1.6s .5s cubic-bezier(.2,.7,.2,1)}
+.js-motion .infographic.in .ig-up{stroke-dashoffset:0}
+@media (prefers-reduced-motion:reduce){.js-motion .infographic .ig-up{stroke-dashoffset:0!important}}
+@media print{.js-motion .infographic .ig-up{stroke-dashoffset:0!important}}
+/* 特徴4つ */
+.features4{grid-template-columns:1fr}
+@media (min-width:700px){.features4{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:1000px){.features4{grid-template-columns:repeat(4,1fr)}}
+@media (max-width:480px){.core-title{font-size:clamp(19px,5.2vw,23px)}.core{padding:26px 14px 22px}}
