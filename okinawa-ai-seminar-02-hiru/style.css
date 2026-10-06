@@ -386,3 +386,12 @@ main{overflow-x:clip}
 @media (min-width:700px){.features4{grid-template-columns:repeat(2,1fr)}}
 @media (min-width:1000px){.features4{grid-template-columns:repeat(4,1fr)}}
 @media (max-width:480px){.core-title{font-size:clamp(19px,5.2vw,23px)}.core{padding:26px 14px 22px}}
+
+/* B-17：スマホでインフォグラフィックの文字を12px相当以上に（SVG座標単位を大きく） */
+@media (max-width:700px){
+  .infographic svg text{font-size:38px}
+  .infographic svg text[font-size="16"]{font-size:24px}
+  .infographic svg .ig-lab-mid{font-size:36px}
+}
+@media (max-width:700px){.infographic svg text[font-size="16"]{font-size:30px}}
+@media (max-width:360px){.infographic svg text{font-size:42px}.infographic svg .ig-lab-mid{font-size:40px}.infographic svg text[font-size="16"]{font-size:32px}}
