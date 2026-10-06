@@ -313,3 +313,63 @@ body{padding-bottom:0}
 }
 @media (max-width:420px){.hero-speakers .chip{flex-basis:100%}}
 .consult-people figure{max-width:140px}.consult-people figcaption{font-size:12px;line-height:1.4}.consult-people{gap:10px}
+
+/* ================= モーション（v1.2 ＋ 動き） =================
+   方針：控えめ・短め・一度だけ。JS無効時／reduced-motion時は何も隠さず、静的に全表示する。
+   隠す処理は .js-motion（JSが付与）配下の .rv だけ。 */
+@keyframes heroIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes photoSettle{from{transform:scale(1.06)}to{transform:scale(1)}}
+@keyframes badgePop{0%{transform:rotate(8deg) scale(.6);opacity:0}70%{transform:rotate(8deg) scale(1.08);opacity:1}100%{transform:rotate(8deg) scale(1);opacity:1}}
+@keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(5px)}}
+@keyframes arrowSlide{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+
+.hero-top,.hero-main>*{animation:heroIn .7s cubic-bezier(.2,.7,.2,1) both}
+.hero-main>*:nth-child(1){animation-delay:.12s}
+.hero-main>*:nth-child(2){animation-delay:.2s}
+.hero-main>*:nth-child(3){animation-delay:.28s}
+.hero-main>*:nth-child(4){animation-delay:.36s}
+.hero-main>*:nth-child(5){animation-delay:.44s}
+.hero-visual{overflow:visible}
+.hero-photo{animation:photoSettle 1.4s cubic-bezier(.2,.7,.2,1) both;transform-origin:60% 40%}
+.hero-badge{animation:badgePop .6s .7s cubic-bezier(.2,.7,.2,1) both}
+.hero-speakers{animation:heroIn .7s .55s cubic-bezier(.2,.7,.2,1) both}
+
+.js-motion .rv{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+.js-motion .rv.rv-l{transform:translateX(-26px)}
+.js-motion .rv.rv-r{transform:translateX(26px)}
+.js-motion .rv.in{opacity:1;transform:none}
+
+.sec-title::after,.turn-line::before,.final h2::before{transform-origin:left center}
+.js-motion .rv .sec-title::after{transform:scaleX(0)}
+.sec-title::after{transition:transform .7s .25s cubic-bezier(.2,.7,.2,1)}
+.js-motion .sec-title.rv:not(.in)::after{transform:scaleX(0)}
+.sec-title.center::after{transform-origin:center}
+
+.btn{will-change:transform}
+.btn-primary .arrow{transition:transform .2s}
+.consult-arrow{animation:arrowSlide 1.8s ease-in-out infinite}
+.consult-arrow::after{animation:none}
+
+@media (hover:hover){
+  .card,.speaker,.qa-card,.after-list li,.flow3 li{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s}
+  .card:hover,.speaker:hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(11,42,74,.16)}
+  .qa-card:hover,.after-list li:hover,.flow3 li:hover{transform:translateY(-2px)}
+  .btn-primary:hover .arrow{animation:nudge .7s ease-in-out infinite}
+  .btn-primary:hover{box-shadow:0 12px 26px rgba(224,145,15,.45)}
+  .wide-photo img,.solution-photo img,.after-photo img{transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+  .wide-photo:hover img,.solution-photo:hover img,.after-photo:hover img{transform:scale(1.025)}
+  .wide-photo,.solution-photo,.after-photo{overflow:hidden;border-radius:var(--r-lg)}
+}
+.faq details{transition:box-shadow .2s}
+.faq details[open]{box-shadow:0 10px 24px rgba(11,42,74,.12)}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js-motion .rv{opacity:1!important;transform:none!important}
+  .js-motion .rv .sec-title::after,.js-motion .sec-title.rv:not(.in)::after{transform:none!important}
+}
+.js-motion .rv.rvd{transition:transform .25s cubic-bezier(.2,.7,.2,1),box-shadow .25s,opacity .25s;transition-delay:0s}
+@media (hover:hover){
+  .js-motion .rv.in:is(.card,.speaker):hover{transform:translateY(-5px);box-shadow:0 22px 44px rgba(11,42,74,.16)}
+  .js-motion .rv.in:is(.qa-card,.flow3 li):hover,.js-motion .rv.in:is(.after-list li):hover{transform:translateY(-2px)}
+}

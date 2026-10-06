@@ -421,6 +421,43 @@
 
 <script>
 (function(){
+  /* モーション：JSが動かない／reduced-motion のときは何も隠さない（コンテンツは常に全表示） */
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce||!('IntersectionObserver' in window)) return;
+  var de=document.documentElement; de.classList.add('js-motion');
+  var sel=['.numbers .num-grid li','.sec-sky .sec-title','.sec-title','.card-grid-3 .feel','.self-note','.turn-line','.solution-photo','.solution-text','.tekis .show','.sub-title','.show-intro','.show-list4 .show','.show-after','.wide-photo','.consult','.speaker','.qa-card','.flow-lead','.flow3 li','.after-list li','.after-photo','.overview','.night','.faq details','.final h2','.final p','.final .btn','.ps-box','.cta-mid','.for-whom'];
+  var seen=new Set(), els=[];
+  sel.forEach(function(q){document.querySelectorAll('main '+q).forEach(function(el){
+    if(seen.has(el)||el.closest('.hero')) return; seen.add(el); els.push(el);});});
+  var groups=new Map();
+  els.forEach(function(el){
+    el.classList.add('rv');
+    var p=el.parentElement, i=groups.get(p)||0; groups.set(p,i+1);
+    el.style.setProperty('--d',Math.min(i,5)*0.08+'s');
+    if(el.matches('.solution-photo,.after-list li:nth-child(odd)')) el.classList.add('rv-l');
+    if(el.matches('.solution-text,.after-photo')) el.classList.add('rv-r');
+  });
+  /* 数字バーのカウントアップ（1回だけ） */
+  function count(el){
+    var n=el.firstChild; if(!n||n.nodeType!==3) return;
+    var to=parseInt(n.nodeValue,10); if(isNaN(to)) return;
+    var t0=null, dur=1100;
+    function step(t){ if(!t0) t0=t; var k=Math.min((t-t0)/dur,1); k=1-Math.pow(1-k,3); n.nodeValue=String(Math.round(to*k)); if(k<1) requestAnimationFrame(step); }
+    n.nodeValue='0'; requestAnimationFrame(step);
+  }
+  var io=new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if(!e.isIntersecting) return;
+      e.target.classList.add('in'); io.unobserve(e.target);
+      (function(t){setTimeout(function(){t.classList.add('rvd');},1100);})(e.target);
+      var num=e.target.querySelector&&e.target.querySelector('.num'); if(num) count(num);
+    });
+  },{threshold:0.12,rootMargin:'0px 0px -6% 0px'});
+  els.forEach(function(el){io.observe(el);});
+})();
+</script>
+<script>
+(function(){
   /* 追従CTA（900px未満で有効）：ヒーローのCTAと最終セクションがどちらも画面外のときに表示する。
      スマホ・タブレットではヒーローのCTAがファーストビューの外にあるため、
      読み込み直後から表示される（申込ボタンを最初から見せる意図の挙動）。
