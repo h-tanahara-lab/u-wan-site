@@ -383,3 +383,22 @@ body{padding-bottom:0}
 @media (min-width:700px){.show-list3{grid-template-columns:repeat(3,1fr)}}
 @media (min-width:900px){.hero-title--long{font-size:27px;line-height:1.55}.hero-title--long .nb.j{display:inline}}
 main{overflow-x:clip}
+
+/* 印刷・PDF保存：モーションで隠した要素を全表示に戻す */
+@media print{
+  .js-motion .rv,.rv{opacity:1!important;transform:none!important;transition:none!important}
+  .js-motion .rv .sec-title::after,.js-motion .sec-title.rv::after{transform:none!important}
+  *{animation:none!important}
+  .sticky-cta{display:none!important}
+}
+/* 320px級の小さい画面：語の途中で折れないように調整 */
+@media (max-width:360px){
+  .hero-title--long{font-size:20px}
+  .hero-title{font-size:26px}
+  .hero-lead{font-size:16px}
+  .chip{padding-right:10px}
+  .chip span{font-size:12.5px;overflow-wrap:normal;word-break:keep-all;min-width:0}
+  .chip small{font-size:10.5px}
+  .num-grid span{word-break:normal}
+}
+.chip b{white-space:nowrap}

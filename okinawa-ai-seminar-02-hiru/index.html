@@ -434,12 +434,12 @@
   }
   var io=new IntersectionObserver(function(es){
     es.forEach(function(e){
-      if(!e.isIntersecting) return;
+      if(!e.isIntersecting && e.boundingClientRect.top>=0) return;
       e.target.classList.add('in'); io.unobserve(e.target);
       (function(t){setTimeout(function(){t.classList.add('rvd');},1100);})(e.target);
       var num=e.target.querySelector&&e.target.querySelector('.num'); if(num) count(num);
     });
-  },{threshold:0.12,rootMargin:'0px 0px -6% 0px'});
+  },{threshold:0,rootMargin:'0px 0px -6% 0px'});
   els.forEach(function(el){io.observe(el);});
 })();
 </script>
