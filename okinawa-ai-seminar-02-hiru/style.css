@@ -303,3 +303,10 @@ main{overflow-x:clip}
 .overview th{color:#9A7414}
 .overview-sec{display:none}
 @media (max-width:360px){.series-tag{font-size:11.5px;padding:5px 12px}.troubles li{font-size:13.5px}}
+
+/* v2.1 */
+.hero-target{margin:0 0 20px;font-size:14px;font-weight:700;color:var(--gold);line-height:1.8}
+.cta-trouble{margin:0 0 24px}
+.for-whom-sec--b{padding:0 0 72px;background:var(--cream)}
+.for-whom-sec--b .for-whom{background:#fff}
+@media (min-width:800px){.for-whom-sec--b{padding-bottom:100px}}
