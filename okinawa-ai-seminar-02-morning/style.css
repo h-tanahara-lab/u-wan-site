@@ -423,3 +423,10 @@ main{overflow-x:clip}
 .price-badge{display:inline-block;margin:0 0 8px;font-size:clamp(20px,5.2vw,28px);font-weight:800;color:var(--gold);font-family:var(--serif)}
 .big-stat,.big-stat-em{font-family:var(--serif);font-size:1.5em;color:var(--orange-dark);font-weight:700}
 .solution-text{text-align:left}.solution-text .sec-title{text-align:center}
+
+/* v2.5：料金ブロック（通常価格を二重取り消し線→法人設立記念価格を大きく） */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.price-card .price-old{margin:6px 0 0;font-size:clamp(20px,5vw,26px);font-weight:700;color:#C9D3E0;text-decoration:line-through;text-decoration-style:double;text-decoration-thickness:2px;text-decoration-color:var(--gold);text-decoration-skip-ink:none}
+.price-arrow{margin:4px 0;color:var(--gold);font-size:22px;line-height:1}
+.price-card .price-badge{margin:0 0 4px;font-size:clamp(24px,6.4vw,34px);color:var(--gold)}
+.price-card .price-value b{font-size:clamp(54px,14vw,76px)}
