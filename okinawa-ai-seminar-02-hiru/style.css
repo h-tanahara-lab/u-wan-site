@@ -318,3 +318,34 @@ main{overflow-x:clip}
   .site-logo{font-size:13px;overflow:visible;text-overflow:clip}
 }
 @media (max-width:360px){.site-logo{font-size:11.5px}}
+
+/* ===== v2.2先行：FV調整・AFTER オーバーレイ ===== */
+.hero-badges{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.hero-badges li{justify-content:flex-start}
+@media (min-width:900px){
+  .hero-badges{grid-template-columns:repeat(4,auto);justify-content:start;gap:8px}
+  .hero-badges li{font-size:12.5px;padding:7px 12px 7px 8px;white-space:nowrap}
+}
+/* ヘッドコピー：タイトルに次ぐ強さ */
+.hero-lead{font-size:clamp(19px,5.2vw,28px);line-height:1.6;font-weight:800;margin:0 0 20px;padding:16px 18px;background:linear-gradient(90deg,rgba(227,178,45,.22),rgba(227,178,45,.06));border-top:2px solid var(--gold);border-bottom:2px solid var(--gold);border-radius:4px}
+.hero-lead em{font-style:normal;color:var(--gold);font-weight:800}
+/* スマホ：写真をタイトル・バッジの直後へ（数字バーの手前に溜めない）。hero-copyを展開して並び順を指定 */
+@media (max-width:899px){
+  .hero-grid{gap:0}
+  .hero-copy{display:contents}
+  .hero-grid>*,.hero-copy>*{order:20}
+  .hero-copy>.hero-tags{order:1}.hero-copy>.hero-title{order:2}.hero-copy>.hero-badges{order:3}
+  .hero-photo{order:4;margin:6px -20px 24px}
+  .hero-copy>.troubles{order:5}.hero-copy>.hero-lead{order:6}.hero-copy>.hero-sub{order:7}.hero-copy>.hero-target{order:8}.hero-copy>.hero-info{order:9}.hero-copy>.cta-block{order:10}
+  .hero-grid{padding-bottom:36px}
+}
+/* AFTER：写真を濃いネイビーのオーバーレイで背景に */
+.after-stage{position:relative;border-radius:var(--radius);overflow:hidden;padding:28px 20px;background:var(--navy)}
+.after-bg{position:absolute;inset:0}
+.after-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.after-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(4,30,62,.9),rgba(4,30,62,.86))}
+.after-stage .after-list{position:relative;z-index:1}
+.after-stage .after-list li{background:rgba(4,30,62,.55);border:1px solid rgba(255,255,255,.16)}
+@media (min-width:900px){.after-stage{padding:44px 48px}}
+@media (max-width:480px){.hero-lead{font-size:17px;padding:14px 14px}}
+@media (max-width:360px){.hero-lead{font-size:15px}}
