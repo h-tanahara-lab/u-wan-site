@@ -430,3 +430,7 @@ main{overflow-x:clip}
 .price-arrow{margin:4px 0;color:var(--gold);font-size:22px;line-height:1}
 .price-card .price-badge{margin:0 0 4px;font-size:clamp(24px,6.4vw,34px);color:var(--gold)}
 .price-card .price-value b{font-size:clamp(54px,14vw,76px)}
+
+/* S-1：取り消し線は金額部分のみ */
+.price-card .price-old{text-decoration:none}
+.price-old-num{text-decoration:line-through;text-decoration-style:double;text-decoration-thickness:2px;text-decoration-color:var(--gold);text-decoration-skip-ink:none}
