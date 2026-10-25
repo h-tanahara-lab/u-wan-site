@@ -764,7 +764,9 @@ p:last-child { margin-bottom: 0; }
 (function () {
   "use strict";
 
-  var STORAGE_KEY = "oto_okinawa2_morning_deadline";
+  // アンケート回答後（?from=survey）は、申込時に見たタイマーとは別に3時間を数える
+  var fromSurvey = /(?:^|[?&])from=survey(?:&|$)/.test(window.location.search);
+  var STORAGE_KEY = fromSurvey ? "oto_okinawa2_morning_survey_deadline" : "oto_okinawa2_morning_deadline";
   var DURATION_MS = 3 * 60 * 60 * 1000; // 3時間
 
   var countdownEls = document.querySelectorAll("[data-countdown]");
