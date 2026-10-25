@@ -533,8 +533,8 @@ p:last-child { margin-bottom: 0; }
   <!-- ブロック1：まず御礼 -->
   <section class="thanks pad">
     <div class="wrap">
-      <h1 class="heading"><span class="nb">お申し込み、</span><span class="nb">ありがとうございます。</span></h1>
-      <p class="thanks-lead"><span class="nb">このたびは「沖縄AIセミナー 第2回 午前の部」に</span><span class="nb">お申し込みいただき、</span><span class="nb">ありがとうございます。</span></p>
+      <h1 class="heading" data-survey-html="&lt;span class=&quot;nb&quot;&gt;アンケートのご回答、&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ありがとうございました。&lt;/span&gt;"><span class="nb">お申し込み、</span><span class="nb">ありがとうございます。</span></h1>
+      <p class="thanks-lead" data-survey-html="&lt;span class=&quot;nb&quot;&gt;本日は「沖縄AIセミナー 第2回 午前の部」に&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ご参加いただき、&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;ありがとうございました。&lt;/span&gt;"><span class="nb">このたびは「沖縄AIセミナー 第2回 午前の部」に</span><span class="nb">お申し込みいただき、</span><span class="nb">ありがとうございます。</span></p>
 
       <div class="countdown-wrap">
         <div class="countdown" data-countdown hidden>
@@ -543,12 +543,12 @@ p:last-child { margin-bottom: 0; }
         </div>
       </div>
 
-      <div class="confirm-box">
+      <div class="confirm-box" data-hide-on-survey>
         <span class="confirm-mark" aria-hidden="true">✓</span>
         <p>10月26日（月）午前の部（10:00〜12:00）のお申し込みは、すでに完了しています。</p>
       </div>
 
-      <p class="thanks-note">お申し込み完了のメールをお送りしていますので、ご確認ください。<br>
+      <p class="thanks-note" data-survey-html="今日書いていただいた「まず試したいこと」が、&lt;br&gt;そのまま次の一歩になります。">お申し込み完了のメールをお送りしていますので、ご確認ください。<br>
       当日のご案内は、追ってメールでお送りします。</p>
     </div>
   </section>
@@ -559,7 +559,7 @@ p:last-child { margin-bottom: 0; }
       <h2 class="heading heading--center heading--light">実は、もう一つお伝えしたいことがあります。</h2>
       <p>午前の部と<strong class="turn-highlight">同じ10月26日、同じ会場</strong>で、<br>
       法人設立記念セミナーの第二弾として、夜の部を開催します。</p>
-      <p style="margin-top:22px;">夜の部には、ゲストとして、午前の部にも登壇する安永智也さんにお越しいただきます。</p>
+      <p style="margin-top:22px;" data-survey-html="夜の部には、ゲストとして、午前の部でもお話しいただいた安永智也さんにお越しいただきます。">夜の部には、ゲストとして、午前の部にも登壇する安永智也さんにお越しいただきます。</p>
     </div>
   </section>
 
@@ -719,9 +719,9 @@ p:last-child { margin-bottom: 0; }
         <span class="ps-label">P.S.</span>
         <p>このページを読んで、「今回は見送ろう」と思われた方もいらっしゃると思います。それでまったく問題ありません。</p>
 
-        <div class="ps-confirm">10月26日 午前の部のお申し込みは、すでに完了しています。</div>
+        <div class="ps-confirm" data-hide-on-survey>10月26日 午前の部のお申し込みは、すでに完了しています。</div>
 
-        <p>当日のご案内は、追ってメールでお送りしますので、そちらを楽しみにお待ちください。</p>
+        <p data-hide-on-survey>当日のご案内は、追ってメールでお送りしますので、そちらを楽しみにお待ちください。</p>
 
         <p style="margin-top:16px;">法人設立記念セミナーの第一弾（午前の部）に続く第二弾です。同じ日・同じ会場で、午前の部は12:00に終了し、夜の部は18:00開場ですので、あわせてご参加いただくこともできます。</p>
 
@@ -761,6 +761,17 @@ p:last-child { margin-bottom: 0; }
 </footer>
 
 <script>
+// アンケート回答後（?from=survey）は、申込直後向けの文面を参加後向けに差し替える
+(function () {
+  if (!/(?:^|[?&])from=survey(?:&|$)/.test(window.location.search)) return;
+  document.querySelectorAll("[data-survey-html]").forEach(function (el) {
+    el.innerHTML = el.getAttribute("data-survey-html");
+  });
+  document.querySelectorAll("[data-hide-on-survey]").forEach(function (el) {
+    el.hidden = true;
+  });
+})();
+
 (function () {
   "use strict";
 
