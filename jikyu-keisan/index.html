@@ -1,0 +1,287 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>時給計算シート</title>
+<style>
+:root{
+  --navy:#1B2A6B; --navy-d:#131f4f; --orange:#E67E22; --orange-l:#FDF1E6;
+  --bg:#F6F7FB; --card:#fff; --line:#D9DDEA; --text:#1d2233; --sub:#5a6178; --res:#EEF1F8;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--text);
+  font-family:"Hiragino Kaku Gothic ProN","Hiragino Sans","Yu Gothic",Meiryo,sans-serif;line-height:1.7;font-size:16px}
+header{background:var(--navy);color:#fff;padding:20px 16px}
+header .in,main{max-width:760px;margin:0 auto}
+header h1{margin:0;font-size:1.25rem;line-height:1.4}
+header p{margin:6px 0 0;font-size:.875rem;opacity:.9}
+main{padding:16px 16px 48px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+button{font:inherit;min-height:44px;padding:8px 16px;border-radius:8px;border:1.5px solid var(--navy);background:#fff;color:var(--navy);cursor:pointer}
+button:hover{background:var(--res)}
+button.danger{border-color:var(--sub);color:var(--sub)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+section{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:20px;overflow:hidden}
+section>h2{margin:0;background:var(--navy);color:#fff;font-size:1.05rem;padding:12px 16px;line-height:1.4}
+section>h2>span:first-child{color:var(--orange);margin-right:.4em}
+.body{padding:8px 16px 16px}
+.lead{font-size:.9rem;color:var(--sub);margin:8px 0}
+.field{margin:14px 0}
+.field label{display:block;font-size:.92rem;font-weight:600;margin-bottom:4px}
+.field .row{display:flex;align-items:center;gap:8px}
+.field select{flex:1;min-width:0;font:inherit;font-size:16px;min-height:44px;padding:8px 12px;border:1.5px solid var(--navy);border-radius:8px;background:#fff;color:var(--text)}
+.field input{flex:1;min-width:0;font:inherit;font-size:16px;min-height:44px;padding:8px 12px;border:1.5px solid var(--navy);border-radius:8px;background:#fff;color:var(--text)}
+.unit{white-space:nowrap;color:var(--sub);font-size:.9rem;min-width:2.5em}
+.hint{font-size:.8rem;color:var(--sub);margin-top:2px}
+.sub{margin:18px 0 6px;font-size:.85rem;font-weight:700;color:var(--navy);border-left:4px solid var(--orange);padding-left:8px}
+.res{display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:var(--res);border:1px dashed var(--line);border-radius:8px;padding:10px 12px;margin:8px 0}
+.res .k{font-size:.88rem;color:var(--sub)}
+.res .k small{display:block;font-size:.75rem}
+.res .v{font-size:1.15rem;font-weight:700;color:var(--navy);text-align:right;white-space:nowrap}
+.res.main{background:var(--orange-l);border:1px solid #f1c79b}
+.res.main .v{color:#9a4a07}
+.note-small{font-size:.78rem;color:var(--sub);margin:-2px 0 8px}
+textarea{width:100%;font:inherit;font-size:16px;min-height:96px;padding:10px 12px;border:1.5px solid var(--navy);border-radius:8px;resize:vertical;color:var(--text)}
+.memo label{display:block;font-weight:700;color:var(--navy);margin:16px 0 4px}
+.insight{background:var(--orange-l);border-radius:8px;padding:10px 12px;margin:12px 0;font-size:.92rem}
+.notes ul{margin:8px 0 0;padding-left:1.2em}
+.notes li{margin:6px 0}
+footer{font-size:.78rem;color:var(--sub);text-align:center}
+@media (min-width:700px){
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:0 24px}
+  .body{padding:12px 24px 20px}
+}
+@media print{
+  .tools,button{display:none!important}
+  body{background:#fff;font-size:12px}
+  header{background:#fff;color:#000;border-bottom:2px solid var(--navy);padding:8px 0}
+  section{break-inside:avoid;border-color:#999}
+  section>h2{background:#fff;color:#000;border-bottom:1px solid #999}
+  textarea{min-height:60px;border:1px solid #999}
+  .field input,.field select{border:1px solid #999}
+}
+</style>
+</head>
+<body>
+<header><div class="in">
+  <h1>時給計算シート</h1>
+  <p>ざっくりで大丈夫です。入れた数字は、この端末（このブラウザ）の中にだけ残ります。外には送られません。</p>
+</div></header>
+<main>
+<div class="tools">
+  <button type="button" id="btnPrint">印刷する</button>
+  <button type="button" id="btnClear" class="danger">全部消す</button>
+</div>
+
+<!-- ① -->
+<section id="s1">
+  <h2><span>①</span>現状を知る（<span class="mn">10</span>月）</h2>
+  <div class="body">
+    <div class="field"><label for="i_month">何月の数字ですか</label><div class="row"><select id="i_month" data-k="month"><option value="1">1月</option><option value="2">2月</option><option value="3">3月</option><option value="4">4月</option><option value="5">5月</option><option value="6">6月</option><option value="7">7月</option><option value="8">8月</option><option value="9">9月</option><option value="10">10月</option><option value="11">11月</option><option value="12">12月</option></select></div></div>
+    <div class="grid">
+    <div>
+      <div class="field"><label for="i_cal">カレンダーで見た1日の労働時間</label><div class="row"><input id="i_cal" data-k="cal" type="number" inputmode="decimal" min="0" step="any"><span class="unit">時間</span></div></div>
+      <div class="field"><label for="i_ext">予定の前後でやっていること（準備・片付け・移動・連絡・SNS・事務など）1日あたり</label><div class="row"><input id="i_ext" data-k="ext" type="number" inputmode="decimal" min="0" step="any"><span class="unit">時間</span></div></div>
+      <div class="field"><label for="i_days"><span class="mn">10</span>月に働いた日数</label><div class="row"><input id="i_days" data-k="days" type="number" inputmode="decimal" min="0" step="any"><span class="unit">日</span></div></div>
+    </div>
+    <div>
+      <div class="field"><label for="i_sales"><span class="mn">10</span>月の売上</label><div class="row"><input id="i_sales" data-k="sales" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+      <div class="field"><label for="i_cost"><span class="mn">10</span>月の原価（材料・仕入れ・外注など）</label><div class="row"><input id="i_cost" data-k="cost" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+      <div class="field"><label for="i_exp"><span class="mn">10</span>月の経費（家賃・広告・通信・その他）</label><div class="row"><input id="i_exp" data-k="exp" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+      <div class="field"><label for="i_take"><span class="mn">10</span>月の手取り（自分の生活に回したお金）※分からなければ利益と同じ</label><div class="row"><input id="i_take" data-k="take" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+    </div>
+    </div>
+
+    <p class="sub">計算結果（入力はできません）</p>
+    <div class="res main"><div class="k">月の労働時間<small>（1日の労働時間＋予定の前後の時間）×働いた日数</small></div><div class="v" id="o_hours">—</div></div>
+    <div class="res"><div class="k">カレンダーだけの時間との差</div><div class="v" id="o_diff">—</div></div>
+    <div class="res"><div class="k">カレンダーだけの時間（参考）</div><div class="v" id="o_calonly">—</div></div>
+    <div class="res"><div class="k">粗利<small>売上 − 原価</small></div><div class="v" id="o_gross">—</div></div>
+    <div class="res"><div class="k">利益<small>粗利 − 経費</small></div><div class="v" id="o_profit">—</div></div>
+    <div class="res"><div class="k">手取り</div><div class="v" id="o_take">—</div></div>
+    <div class="note-small" id="o_takenote" hidden>手取りが未入力のため、利益と同じ値を使っています。</div>
+    <div class="res main"><div class="k">1時間あたりの粗利<small>粗利 ÷ 月の労働時間</small></div><div class="v" id="o_gph">—</div></div>
+    <div class="res main"><div class="k">手取りの時給<small>手取り ÷ 月の労働時間</small></div><div class="v" id="o_tph">—</div></div>
+
+    <div class="memo"><label for="m1">メモ：現状を知ってどう感じたか</label><textarea id="m1" data-k="m1"></textarea></div>
+  </div>
+</section>
+
+<!-- ② -->
+<section id="s2">
+  <h2><span>②</span>ちょっとだけ未来を考える</h2>
+  <div class="body">
+    <div class="grid">
+    <div>
+      <div class="field"><label for="i_age">今の年齢</label><div class="row"><input id="i_age" data-k="age" type="number" inputmode="numeric" min="0" step="any"><span class="unit">歳</span></div></div>
+      <div class="field"><label for="i_life">何歳まで生きる予定か（仮）</label><div class="row"><input id="i_life" data-k="life" type="number" inputmode="numeric" min="0" step="any"><span class="unit">歳</span></div></div>
+      <div class="field"><label for="i_ret">何歳で仕事をしなくなるか（仮）</label><div class="row"><input id="i_ret" data-k="ret" type="number" inputmode="numeric" min="0" step="any"><span class="unit">歳</span></div></div>
+    </div>
+    <div>
+      <div class="field"><label for="i_lc">その時の月の生活費</label><div class="row"><input id="i_lc" data-k="lc" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+      <div class="field"><label for="i_extra">旅行・医療・介護などの上乗せ（年額）</label><div class="row"><input id="i_extra" data-k="extra" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+    </div>
+    </div>
+
+    <p class="sub">計算結果（入力はできません）</p>
+    <div class="res"><div class="k">働かない年数<small>何歳まで生きる − 何歳で仕事をしなくなるか</small></div><div class="v" id="o_idle">—</div></div>
+    <div class="res"><div class="k">リタイアまでの年数<small>何歳で仕事をしなくなるか − 今の年齢</small></div><div class="v" id="o_until">—</div></div>
+    <div class="res"><div class="k">老後に必要な額<small>（月の生活費×12＋上乗せ）× 働かない年数</small></div><div class="v" id="o_need">—</div></div>
+    <div class="res main"><div class="k">毎月積み立てる額<small>老後に必要な額 ÷ リタイアまでの年数 ÷ 12</small></div><div class="v" id="o_save">—</div></div>
+  </div>
+</section>
+
+<!-- ③ -->
+<section id="s3">
+  <h2><span>③</span>今、稼がないといけない額と時間</h2>
+  <div class="body">
+    <div class="field"><label for="i_nowlc">今の月の生活費（住宅ローン・教育費・医療など、ざっくり全部込み）</label><div class="row"><input id="i_nowlc" data-k="nowlc" type="number" inputmode="numeric" min="0" step="any"><span class="unit">円</span></div></div>
+    <div class="field"><label for="i_nexth">来年、月に何時間働くか（初期値は<span class="mn">10</span>月の労働時間）</label><div class="row"><input id="i_nexth" data-k="nexth" type="number" inputmode="decimal" min="0" step="any"><span class="unit">時間</span></div><div class="hint" id="o_nexthint"></div></div>
+
+    <p class="sub">計算結果（入力はできません）</p>
+    <div class="res"><div class="k">毎月必要な手取り<small>今の月の生活費 ＋ 毎月積み立てる額</small></div><div class="v" id="o_ntake">—</div></div>
+    <div class="res"><div class="k">毎月必要な粗利<small>毎月必要な手取り ＋ <span class="mn">10</span>月の経費</small></div><div class="v" id="o_ngross">—</div></div>
+    <div class="res"><div class="k">毎月必要な売上<small>毎月必要な粗利 ÷ <span class="mn">10</span>月の粗利率</small></div><div class="v" id="o_nsales">—</div></div>
+    <div class="res main"><div class="k">年間で必要な売上<small>毎月必要な売上 × 12</small></div><div class="v" id="o_nyear">—</div></div>
+    <div class="res main"><div class="k">必要な1時間あたりの粗利<small>毎月必要な粗利 ÷ 来年の月の労働時間</small></div><div class="v" id="o_ngph">—</div></div>
+    <div class="res main"><div class="k">必要な手取りの時給<small>毎月必要な手取り ÷ 来年の月の労働時間</small></div><div class="v" id="o_ntph">—</div></div>
+  </div>
+</section>
+
+<!-- ④ -->
+<section id="s4">
+  <h2><span>④</span>今と必要のギャップ → 宿題</h2>
+  <div class="body">
+    <div class="res main"><div class="k">何倍か<small>必要な1時間あたりの粗利 ÷ 今の1時間あたりの粗利</small></div><div class="v" id="o_ratio">—</div></div>
+    <div class="res main"><div class="k">今の1時間あたりの粗利のまま働くなら、月に何時間必要か<small>毎月必要な粗利 ÷ 今の1時間あたりの粗利</small></div><div class="v" id="o_needh">—</div></div>
+    <div class="insight">気づき：埋める手段は「時間を増やす」か「1時間あたりの粗利を上げる」の2つ</div>
+    <div class="memo">
+      <label for="m2">メモ：計算してみてどう感じたか</label><textarea id="m2" data-k="m2"></textarea>
+      <label for="m3">宿題：来年（<span class="ny">2027</span>年）をどういう年にしたいか</label><textarea id="m3" data-k="m3" style="min-height:140px"></textarea>
+    </div>
+  </div>
+</section>
+
+<section class="notes" id="s5">
+  <h2>注釈（計算に入れていないもの）</h2>
+  <div class="body">
+    <ul>
+      <li>税金・社会保険：実際はここも引かれる。今回は「手取り＝自分の生活に回したお金」とざっくり扱う</li>
+      <li>年金・退職金・今の貯金：老後の必要額から差し引ける。今回は入れない</li>
+      <li>物価の上がり方・運用：今回は考えない</li>
+      <li>選んだ月（<span class="mn">10</span>月）だけの数字：月ごとに波がある。多い月か少ない月かは頭に置いておく</li>
+    </ul>
+  </div>
+</section>
+<footer>入力した内容は、この端末のブラウザの中にだけ保存されます。</footer>
+</main>
+
+<script>
+(function(){
+  var KEY='uwan_jikyu_keisan_v1';
+  var mem={}; // localStorageが使えない場合の保持先
+  var store=null;
+  try{ localStorage.setItem('__t','1'); localStorage.removeItem('__t'); store=localStorage; }catch(e){ store=null; }
+
+  function load(){
+    try{ if(store){ var s=store.getItem(KEY); if(s) return JSON.parse(s)||{}; } }catch(e){}
+    return {};
+  }
+  function save(){
+    try{ if(store) store.setItem(KEY, JSON.stringify(mem)); }catch(e){}
+  }
+
+  var els=document.querySelectorAll('[data-k]');
+  mem=load();
+  els.forEach(function(el){
+    var v=mem[el.getAttribute('data-k')];
+    if(typeof v==='string') el.value=v;
+    el.addEventListener('input',function(){ mem[el.getAttribute('data-k')]=el.value; save(); calc(); });
+  });
+
+  // 月・年の表示（初期値は前月／来年は今日の日付から）
+  var now=new Date();
+  var prev=now.getMonth()===0?12:now.getMonth();
+  var monthSel=document.getElementById('i_month');
+  function showMonth(){
+    var m=mem.month; if(!m||!/^(?:[1-9]|1[0-2])$/.test(String(m))) m=String(prev);
+    monthSel.value=m;
+    document.querySelectorAll('.mn').forEach(function(e){ e.textContent=m; });
+  }
+  document.querySelectorAll('.ny').forEach(function(e){ e.textContent=String(now.getFullYear()+1); });
+  monthSel.addEventListener('change',function(){ mem.month=monthSel.value; save(); showMonth(); });
+  showMonth();
+
+  function num(k){
+    var s=mem[k];
+    if(s===undefined||s===null||String(s).trim()==='') return null;
+    var n=Number(s);
+    return isFinite(n)?n:null;
+  }
+  var fmt=new Intl.NumberFormat('ja-JP');
+  function yen(n){ return n===null||!isFinite(n)?'—':fmt.format(Math.round(n))+'円'; }
+  function hrs(n){ return n===null||!isFinite(n)?'—':fmt.format(Math.round(n))+'時間'; }
+  function yrs(n){ return n===null||!isFinite(n)?'—':fmt.format(Math.round(n))+'年'; }
+  function times(n){ return n===null||!isFinite(n)?'—':n.toFixed(1)+'倍'; }
+  function div(a,b){ if(a===null||b===null||b===0) return null; var r=a/b; return isFinite(r)?r:null; }
+  function set(id,t){ document.getElementById(id).textContent=t; }
+
+  function calc(){
+    // ①
+    var cal=num('cal'), ext=num('ext'), days=num('days');
+    var hours=(cal!==null&&days!==null)?(cal+(ext||0))*days:null;
+    var calonly=(cal!==null&&days!==null)?cal*days:null;
+    var sales=num('sales'), cost=num('cost'), exp=num('exp'), take=num('take');
+    var gross=(sales!==null)?sales-(cost||0):null;
+    var profit=(gross!==null)?gross-(exp||0):null;
+    var takeUsed=take!==null?take:profit;
+    set('o_hours',hrs(hours));
+    set('o_calonly',hrs(calonly));
+    set('o_diff',(hours!==null&&calonly!==null)?hrs(hours-calonly):'—');
+    set('o_gross',yen(gross)); set('o_profit',yen(profit)); set('o_take',yen(takeUsed));
+    document.getElementById('o_takenote').hidden=!(take===null&&profit!==null);
+    var gph=div(gross,hours), tph=div(takeUsed,hours);
+    set('o_gph',yen(gph)); set('o_tph',yen(tph));
+
+    // ②
+    var age=num('age'), life=num('life'), ret=num('ret'), lc=num('lc'), extra=num('extra');
+    var idle=(life!==null&&ret!==null)?life-ret:null;
+    var until=(ret!==null&&age!==null)?ret-age:null;
+    var need=(idle!==null&&lc!==null)?(lc*12+(extra||0))*idle:null;
+    var save_=(need!==null&&until!==null&&until>0)?need/until/12:null;
+    set('o_idle',yrs(idle)); set('o_until',yrs(until)); set('o_need',yen(need)); set('o_save',yen(save_));
+
+    // ③
+    var nowlc=num('nowlc'), nexth=num('nexth');
+    var nh=nexth!==null?nexth:hours;
+    set('o_nexthint',nexth===null?(hours!==null?'未入力のため、①の月の労働時間（'+hrs(hours)+'）を使っています。':'未入力のときは、①の月の労働時間を使います。'):'');
+    var ntake=(nowlc!==null&&save_!==null)?nowlc+save_:null;
+    var ngross=(ntake!==null&&exp!==null)?ntake+exp:(ntake!==null&&sales!==null?ntake:null);
+    var margin=div(gross,sales);
+    var nsales=(ngross!==null&&margin!==null&&margin!==0)?ngross/margin:null;
+    set('o_ntake',yen(ntake)); set('o_ngross',yen(ngross)); set('o_nsales',yen(nsales));
+    set('o_nyear',yen(nsales!==null?nsales*12:null));
+    var ngph=div(ngross,nh), ntph=div(ntake,nh);
+    set('o_ngph',yen(ngph)); set('o_ntph',yen(ntph));
+
+    // ④
+    set('o_ratio',times(div(ngph,gph)));
+    set('o_needh',hrs(div(ngross,gph)));
+  }
+  calc();
+
+  document.getElementById('btnPrint').addEventListener('click',function(){ window.print(); });
+  document.getElementById('btnClear').addEventListener('click',function(){
+    if(!window.confirm('入力した数字とメモを、全部消します。元に戻せません。よろしいですか？')) return;
+    mem={};
+    try{ if(store) store.removeItem(KEY); }catch(e){}
+    els.forEach(function(el){ el.value=''; });
+    calc();
+  });
+})();
+</script>
+</body>
+</html>
